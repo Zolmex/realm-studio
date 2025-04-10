@@ -1,9 +1,5 @@
 package realmeditor.editor.ui.elements {
-import editor.ui.Constants;
 
-import flash.display.Graphics;
-
-import flash.display.Shape;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
@@ -11,7 +7,6 @@ import flash.events.MouseEvent;
 import realmeditor.editor.ui.Constants;
 import realmeditor.util.MoreColorUtil;
 
-import util.MoreColorUtil;
 
 public class SimpleOkButton extends Sprite {
 

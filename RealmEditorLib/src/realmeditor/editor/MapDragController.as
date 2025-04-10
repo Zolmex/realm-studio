@@ -1,12 +1,12 @@
 package realmeditor.editor {
-import editor.actions.MapActionSet;
-import editor.actions.MapClearAreaAction;
-import editor.actions.MapDragAction;
-import editor.actions.MapReplaceTileAction;
-import editor.actions.MapSelectAction;
-import editor.actions.data.MapSelectData;
-import editor.ui.MapView;
-import editor.ui.TileMapView;
+import realmeditor.editor.actions.MapActionSet;
+import realmeditor.editor.actions.MapClearAreaAction;
+import realmeditor.editor.actions.MapDragAction;
+import realmeditor.editor.actions.MapReplaceTileAction;
+import realmeditor.editor.actions.MapSelectAction;
+import realmeditor.editor.actions.data.MapSelectData;
+import realmeditor.editor.ui.MapView;
+import realmeditor.editor.ui.TileMapView;
 
 import realmeditor.editor.actions.MapDragAction;
 import realmeditor.editor.actions.data.MapSelectData;

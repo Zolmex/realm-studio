@@ -1,14 +1,4 @@
 package realmeditor.editor.tools {
-import editor.MEBrush;
-import editor.MEDrawType;
-import editor.MapTileData;
-import editor.actions.MapActionSet;
-import editor.actions.MapReplaceTileAction;
-import editor.ui.MainView;
-import editor.MapHistory;
-import editor.ui.MapView;
-import editor.ui.TileMapView;
-
 import realmeditor.editor.MEBrush;
 import realmeditor.editor.MEDrawType;
 
@@ -16,12 +6,12 @@ import realmeditor.editor.MapHistory;
 import realmeditor.editor.MapTileData;
 import realmeditor.editor.actions.MapActionSet;
 import realmeditor.editor.actions.MapReplaceTileAction;
+import realmeditor.editor.actions.data.MapSelectData;
 
 import realmeditor.editor.ui.MainView;
 import realmeditor.editor.ui.TileMapView;
 import realmeditor.util.IntPoint;
 
-import util.IntPoint;
 
 public class MEEraserTool extends METool {
 
@@ -72,7 +62,7 @@ public class MEEraserTool extends METool {
 
         var action:MapReplaceTileAction = null;
         if (brush.size == 0) {
-            action = this.eraseTile(mapX, mapY);
+            action = eraseTile(this.mainView.userBrush, this.mainView.mapView.tileMap, mapX, mapY);
             if (action != null) {
                 history.record(action);
             }
@@ -90,7 +80,7 @@ public class MEEraserTool extends METool {
                     continue;
                 }
 
-                action = this.eraseTile(x, y);
+                action = eraseTile(this.mainView.userBrush, this.mainView.mapView.tileMap, x, y);
                 if (action != null) {
                     actions.push(action);
                 }
@@ -100,9 +90,30 @@ public class MEEraserTool extends METool {
         history.recordSet(actions);
     }
 
-    private function eraseTile(mapX:int, mapY:int):MapReplaceTileAction {
-        var brush:MEBrush = this.mainView.userBrush;
-        var tileMap:TileMapView = this.mainView.mapView.tileMap;
+    public static function eraseSelection(mainView:MainView, selection:MapSelectData, history:MapHistory):void {
+        var brush:MEBrush = mainView.userBrush;
+        var tileMap:TileMapView = mainView.mapView.tileMap;
+
+        var action:MapReplaceTileAction = null;
+        var actions:MapActionSet = new MapActionSet();
+
+        for (var y:int = selection.startY; y <= selection.endY; y++) {
+            for (var x:int = selection.startX; x <= selection.endX; x++) {
+                if (!mainView.mapView.isInsideSelection(x, y)) {
+                    continue;
+                }
+
+                action = eraseTile(brush, tileMap, x, y);
+                if (action != null) {
+                    actions.push(action);
+                }
+            }
+        }
+
+        history.recordSet(actions);
+    }
+
+    public static function eraseTile(brush:MEBrush, tileMap:TileMapView, mapX:int, mapY:int):MapReplaceTileAction {
         var prevData:MapTileData = tileMap.getTileData(mapX, mapY);
         if (prevData == null){
             return null;

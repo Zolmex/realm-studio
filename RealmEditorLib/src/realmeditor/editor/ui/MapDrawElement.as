@@ -1,10 +1,4 @@
 package realmeditor.editor.ui {
-import assets.GroundLibrary;
-import assets.ObjectLibrary;
-import assets.RegionLibrary;
-
-import editor.MEDrawType;
-import editor.ui.elements.DrawListTooltip;
 
 import flash.display.Bitmap;
 import flash.display.BitmapData;

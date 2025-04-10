@@ -1,10 +1,4 @@
 package realmeditor.editor.ui {
-import assets.ObjectLibrary;
-
-import editor.MEDrawType;
-import editor.ui.elements.IDrawElementFilter;
-
-import flash.utils.Dictionary;
 
 import realmeditor.assets.ObjectLibrary;
 

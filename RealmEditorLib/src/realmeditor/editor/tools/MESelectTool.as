@@ -1,40 +1,13 @@
 package realmeditor.editor.tools {
-import editor.MEBrush;
-import editor.MEEvent;
-import editor.MapTileData;
-import editor.MapTileData;
-import editor.actions.MapAction;
-import editor.actions.MapActionSet;
-import editor.actions.MapActionSet;
-import editor.actions.MapActionSet;
-import editor.actions.MapDragAction;
-import editor.actions.MapReplaceTileAction;
-import editor.actions.MapSelectAction;
-import editor.actions.MapSelectAction;
-import editor.actions.data.MapSelectData;
-import editor.ui.MainView;
-import editor.MapHistory;
-import editor.ui.MapInputHandler;
-import editor.ui.MapTileSprite;
-import editor.ui.MapView;
-import editor.ui.TileMapView;
-
-import flash.display.Shape;
-import flash.events.Event;
-
-import flash.geom.Point;
-import flash.net.registerClassAlias;
+import realmeditor.editor.actions.MapSelectAction;
 
 import realmeditor.editor.MapHistory;
 import realmeditor.editor.actions.MapDragAction;
-import realmeditor.editor.actions.MapSelectAction;
 
 import realmeditor.editor.actions.data.MapSelectData;
 
 import realmeditor.editor.ui.MainView;
 import realmeditor.util.IntPoint;
-
-import util.IntPoint;
 
 public class MESelectTool extends METool {
 

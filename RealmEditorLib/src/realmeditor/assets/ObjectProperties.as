@@ -1,6 +1,5 @@
 package realmeditor.assets
 {
-import assets.*;
    import flash.utils.Dictionary;
    
    public class ObjectProperties

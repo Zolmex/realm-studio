@@ -1,5 +1,4 @@
 package realmeditor.assets {
-import assets.MaskedImage;
 
 import flash.display.BitmapData;
 import flash.geom.Rectangle;

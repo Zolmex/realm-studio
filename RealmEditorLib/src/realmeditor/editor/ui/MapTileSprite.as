@@ -1,14 +1,7 @@
 package realmeditor.editor.ui {
-import assets.GroundLibrary;
-import assets.ObjectLibrary;
-import assets.RegionLibrary;
-import editor.MapTileData;
-
-import flash.display.Bitmap;
 
 import flash.display.BitmapData;
 
-import flash.display.Sprite;
 
 import realmeditor.assets.GroundLibrary;
 import realmeditor.assets.ObjectLibrary;

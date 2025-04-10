@@ -1,18 +1,15 @@
 package realmeditor.editor.ui.elements {
-import editor.ui.*;
+import realmeditor.editor.ui.*;
 
 import flash.display.Graphics;
 import flash.display.Shape;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
-import flash.filters.DropShadowFilter;
-import flash.text.TextField;
 
 import realmeditor.editor.ui.Constants;
 import realmeditor.util.FilterUtil;
 
-import util.FilterUtil;
 
 public class SimpleTextButton extends Sprite {
 

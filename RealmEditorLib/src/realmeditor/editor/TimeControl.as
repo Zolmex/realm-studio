@@ -1,6 +1,6 @@
 package realmeditor.editor {
-import editor.ui.*;
-import editor.actions.MapAction;
+import realmeditor.editor.ui.*;
+import realmeditor.editor.actions.MapAction;
 
 import flash.utils.Dictionary;
 

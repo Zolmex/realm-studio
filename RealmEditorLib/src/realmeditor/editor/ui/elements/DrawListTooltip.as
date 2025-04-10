@@ -1,8 +1,4 @@
 package realmeditor.editor.ui.elements {
-import editor.ui.*;
-import editor.MEDrawType;
-import editor.ui.elements.SimpleText;
-import editor.ui.elements.Tooltip;
 
 import flash.display.Bitmap;
 
@@ -14,8 +10,6 @@ import flash.text.TextFormatAlign;
 import realmeditor.editor.MEDrawType;
 import realmeditor.editor.ui.Constants;
 import realmeditor.util.TextureRedrawer;
-
-import util.TextureRedrawer;
 
 public class DrawListTooltip extends Tooltip {
 

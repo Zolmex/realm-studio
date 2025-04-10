@@ -1,7 +1,7 @@
 package realmeditor.editor.ui {
-import editor.MEEvent;
-import editor.ui.elements.SimpleText;
-import editor.ui.elements.SimpleTextButton;
+import realmeditor.editor.MEEvent;
+import realmeditor.editor.ui.elements.SimpleText;
+import realmeditor.editor.ui.elements.SimpleTextButton;
 
 import flash.display.Graphics;
 

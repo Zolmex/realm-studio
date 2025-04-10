@@ -1,27 +1,4 @@
 package realmeditor.editor.ui {
-import assets.GroundLibrary;
-import assets.ObjectLibrary;
-import assets.RegionLibrary;
-
-import editor.MapDragController;
-
-import editor.MapHistory;
-
-import editor.actions.MapAction;
-import editor.MEBrush;
-import editor.MEClipboard;
-import editor.MEDrawType;
-import editor.actions.MapActionSet;
-import editor.actions.MapDragAction;
-import editor.actions.MapReplaceTileAction;
-import editor.actions.MapSelectAction;
-import editor.actions.data.MapSelectData;
-import editor.tools.MESelectTool;
-import editor.tools.METool;
-import editor.actions.MapAction;
-import editor.actions.MapAction;
-import editor.MapData;
-import editor.MapTileData;
 
 import flash.display.Bitmap;
 
@@ -30,10 +7,9 @@ import flash.display.BitmapData;
 import flash.display.Graphics;
 import flash.display.Shape;
 import flash.display.Sprite;
-import flash.geom.Matrix;
+import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
-import flash.utils.Dictionary;
 
 import realmeditor.assets.GroundLibrary;
 import realmeditor.assets.ObjectLibrary;
@@ -54,8 +30,6 @@ import realmeditor.editor.actions.MapSelectAction;
 import realmeditor.editor.actions.data.MapSelectData;
 import realmeditor.util.IntPoint;
 
-import util.IntPoint;
-
 public class MapView extends Sprite {
 
     public static const EMPTY_SELECTION:MapSelectData = new MapSelectData(-1, -1, -1, -1);
@@ -72,7 +46,7 @@ public class MapView extends Sprite {
     public var selection:MapSelectData;
     public var selectionRect:Shape;
     private var highlightRect:Shape;
-    public var brushOverlay:Bitmap; // Draws a transparent view of the tiles (ground/object/region) the user will be painting on the map
+    private var brushOverlay:Bitmap; // Draws a transparent view of the tiles (ground/object/region) the user will be painting on the map
     private var brushElementType:int;
     private var brushSize:int;
     private var brushTextureType:int;
@@ -274,9 +248,7 @@ public class MapView extends Sprite {
 
                 texture = GroundLibrary.getBitmapData(brush.groundType);
                 this.brushTextureType = brush.groundType;
-                if (MainView.Instance.qualityTiles) {
-                    size = Math.max(texture.width, texture.height);
-                }
+                size = Math.max(texture.width, texture.height);
                 break;
             case MEDrawType.OBJECTS:
                 if (brush.objType == 0) {
@@ -285,9 +257,7 @@ public class MapView extends Sprite {
 
                 texture = ObjectLibrary.getTextureFromType(brush.objType);
                 this.brushTextureType = brush.objType;
-                if (MainView.Instance.qualityObjects) {
-                    size = Math.max(texture.width, texture.height);
-                }
+                size = Math.max(texture.width, texture.height);
                 break;
             case MEDrawType.REGIONS:
                 if (brush.regType == 0) {
@@ -313,14 +283,7 @@ public class MapView extends Sprite {
                 }
 
                 if (texture != null) {
-                    if (texture.width > size || texture.height > size) {
-                        var matrix:Matrix = new Matrix();
-                        matrix.scale(size / texture.width, size / texture.height);
-                        matrix.translate(xi * size, yi * size);
-                        brushTexture.draw(texture, matrix);
-                    } else {
-                        brushTexture.copyPixels(texture, new Rectangle(0, 0, texture.width, texture.height), new Point(xi * texture.width, yi * texture.height));
-                    }
+                    brushTexture.copyPixels(texture, new Rectangle(0, 0, texture.width, texture.height), new Point(xi * texture.width, yi * texture.height));
                 } else { // Must mean we're rendering a region
                     brushTexture.fillRect(new Rectangle(xi * size, yi * size, size, size), 1593835520 | regColor);
                 }

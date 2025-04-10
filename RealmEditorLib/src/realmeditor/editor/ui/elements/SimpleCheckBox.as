@@ -1,19 +1,16 @@
 package realmeditor.editor.ui.elements {
-import editor.ui.Constants;
+import realmeditor.editor.ui.Constants;
 
 import flash.display.Graphics;
 import flash.display.Shape;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
-import flash.text.TextFieldAutoSize;
 
 import realmeditor.editor.ui.Constants;
 
 public class SimpleCheckBox extends Sprite {
 
-    private static const WIDTH:int = 95;
-    private static const HEIGHT:int = CHECKBOX_SIZE + 8;
     private static const CHECKBOX_SIZE:int = 15;
     private static const CHECKCROSS_SIZE:int = 10;
 
@@ -29,8 +26,7 @@ public class SimpleCheckBox extends Sprite {
         this.background = new Shape();
         addChild(this.background);
 
-        this.title = new SimpleText(18, 0xFFFFFF, false, WIDTH - CHECKBOX_SIZE - 7);
-        this.title.setAutoSize(TextFieldAutoSize.LEFT);
+        this.title = new SimpleText(18, 0xFFFFFF);
         this.title.setText(title);
         this.title.filters = Constants.SHADOW_FILTER_1;
         this.title.updateMetrics();
@@ -71,11 +67,11 @@ public class SimpleCheckBox extends Sprite {
     }
 
     private function positionChildren():void {
-        this.title.x = 2;
-        this.title.y = (HEIGHT - this.title.actualHeight_) / 2;
+        this.title.x = 0;
+        this.title.y = 0;
 
-        this.checkBox.x = this.title.x + this.title.actualWidth_ + 5;
-        this.checkBox.y = (HEIGHT - this.checkBox.height) / 2;
+        this.checkBox.x = this.title.x + this.title.width + 5;
+        this.checkBox.y = this.title.y + (this.title.height - this.checkBox.height) / 2;
 
         this.checkCross.x = this.checkBox.x + (CHECKBOX_SIZE - CHECKCROSS_SIZE) / 2;
         this.checkCross.y = this.checkBox.y + (CHECKBOX_SIZE - CHECKCROSS_SIZE) / 2;
@@ -84,7 +80,7 @@ public class SimpleCheckBox extends Sprite {
     private function drawBackground():void {
         var g:Graphics = this.background.graphics;
         g.beginFill(Constants.BACK_COLOR_1);
-        g.drawRoundRect(0, 0, width + 6, HEIGHT, 10, 10);
+        g.drawRoundRect(0, 0, width + 3, height, 10, 10);
         g.endFill();
     }
 }

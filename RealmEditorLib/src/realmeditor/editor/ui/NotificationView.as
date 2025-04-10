@@ -1,8 +1,7 @@
 package realmeditor.editor.ui {
 import com.gskinner.motion.GTween;
-import com.gskinner.motion.GTween;
 
-import editor.ui.elements.SimpleText;
+import realmeditor.editor.ui.elements.SimpleText;
 
 import flash.display.Graphics;
 
@@ -67,20 +66,11 @@ public class NotificationView extends Sprite {
 
         alpha = 1;
         visible = true;
-        if (duration == -1){ // Infinite, must manually clear notification
-            return;
-        }
-
         this.tween = new GTween(this, duration, {"alpha": 0});
         this.tween.onComplete = this.endAnimation;
     }
 
     private function endAnimation(tween:GTween):void {
-        alpha = 1;
-        visible = false;
-    }
-
-    public function clear():void {
         alpha = 1;
         visible = false;
     }

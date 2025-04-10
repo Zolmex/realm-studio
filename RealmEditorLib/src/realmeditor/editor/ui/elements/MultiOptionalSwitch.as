@@ -1,12 +1,5 @@
 package realmeditor.editor.ui.elements {
-import com.gsolo.encryption.SHA1;
 
-import editor.MEEvent;
-
-import editor.ui.Constants;
-
-import flash.display.Bitmap;
-import flash.display.BitmapData;
 import flash.display.Graphics;
 import flash.display.Shape;
 import flash.display.Sprite;
@@ -18,8 +11,6 @@ import realmeditor.editor.MEEvent;
 import realmeditor.editor.ui.Constants;
 
 import realmeditor.util.FilterUtil;
-
-import util.FilterUtil;
 
 public class MultiOptionalSwitch extends Sprite {
 
@@ -92,16 +83,12 @@ public class MultiOptionalSwitch extends Sprite {
 }
 }
 
-import editor.ui.Constants;
-import editor.ui.elements.SimpleText;
-
 import flash.display.Sprite;
 
 import realmeditor.editor.ui.Constants;
 
 import realmeditor.editor.ui.elements.SimpleText;
 
-import util.FilterUtil;
 
 class SwitchOption extends Sprite {
 

@@ -1,8 +1,8 @@
 package realmeditor.editor.ui {
-import editor.ui.elements.SimpleCloseButton;
-import editor.ui.elements.SimpleOkButton;
-import editor.ui.elements.SimpleText;
-import editor.ui.elements.SimpleTextInput;
+import realmeditor.editor.ui.elements.SimpleCloseButton;
+import realmeditor.editor.ui.elements.SimpleOkButton;
+import realmeditor.editor.ui.elements.SimpleText;
+import realmeditor.editor.ui.elements.SimpleTextInput;
 
 import flash.display.Graphics;
 

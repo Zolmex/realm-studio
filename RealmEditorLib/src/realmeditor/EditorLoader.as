@@ -1,15 +1,4 @@
 package realmeditor {
-import assets.AnimatedChars;
-import assets.AssetLibrary;
-import assets.GroundLibrary;
-import assets.ObjectLibrary;
-import assets.RegionLibrary;
-
-import editor.Parameters;
-import editor.ui.Keybinds;
-import editor.ui.MainView;
-import editor.ui.embed.Cursors;
-import editor.ui.embed.EditorTools;
 
 import flash.display.BitmapData;
 

@@ -3,17 +3,18 @@ package realmeditor.editor.ui.elements {
 import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.text.Font;
+import flash.text.StyleSheet;
 import flash.text.TextField;
 import flash.text.TextFieldType;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 import flash.text.TextLineMetrics;
 
-import editor.ui.embed.fonts.MyriadPro;
+import realmeditor.editor.ui.embed.fonts.MyriadPro;
 
-import editor.ui.embed.fonts.MyriadProBold;
-import editor.ui.embed.fonts.MyriadProBoldCFF;
-import editor.ui.embed.fonts.MyriadProCFF;
+import realmeditor.editor.ui.embed.fonts.MyriadProBold;
+import realmeditor.editor.ui.embed.fonts.MyriadProBoldCFF;
+import realmeditor.editor.ui.embed.fonts.MyriadProCFF;
 
 import realmeditor.editor.ui.embed.fonts.MyriadPro;
 import realmeditor.editor.ui.embed.fonts.MyriadProBold;
@@ -123,7 +124,7 @@ public class SimpleText extends TextField {
     }
 
     public function setText(text:String):SimpleText {
-        this.text = text;
+        this.htmlText = text;
         return this;
     }
 
@@ -153,11 +154,8 @@ public class SimpleText extends TextField {
         }
         width = this.inputWidth_ == 0 ? this.actualWidth_ : this.inputWidth_;
         height = this.inputHeight_ == 0 ? this.actualHeight_ : this.inputHeight_;
-        if (this.autoResize) {
+        if (this.autoResize)
             this.resize();
-            this.actualWidth_ *= this.scaleX;
-            this.actualHeight_ *= this.scaleY;
-        }
         return this;
     }
 

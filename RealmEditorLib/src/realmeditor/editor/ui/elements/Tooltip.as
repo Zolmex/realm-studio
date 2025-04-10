@@ -1,5 +1,5 @@
 package realmeditor.editor.ui.elements {
-import editor.ui.*;
+import realmeditor.editor.ui.*;
 
 import flash.display.DisplayObject;
 import flash.display.Graphics;

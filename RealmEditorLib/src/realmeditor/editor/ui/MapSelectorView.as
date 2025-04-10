@@ -1,5 +1,5 @@
 package realmeditor.editor.ui {
-import editor.MEEvent;
+import realmeditor.editor.MEEvent;
 
 import flash.display.Graphics;
 import flash.display.Shape;
@@ -116,37 +116,16 @@ public class MapSelectorView extends Sprite {
         this.mapSlots[mapId].setSelected(true);
         this.selectedMap = mapId;
     }
-
-    public function selectNextMap(closedMapId:int):int {
-        var minDiff:int = -1;
-        var current:int = 0;
-        for each (var mapSlot:MapSelectorSlot in this.mapSlots){
-            var diff:int = Math.abs(closedMapId - mapSlot.mapId);
-            if (minDiff == -1 || diff < minDiff) {
-                minDiff = diff;
-                current = mapSlot.mapId;
-            }
-            mapSlot.setSelected(false);
-        }
-
-        if (minDiff == -1){
-            return 0;
-        }
-
-        this.mapSlots[current].setSelected(true);
-        this.selectedMap = current;
-        return current;
-    }
 }
 }
 
-import editor.MEEvent;
-import editor.ui.Constants;
-import editor.ui.MainView;
-import editor.ui.MapSelectorView;
-import editor.ui.MapView;
-import editor.ui.elements.TextTooltip;
-import editor.ui.elements.SimpleText;
+import realmeditor.editor.MEEvent;
+import realmeditor.editor.ui.Constants;
+import realmeditor.editor.ui.MainView;
+import realmeditor.editor.ui.MapSelectorView;
+import realmeditor.editor.ui.MapView;
+import realmeditor.editor.ui.elements.TextTooltip;
+import realmeditor.editor.ui.elements.SimpleText;
 
 import flash.display.Graphics;
 
@@ -155,7 +134,6 @@ import flash.display.Shape;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
-import flash.text.TextFieldAutoSize;
 
 import realmeditor.editor.MEEvent;
 import realmeditor.editor.ui.Constants;
@@ -168,7 +146,6 @@ import realmeditor.editor.ui.elements.SimpleText;
 import realmeditor.editor.ui.elements.TextTooltip;
 import realmeditor.util.MoreColorUtil;
 
-import util.MoreColorUtil;
 
 class MapSelectorSlot extends Sprite {
 
@@ -195,12 +172,10 @@ class MapSelectorSlot extends Sprite {
         this.background = new Shape();
         addChild(this.background);
 
-        this.text = new SimpleText(16, 0xFFFFFF, false, WIDTH - 10);
-        this.text.setAutoSize(TextFieldAutoSize.LEFT);
-        this.text.setText(mapId.toString() + (!mapView.mapData.savedChanges ? "* " : "") + ". " + name);
+        this.text = new SimpleText(16, 0xFFFFFF, false, WIDTH);
+        this.text.setText(mapId.toString() + ". " + name + (!mapView.mapData.savedChanges ? " *" : ""));
         this.text.updateMetrics();
         this.text.x = 3;
-        this.text.y = (HEIGHT - this.text.actualHeight_) / 2;
         this.text.filters = Constants.SHADOW_FILTER_1;
         addChild(this.text);
 
@@ -228,9 +203,8 @@ class MapSelectorSlot extends Sprite {
     }
 
     private function onMapChanged(e:Event):void {
-        this.text.setText(this.mapId.toString() + ". * " + this.mapName);
+        this.text.setText(this.mapId.toString() + ". " + this.mapName + " *");
         this.text.updateMetrics();
-        this.text.y = (HEIGHT - this.text.actualHeight_) / 2;
     }
 
     private function onMapSaved(e:Event):void {
@@ -246,8 +220,8 @@ class MapSelectorSlot extends Sprite {
 
     private function onRollOver(e:Event):void {
         if (this.closeTooltip == null) {
-            this.closeTooltip = new TextTooltip(this.cross, "Close", 18, 0xFFFFFF, true);
-            this.closeTooltip.addSubText("Save map before closing!");
+            this.closeTooltip = new TextTooltip(this.cross, "<b>Close</b>", 18, 0xFFFFFF);
+            this.closeTooltip.addSubText("<b>Save map before closing!</b>");
             MainView.Main.stage.addChild(this.closeTooltip);
         }
     }

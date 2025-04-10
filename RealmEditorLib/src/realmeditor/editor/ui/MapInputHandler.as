@@ -1,7 +1,7 @@
 package realmeditor.editor.ui {
-import editor.MEEvent;
-import editor.tools.METool;
-import editor.ToolSwitchEvent;
+import realmeditor.editor.MEEvent;
+import realmeditor.editor.tools.METool;
+import realmeditor.editor.ToolSwitchEvent;
 
 import flash.events.Event;
 import flash.events.EventDispatcher;
@@ -116,7 +116,15 @@ public class MapInputHandler extends EventDispatcher {
         }
 
         this.dragging = true;
-        this.dispatchEvent(new Event(MEEvent.MOUSE_DRAG));
+        if (e.shiftKey) {
+            this.dispatchEvent(new Event(MEEvent.SHIFT_MOUSE_DRAG));
+        }
+        else if (e.ctrlKey) {
+            this.dispatchEvent(new Event(MEEvent.CTRL_MOUSE_DRAG));
+        }
+        else {
+            this.dispatchEvent(new Event(MEEvent.MOUSE_DRAG));
+        }
     }
 
     private function onMouseDown(e:MouseEvent):void {

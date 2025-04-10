@@ -4,7 +4,6 @@ package realmeditor.assets
 
 import realmeditor.util.BitmapUtil;
 
-import util.BitmapUtil;
 
 public class MaskedImage
    {

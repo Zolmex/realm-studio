@@ -1,8 +1,4 @@
 package realmeditor.editor.tools {
-import editor.*;
-import editor.ui.MainView;
-import editor.MapHistory;
-import editor.ui.MapView;
 
 import flash.utils.Dictionary;
 
@@ -12,8 +8,6 @@ import realmeditor.editor.MapHistory;
 
 import realmeditor.editor.ui.MainView;
 import realmeditor.util.IntPoint;
-
-import util.IntPoint;
 
 public class METool {
 
@@ -153,6 +147,38 @@ public class METool {
                 return EDIT;
             default:
                 trace("Unknown tool name for tool id:", id.toString());
+                return null;
+        }
+    }
+
+    public static function GetToolDescription(name:String):String {
+        switch (name){
+            case SELECT:
+                return "Keybind: <b>S</b>\n" +
+                        "Hold <b>Shift</b> while dragging to activate.\n" +
+                        "<b>Escape</b> to unselect.\n" +
+                        "<b>Delete</b> to delete tiles in selection.";
+            case PENCIL:
+                return "Keybind: <b>D</b>\n" +
+                        "Ctrl + Scroll to change brush size.";
+            case ERASER:
+                return "Keybind: <b>E</b>\n" +
+                        "Ctrl + Scroll to change brush size.";
+            case PICKER:
+                return "Keybind: <b>A</b>\n";
+            case BUCKET:
+                return "Keybind: <b>F</b>\n";
+            case LINE:
+                return "Keybind: <b>L</b>\n" +
+                        "Not implemented";
+            case SHAPE:
+                return "Keybind: <b>U</b>\n" +
+                        "Not implemented";
+            case EDIT:
+                return "Keybind: <b>I</b>\n" +
+                        "Can only edit names of objects for now... (useful for Signs)";
+            default:
+                trace("Unknown tool name for tool name:", name.toString());
                 return null;
         }
     }

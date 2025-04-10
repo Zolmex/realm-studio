@@ -1,7 +1,7 @@
 package realmeditor.editor.ui {
-import editor.ui.elements.SimpleText;
-import editor.ui.elements.SimpleTextButton;
-import editor.ui.elements.SimpleTextInput;
+import realmeditor.editor.ui.elements.SimpleText;
+import realmeditor.editor.ui.elements.SimpleTextButton;
+import realmeditor.editor.ui.elements.SimpleTextInput;
 
 import flash.display.Graphics;
 
@@ -172,9 +172,9 @@ public class ObjectFilterOptionsView extends Sprite {
 }
 }
 
-import editor.ui.Constants;
-import editor.ui.ObjectFilterOptionsView;
-import editor.ui.elements.SimpleText;
+import realmeditor.editor.ui.Constants;
+import realmeditor.editor.ui.ObjectFilterOptionsView;
+import realmeditor.editor.ui.elements.SimpleText;
 
 import flash.display.Graphics;
 

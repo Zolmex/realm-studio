@@ -5,11 +5,11 @@ public class MEEvent {
     public static const MAP_LOAD_BEGIN:String = "MapLoadBegin";
     public static const MAP_LOAD_END:String = "MapLoadEnd";
     public static const GRID_ENABLE:String = "GridEnable";
-    public static const QUALITY_TILES:String = "QualityTiles";
-    public static const QUALITY_OBJECTS:String = "QualityObjects";
     public static const TILE_CLICK:String = "TileClick";
     public static const MOUSE_DRAG:String = "MouseDrag";
     public static const MIDDLE_MOUSE_DRAG:String = "MiddleMouseDrag";
+    public static const CTRL_MOUSE_DRAG:String = "CtrlMouseDrag";
+    public static const SHIFT_MOUSE_DRAG:String = "ShiftMouseDrag";
     public static const MOUSE_DRAG_END:String = "MouseDragEnd";
     public static const MIDDLE_MOUSE_DRAG_END:String = "MiddleMouseDragEnd";
     public static const TOOL_SWITCH:String = "ToolSwitch";
@@ -44,5 +44,6 @@ public class MEEvent {
     public static const MAP_CHANGED:String = "MapChanged";
     public static const MAP_SAVED:String = "MapSaved";
     public static const MAP_DIMENSIONS_CHANGE:String = "MapDimensionsChange";
+    public static const DELETE_SELECTION:String = "DeleteSelection";
 }
 }

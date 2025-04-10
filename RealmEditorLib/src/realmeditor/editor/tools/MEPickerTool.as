@@ -1,10 +1,4 @@
 package realmeditor.editor.tools {
-import editor.MEBrush;
-import editor.MEDrawType;
-import editor.MapTileData;
-import editor.ui.MainView;
-import editor.MapHistory;
-import editor.ui.MapView;
 
 import realmeditor.editor.MEBrush;
 
@@ -14,7 +8,6 @@ import realmeditor.editor.MapTileData;
 import realmeditor.editor.ui.MainView;
 import realmeditor.util.IntPoint;
 
-import util.IntPoint;
 
 public class MEPickerTool extends METool {
 

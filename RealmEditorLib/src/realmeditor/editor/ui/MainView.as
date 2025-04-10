@@ -1,54 +1,21 @@
 package realmeditor.editor.ui {
-import editor.AutoMapSaver;
-
-import editor.MEBrush;
-import editor.MEClipboard;
-import editor.MEDrawType;
-
-import editor.MEEvent;
-import editor.MapHistory;
-import editor.TimeControl;
-import editor.actions.MapEditAction;
-import editor.actions.MapSelectAction;
-import editor.actions.data.MapSelectData;
-import editor.tools.MESelectTool;
-import editor.tools.METool;
-import editor.tools.METool;
-import editor.actions.MapAction;
-import editor.MapData;
-import editor.MapTileData;
-import editor.ToolSwitchEvent;
-import editor.ui.MapDrawElementListView;
-import editor.ui.elements.IDrawElementFilter;
-import editor.ui.elements.MultiOptionalSwitch;
-import editor.ui.elements.SimpleCheckBox;
-import editor.ui.elements.SimpleTextInput;
-import editor.ui.embed.Background;
-
 import flash.desktop.NativeApplication;
+import flash.display.NativeWindow;
+
+import realmeditor.editor.tools.MEEraserTool;
+
+import realmeditor.editor.tools.METool;
 
 import flash.display.Graphics;
-import flash.display.NativeWindow;
 import flash.display.Shape;
-import flash.display.SimpleButton;
 import flash.display.Sprite;
 import flash.events.Event;
 
-import editor.ui.elements.SimpleTextButton;
-
-import flash.events.KeyboardEvent;
-
 import flash.events.MouseEvent;
-import flash.geom.Matrix;
 import flash.geom.Point;
-import flash.geom.Vector3D;
 import flash.system.fscommand;
-import flash.ui.Keyboard;
-import flash.ui.Mouse;
-import flash.utils.Dictionary;
-import flash.utils.getTimer;
 
-import org.osflash.signals.Signal;
+import flash.utils.getTimer;
 
 import realmeditor.RealmEditorTestEvent;
 
@@ -66,18 +33,12 @@ import realmeditor.editor.TimeControl;
 import realmeditor.editor.ToolSwitchEvent;
 import realmeditor.editor.actions.MapEditAction;
 import realmeditor.editor.tools.MESelectTool;
-import realmeditor.editor.tools.METool;
 import realmeditor.editor.ui.elements.MultiOptionalSwitch;
 import realmeditor.editor.ui.elements.SimpleCheckBox;
 import realmeditor.editor.ui.elements.SimpleTextButton;
 import realmeditor.editor.ui.elements.SimpleTextInput;
 import realmeditor.editor.ui.embed.Background;
 import realmeditor.util.IntPoint;
-import realmeditor.util.TimedAction;
-import realmeditor.util.TimedAction;
-
-import util.IntPoint;
-
 public class MainView extends Sprite {
 
     private static const MAX_ZOOM:Number = 1000.0;
@@ -113,8 +74,6 @@ public class MainView extends Sprite {
     private var tileInfoPanel:TileInfoPanel;
     private var gridCheckbox:SimpleCheckBox;
     private var autoSaveCheckbox:SimpleCheckBox;
-    private var qualityTilesCheckbox:SimpleCheckBox;
-    private var qualityObjectsCheckbox:SimpleCheckBox;
     private var drawTypeSwitch:MultiOptionalSwitch;
     private var editNameView:EditTileNameView;
     private var objectFilterView:ObjectFilterOptionsView;
@@ -126,6 +85,7 @@ public class MainView extends Sprite {
     public var userBrush:MEBrush;
     public var selectedTool:METool;
     private var lastMousePos:Point;
+    private var previousTool:METool;
     private var clipBoard:MEClipboard;
     public var timeControl:TimeControl; // Controls actions done/undone in each map
 
@@ -134,10 +94,6 @@ public class MainView extends Sprite {
     private var window:NativeWindow;
 
     public var testMode:Boolean;
-    public var timers:Vector.<TimedAction> = new Vector.<TimedAction>();
-
-    public var qualityTiles:Boolean;
-    public var qualityObjects:Boolean = true;
 
     public function MainView(main:Sprite, embedded:Boolean) {
         Instance = this;
@@ -182,14 +138,6 @@ public class MainView extends Sprite {
         this.autoSaveCheckbox.addEventListener(Event.CHANGE, this.onAutoSaveClick);
         addChild(this.autoSaveCheckbox);
 
-        this.qualityTilesCheckbox = new SimpleCheckBox("Quality Tiles", false);
-        this.qualityTilesCheckbox.addEventListener(Event.CHANGE, this.onQualityTilesClick);
-        addChild(this.qualityTilesCheckbox);
-
-        this.qualityObjectsCheckbox = new SimpleCheckBox("Quality Objects", true);
-        this.qualityObjectsCheckbox.addEventListener(Event.CHANGE, this.onQualityObjectsClick);
-        addChild(this.qualityObjectsCheckbox);
-
         this.drawTypeSwitch = new MultiOptionalSwitch();
         this.drawTypeSwitch.addOption("Ground");
         this.drawTypeSwitch.addOption("Objects");
@@ -201,7 +149,7 @@ public class MainView extends Sprite {
         g.beginFill(Constants.BACK_COLOR_2, 0.8);
         g.drawRoundRect(0, 0,
                 this.autoSaveCheckbox.width + 10, // Add here all of the things that are supposed to go inside of the toolbox
-                this.zoomInput.height + this.gridCheckbox.height + this.autoSaveCheckbox.height + this.drawTypeSwitch.height + this.qualityTilesCheckbox.height + this.qualityObjectsCheckbox.height + 44,
+                this.zoomInput.height + this.gridCheckbox.height + this.autoSaveCheckbox.height + this.drawTypeSwitch.height + 32,
                 10, 10);
         g.endFill();
 
@@ -271,12 +219,12 @@ public class MainView extends Sprite {
     private function setupInput():void {
         this.inputHandler = new MapInputHandler(this);
         this.inputHandler.addEventListener(MEEvent.GRID_ENABLE, this.onGridEnable);
-        this.inputHandler.addEventListener(MEEvent.QUALITY_TILES, this.onQualityTilesToggle);
-        this.inputHandler.addEventListener(MEEvent.QUALITY_OBJECTS, this.onQualityObjectsToggle);
         this.inputHandler.addEventListener(MEEvent.TILE_CLICK, this.onTileClick);
         this.inputHandler.addEventListener(MEEvent.MOUSE_DRAG, this.onMouseDrag);
         this.inputHandler.addEventListener(MEEvent.MOUSE_DRAG_END, this.onMouseDragEnd);
         this.inputHandler.addEventListener(MEEvent.MIDDLE_MOUSE_DRAG, this.onMiddleMouseDrag);
+        this.inputHandler.addEventListener(MEEvent.CTRL_MOUSE_DRAG, this.onCtrlMouseDrag);
+        this.inputHandler.addEventListener(MEEvent.SHIFT_MOUSE_DRAG, this.onShiftMouseDrag);
         this.inputHandler.addEventListener(MEEvent.MIDDLE_MOUSE_DRAG_END, this.onMiddleMouseDragEnd);
         this.inputHandler.addEventListener(MouseEvent.MOUSE_MOVE, this.onMouseMoved);
         this.inputHandler.addEventListener(MEEvent.TOOL_SWITCH, this.onToolSwitch);
@@ -291,6 +239,7 @@ public class MainView extends Sprite {
         this.inputHandler.addEventListener(MEEvent.MOVE_SELECTION_LEFT, this.onMoveSelectionLeft);
         this.inputHandler.addEventListener(MEEvent.MOVE_SELECTION_RIGHT, this.onMoveSelectionRight);
         this.inputHandler.addEventListener(MEEvent.TOGGLE_DEBUG, this.onToggleDebug);
+        this.inputHandler.addEventListener(MEEvent.DELETE_SELECTION, this.onDeleteSelection);
     }
 
     private function updateScale():void {
@@ -329,9 +278,6 @@ public class MainView extends Sprite {
 
         this.toolBoxBackground.x = 15;
         this.toolBoxBackground.y = (StageHeight - this.toolBoxBackground.height) / 2;
-        if (this.toolBoxBackground.y < this.mapSelector.y + this.mapSelector.height){ // Make sure the lef side toolbox doesn't overlap with the map selector
-            this.toolBoxBackground.y = this.mapSelector.y + this.mapSelector.height + 15;
-        }
 
         this.zoomInput.x = this.toolBoxBackground.x + 5;
         this.zoomInput.y = this.toolBoxBackground.y + 7.5;
@@ -342,14 +288,8 @@ public class MainView extends Sprite {
         this.autoSaveCheckbox.x = this.zoomInput.x;
         this.autoSaveCheckbox.y = this.gridCheckbox.y + this.gridCheckbox.height + 6;
 
-        this.qualityTilesCheckbox.x = this.zoomInput.x;
-        this.qualityTilesCheckbox.y = this.autoSaveCheckbox.y + this.autoSaveCheckbox.height + 6;
-
-        this.qualityObjectsCheckbox.x = this.zoomInput.x;
-        this.qualityObjectsCheckbox.y = this.qualityTilesCheckbox.y + this.qualityTilesCheckbox.height + 6;
-
         this.drawTypeSwitch.x = this.zoomInput.x;
-        this.drawTypeSwitch.y = this.qualityObjectsCheckbox.y + this.qualityObjectsCheckbox.height + 6;
+        this.drawTypeSwitch.y = this.autoSaveCheckbox.y + this.autoSaveCheckbox.height + 6;
 
         this.drawElementsList.x = StageWidth - MapDrawElementListView.WIDTH - 15;
         if (this.backButton != null) {
@@ -476,17 +416,6 @@ public class MainView extends Sprite {
         if (this.mapData != null) {
             this.autoSaver.trySaveMap(this.mapData, deltaTime);
         }
-
-        for (var i:int = 0; i < this.timers.length; i++) {
-            var act:TimedAction = this.timers[i];
-            act.timeLeftMS -= deltaTime;
-            if (act.timeLeftMS > 0){
-                continue;
-            }
-
-            act.callback();
-            this.timers.removeAt(i);
-        }
     }
 
     private static function closeWindow():void {
@@ -568,8 +497,6 @@ public class MainView extends Sprite {
         this.mapView = this.mapViewContainer.viewMap(this.mapSelector.selectedMap);
         this.mapData = this.mapView.mapData;
 
-        this.mapDimensionsText.setText("Width: " + this.mapData.mapWidth + "\nHeight: " + this.mapData.mapHeight);
-
         this.updateZoomLevel();
         this.gridCheckbox.setValue(this.mapView.gridEnabled);
     }
@@ -579,7 +506,8 @@ public class MainView extends Sprite {
         this.mapViewContainer.removeMapView(e.mapId);
         this.timeControl.eraseHistory(e.mapId);
 
-        var nextId:int = this.mapSelector.selectNextMap(this.mapSelector.selectedMap);
+        var nextId:int = this.mapSelector.selectedMap - 1 < 0 ? 0 : this.mapSelector.selectedMap - 1;
+        this.mapSelector.selectMap(nextId);
 
         this.mapView = this.mapViewContainer.viewMap(nextId);
 
@@ -599,19 +527,8 @@ public class MainView extends Sprite {
     private function onSaveClick(e:Event):void {
         if (this.mapData != null) {
             this.mapData.addEventListener(MEEvent.MAP_SAVED, this.onJsonSaved);
-            this.notifications.showNotification("Serializing map to JSON...", 18, -1); // Need to clear notification if duration is -1
-            this.timers.push(new TimedAction(100, this.saveJson)); // Wait like 100 ms to make sure the serializing notification is visible
+            this.mapData.save(false);
         }
-    }
-
-    private function saveJson():void {
-        this.mapData.save(false);
-        this.notifications.clear();
-    }
-
-    private function saveWmap():void {
-        this.mapData.save(true);
-        this.notifications.clear();
     }
 
     private function onBackClick(e:Event):void {
@@ -622,8 +539,7 @@ public class MainView extends Sprite {
     private function onSaveWmapClick(e:Event):void {
         if (this.mapData != null) {
             this.mapData.addEventListener(MEEvent.MAP_SAVED, this.onWmapSaved);
-            this.notifications.showNotification("Serializing map to WMap...", 18, -1);
-            this.timers.push(new TimedAction(100, this.saveWmap));
+            this.mapData.save(true);
         }
     }
 
@@ -664,11 +580,9 @@ public class MainView extends Sprite {
         this.mapSelector.selectMap(mapId);
 
         this.mapViewContainer.viewMap(mapId);
-        this.timeControl.createHistory(mapId);
+        this.timeControl.createHistory(this.mapView.id);
 
         this.mapDimensionsText.setText("Width: " + this.mapData.mapWidth + "\nHeight: " + this.mapData.mapHeight);
-
-        MainView.Instance.notifications.clear(); // Clear "loading map..." notification
     }
 
     private function onGridClick(e:Event):void {
@@ -685,51 +599,6 @@ public class MainView extends Sprite {
         if (this.mapView) {
             var value:Boolean = this.mapView.toggleGrid();
             this.gridCheckbox.setValue(value);
-        }
-    }
-
-    private function onQualityTilesToggle(e:Event):void {
-        this.qualityTiles = !this.qualityTiles;
-        this.qualityTilesCheckbox.setValue(this.qualityTiles);
-        if (this.mapView){
-            this.mapView.tileMap.showHighQualityTiles(this.qualityTiles);
-            this.updateBrushOverlayQuality();
-        }
-    }
-
-    private function onQualityTilesClick(e:Event):void {
-        this.qualityTiles = this.qualityTilesCheckbox.value;
-        if (this.mapView){
-            this.mapView.tileMap.showHighQualityTiles(this.qualityTiles);
-            this.updateBrushOverlayQuality();
-        }
-    }
-
-    private function onQualityObjectsToggle(e:Event):void {
-        this.qualityObjects = !this.qualityObjects;
-        this.qualityObjectsCheckbox.setValue(this.qualityObjects);
-        if (this.mapView){
-            this.mapView.tileMap.showHighQualityObjects(this.qualityObjects);
-            this.updateBrushOverlayQuality();
-        }
-    }
-
-    private function onQualityObjectsClick(e:Event):void {
-        this.qualityObjects = this.qualityObjectsCheckbox.value;
-        if (this.mapView){
-            this.mapView.tileMap.showHighQualityObjects(this.qualityObjects);
-            this.updateBrushOverlayQuality();
-        }
-    }
-
-    private function updateBrushOverlayQuality():void {
-        if (this.mapView.brushOverlay.visible) {
-            var tilePos:IntPoint = this.getMouseTilePosition();
-            if (tilePos == null) {
-                return;
-            }
-
-            this.mapView.drawBrushTiles(tilePos.x_, tilePos.y_, this.userBrush); // Force draw the brush again
         }
     }
 
@@ -764,23 +633,37 @@ public class MainView extends Sprite {
             return;
         }
 
-        if (this.isWindowOpened()){
-            return;
-        }
-
         this.selectedTool.mouseDrag(tilePos, this.timeControl.getHistory(this.mapView.id));
     }
 
     private function onMiddleMouseDrag(e:Event):void {
-        if (this.isWindowOpened()){
-            return;
-        }
-
         if (this.lastMousePos == null) {
             this.lastMousePos = new Point(Main.stage.mouseX, Main.stage.mouseY);
         }
 
         this.dragMap();
+    }
+
+    private function onCtrlMouseDrag(e:Event):void {
+        if (this.lastMousePos == null) {
+            this.lastMousePos = new Point(Main.stage.mouseX, Main.stage.mouseY);
+        }
+
+        this.dragMap();
+    }
+
+    private function onShiftMouseDrag(e:Event):void {
+        var tilePos:IntPoint = this.getMouseTilePosition();
+        if (this.mapView == null) {
+            return;
+        }
+
+        if (this.selectedTool.id != METool.SELECT_ID) {
+            this.previousTool = this.selectedTool;
+            onToolSwitch(new ToolSwitchEvent(MEEvent.TOOL_SWITCH, METool.SELECT_ID));
+        }
+
+        this.selectedTool.mouseDrag(tilePos, this.timeControl.getHistory(this.mapView.id));
     }
 
     private function dragMap():void {
@@ -800,11 +683,12 @@ public class MainView extends Sprite {
             return;
         }
 
-        if (this.isWindowOpened()){
-            return;
-        }
-
         this.selectedTool.mouseDragEnd(tilePos, this.timeControl.getHistory(this.mapView.id));
+        this.lastMousePos = null;
+        if (this.previousTool != null) {
+            this.onToolSwitch(new ToolSwitchEvent(MEEvent.TOOL_SWITCH, this.previousTool.id));
+            this.previousTool = null;
+        }
     }
 
     private function onMiddleMouseDragEnd(e:Event):void {
@@ -813,25 +697,16 @@ public class MainView extends Sprite {
 
     private function onTileClick(e:Event):void { // Perform select/draw/erase actions here
         var tilePos:IntPoint = this.getMouseTilePosition();
-        if (tilePos == null){
-            this.onClearSelection(null);
-            return;
-        }
-
         if (this.mapView == null) {
             return;
         }
 
-        if (this.isWindowOpened()){
+        if ((this.mapDimensionsWindow != null && this.mapDimensionsWindow.visible) ||
+                (this.mapCreateWindow != null && this.mapCreateWindow.visible)){
             return;
         }
 
         this.selectedTool.tileClick(tilePos, this.timeControl.getHistory(this.mapView.id));
-    }
-
-    private function isWindowOpened():Boolean{
-        return (this.mapDimensionsWindow != null && this.mapDimensionsWindow.visible) ||
-                (this.mapCreateWindow != null && this.mapCreateWindow.visible);
     }
 
     public function showEditNameView(x:int, y:int, objName:String):void {
@@ -848,10 +723,6 @@ public class MainView extends Sprite {
     }
 
     private function onEditName(e:Event):void {
-        if (this.isWindowOpened()){
-            return;
-        }
-
         var mapX:int = this.editNameView.tileX;
         var mapY:int = this.editNameView.tileY;
         var history:MapHistory = this.timeControl.getHistory(this.mapView.id);
@@ -872,10 +743,6 @@ public class MainView extends Sprite {
 
         if (tilePos == null) {
             this.tileInfoPanel.visible = false;
-            return;
-        }
-
-        if (this.isWindowOpened()){
             return;
         }
 
@@ -1016,21 +883,12 @@ public class MainView extends Sprite {
             return;
         }
 
-        if (this.isWindowOpened()){
-            return;
-        }
-
         this.clipBoard.clear();
         this.mapView.copySelectionToClipboard(this.clipBoard);
-        this.notifications.showNotification("Copy");
     }
 
     private function onPaste(e:Event):void {
         if (this.mapView == null) {
-            return;
-        }
-
-        if (this.isWindowOpened()){
             return;
         }
 
@@ -1040,14 +898,9 @@ public class MainView extends Sprite {
         }
 
         this.mapView.pasteFromClipboard(this.clipBoard, tilePos.x_, tilePos.y_, this.timeControl.getHistory(this.mapView.id));
-        this.notifications.showNotification("Paste");
     }
 
     private function onClearSelection(e:Event):void {
-        if (this.mapView == null || this.isWindowOpened()){
-            return;
-        }
-
         if (this.selectedTool.id == METool.SELECT_ID) {
             this.selectedTool.reset();
         }
@@ -1062,20 +915,12 @@ public class MainView extends Sprite {
             return;
         }
 
-        if (this.isWindowOpened()){
-            return;
-        }
-
         var selectTool:MESelectTool = METool.GetTool(METool.SELECT_ID, this) as MESelectTool;
         selectTool.dragSelection(0, -1, this.timeControl.getHistory(this.mapView.id));
     }
 
     private function onMoveSelectionDown(e:Event):void {
         if (this.mapView == null || this.selectedTool.id != METool.SELECT_ID) {
-            return;
-        }
-
-        if (this.isWindowOpened()){
             return;
         }
 
@@ -1088,20 +933,12 @@ public class MainView extends Sprite {
             return;
         }
 
-        if (this.isWindowOpened()){
-            return;
-        }
-
         var selectTool:MESelectTool = METool.GetTool(METool.SELECT_ID, this) as MESelectTool;
         selectTool.dragSelection(-1, 0, this.timeControl.getHistory(this.mapView.id));
     }
 
     private function onMoveSelectionRight(e:Event):void {
         if (this.mapView == null || this.selectedTool.id != METool.SELECT_ID) {
-            return;
-        }
-
-        if (this.isWindowOpened()){
             return;
         }
 
@@ -1115,15 +952,18 @@ public class MainView extends Sprite {
             return;
         }
 
-        if (this.isWindowOpened()){
-            return;
-        }
-
         if (this.selectedTool.id == METool.ERASER_ID) {
             this.mapView.drawBrushOutline(tilePos.x_, tilePos.y_, this.userBrush);
         } else {
             this.mapView.drawBrushTiles(tilePos.x_, tilePos.y_, this.userBrush);
         }
+    }
+
+    private function onDeleteSelection(e:Event):void {
+        if (this.mapView.selection == MapView.EMPTY_SELECTION)
+            return;
+
+        MEEraserTool.eraseSelection(this, this.mapView.selection, this.timeControl.getHistory(this.mapView.id));
     }
 
     private function onToggleDebug(e:Event):void {

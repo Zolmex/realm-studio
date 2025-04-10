@@ -1,5 +1,5 @@
 package realmeditor.editor.ui {
-import editor.MEEvent;
+import realmeditor.editor.MEEvent;
 
 import flash.ui.Keyboard;
 import flash.utils.Dictionary;
@@ -22,14 +22,14 @@ public class Keybinds {
         ALT_KEYS = new Dictionary();
         HELD_KEYS = new Dictionary();
         HELD_CTRL_KEYS = new Dictionary();
-        KEYS[Keyboard.M] = MEEvent.TOOL_SWITCH_SELECT;
-        KEYS[Keyboard.B] = MEEvent.TOOL_SWITCH_PENCIL;
+        KEYS[Keyboard.S] = MEEvent.TOOL_SWITCH_SELECT;
+        KEYS[Keyboard.D] = MEEvent.TOOL_SWITCH_PENCIL;
         KEYS[Keyboard.L] = MEEvent.TOOL_SWITCH_LINE;
         KEYS[Keyboard.U] = MEEvent.TOOL_SWITCH_SHAPE;
-        KEYS[Keyboard.G] = MEEvent.TOOL_SWITCH_BUCKET;
-        KEYS[Keyboard.I] = MEEvent.TOOL_SWITCH_PICKER;
+        KEYS[Keyboard.F] = MEEvent.TOOL_SWITCH_BUCKET;
+        KEYS[Keyboard.A] = MEEvent.TOOL_SWITCH_PICKER;
         KEYS[Keyboard.E] = MEEvent.TOOL_SWITCH_ERASER;
-        KEYS[Keyboard.D] = MEEvent.TOOL_SWITCH_EDIT;
+        KEYS[Keyboard.I] = MEEvent.TOOL_SWITCH_EDIT;
         KEYS[Keyboard.T] = MEEvent.DRAW_TYPE_SWITCH;
         KEYS[Keyboard.ESCAPE] = MEEvent.CLEAR_SELECTION;
         KEYS[Keyboard.UP] = MEEvent.MOVE_SELECTION_UP;
@@ -37,9 +37,8 @@ public class Keybinds {
         KEYS[Keyboard.LEFT] = MEEvent.MOVE_SELECTION_LEFT;
         KEYS[Keyboard.RIGHT] = MEEvent.MOVE_SELECTION_RIGHT;
         KEYS[Keyboard.F3] = MEEvent.TOGGLE_DEBUG;
-        KEYS[Keyboard.Q] = MEEvent.QUALITY_TILES;
+        KEYS[Keyboard.DELETE] = MEEvent.DELETE_SELECTION;
         SHIFT_KEYS[Keyboard.G] = MEEvent.GRID_ENABLE;
-        SHIFT_KEYS[Keyboard.Q] = MEEvent.QUALITY_OBJECTS;
         CTRL_KEYS[Keyboard.C] = MEEvent.COPY;
         CTRL_KEYS[Keyboard.V] = MEEvent.PASTE;
         HELD_CTRL_KEYS[Keyboard.Z] = MEEvent.UNDO;
