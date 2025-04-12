@@ -214,6 +214,7 @@ public class MapData extends EventDispatcher {
 
         var dict:Array = jm["dict"];
         var byteArray:ByteArray = Base64.decodeToByteArray(jm["data"]);
+        byteArray.endian = Endian.LITTLE_ENDIAN;
         byteArray.uncompress();
         this.tileDict = new Dictionary();
         for (var yi:int = 0; yi < this.mapHeight; yi++) {
@@ -452,6 +453,7 @@ public class MapData extends EventDispatcher {
 
     private function exportJson():ByteArray {
         var ret:ByteArray = new ByteArray();
+        ret.endian = Endian.LITTLE_ENDIAN;
         var json:String = getMapJsonString();
         ret.writeMultiByte(json, "utf-8");
         return ret;
@@ -466,6 +468,7 @@ public class MapData extends EventDispatcher {
         var dict:Object = {};
         var entries:Array = [];
         var indices:ByteArray = new ByteArray();
+        indices.endian = Endian.LITTLE_ENDIAN;
         var index:int;
         for (var yi:int = 0; yi < this.mapHeight; yi++) {
             for (var xi:int = 0; xi < this.mapWidth; xi++) {
@@ -499,7 +502,7 @@ public class MapData extends EventDispatcher {
         }
         if (tileData.objType != 0) {
             var obj:Object = {"id": ObjectLibrary.getIdFromType(tileData.objType)};
-            if (tileData.objCfg != null) {
+            if (tileData.objCfg != null && tileData.objCfg != "") {
                 obj["name"] = tileData.objCfg;
             }
             ret["objs"] = [obj];

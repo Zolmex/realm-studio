@@ -45,5 +45,6 @@ public class MEEvent {
     public static const MAP_SAVED:String = "MapSaved";
     public static const MAP_DIMENSIONS_CHANGE:String = "MapDimensionsChange";
     public static const DELETE_SELECTION:String = "DeleteSelection";
+    public static const EXIT_EDITOR:String = "ExitEditor";
 }
 }

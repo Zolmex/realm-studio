@@ -2,6 +2,8 @@ package realmeditor.editor.ui {
 import flash.desktop.NativeApplication;
 import flash.display.NativeWindow;
 
+import realmeditor.editor.actions.data.MapSelectData;
+
 import realmeditor.editor.tools.MEEraserTool;
 
 import realmeditor.editor.tools.METool;
@@ -64,8 +66,9 @@ public class MainView extends Sprite {
     private var testMapButton:SimpleTextButton;
     private var mapCreateWindow:CreateMapWindow;
     private var closePrompt:ClosePromptWindow;
-    private var mapDimensionsText:SimpleTextButton;
+    private var mapInfoPanel:MapInfoPanel;
     private var mapDimensionsWindow:MapDimensionsWindow;
+    private var selectionInfoPanel:SelectionInfoPanel;
 
     public var inputHandler:MapInputHandler;
     public var notifications:NotificationView;
@@ -199,9 +202,14 @@ public class MainView extends Sprite {
         this.objectFilterView = new ObjectFilterOptionsView(this.drawElementsList);
         addChild(this.objectFilterView);
 
-        this.mapDimensionsText = new SimpleTextButton("Width: 0\nHeight: 0", 20, 0xFFFFFF, false);
-        this.mapDimensionsText.addEventListener(MouseEvent.CLICK, this.onMapDimensionsClick);
-        addChild(this.mapDimensionsText);
+        this.mapInfoPanel = new MapInfoPanel();
+        this.mapInfoPanel.addEventListener(MouseEvent.CLICK, onMapDimensionsClick);
+        this.mapInfoPanel.visible = false;
+        addChild(this.mapInfoPanel);
+
+        this.selectionInfoPanel = new SelectionInfoPanel();
+        this.selectionInfoPanel.visible = false;
+        addChild(this.selectionInfoPanel);
 
         this.notifications = new NotificationView();
         addChild(this.notifications);
@@ -210,6 +218,7 @@ public class MainView extends Sprite {
         Main.stage.addEventListener(MouseEvent.MOUSE_WHEEL, this.onMouseWheel);
         Main.stage.addEventListener(Event.RESIZE, this.onStageResize);
         Main.stage.addEventListener(Event.REMOVED_FROM_STAGE, this.onRemovedFromStage);
+        this.addEventListener(MEEvent.EXIT_EDITOR, this.onRemovedFromStage);
         this.window.addEventListener(Event.CLOSING, this.onExiting); // Closing the window
 
         this.updateScale();
@@ -273,8 +282,8 @@ public class MainView extends Sprite {
         this.mapSelector.x = this.loadButton.x;
         this.mapSelector.y = this.loadButton.y + this.loadButton.height + 10;
 
-        this.mapDimensionsText.x = this.mapSelector.x + this.mapSelector.width + 5;
-        this.mapDimensionsText.y = this.mapSelector.y;
+        this.mapInfoPanel.x = 15;
+        this.mapInfoPanel.y = StageHeight - this.mapInfoPanel.height - 15;
 
         this.toolBoxBackground.x = 15;
         this.toolBoxBackground.y = (StageHeight - this.toolBoxBackground.height) / 2;
@@ -300,6 +309,9 @@ public class MainView extends Sprite {
 
         this.tileInfoPanel.x = this.drawElementsList.x - this.tileInfoPanel.width - 15;
         this.tileInfoPanel.y = StageHeight - this.tileInfoPanel.height - 15;
+
+        this.selectionInfoPanel.x = this.tileInfoPanel.x - this.selectionInfoPanel.width - 5;
+        this.selectionInfoPanel.y = StageHeight - this.selectionInfoPanel.height - 15;
 
         this.toolBar.x = this.drawElementsList.x - this.toolBar.width - 8;
         this.toolBar.y = (StageHeight - this.toolBar.height) / 2;
@@ -394,6 +406,7 @@ public class MainView extends Sprite {
         Main.stage.removeEventListener(MouseEvent.MOUSE_WHEEL, this.onMouseWheel);
         Main.stage.removeEventListener(Event.RESIZE, this.onStageResize);
         Main.stage.removeEventListener(Event.REMOVED_FROM_STAGE, this.onRemovedFromStage);
+        this.window.removeEventListener(Event.CLOSING, this.onExiting);
     }
 
     private function update(e:Event):void { // Runs every frame
@@ -499,6 +512,8 @@ public class MainView extends Sprite {
 
         this.updateZoomLevel();
         this.gridCheckbox.setValue(this.mapView.gridEnabled);
+        this.mapInfoPanel.visible = true;
+        this.mapInfoPanel.setInfo(this.mapData.mapWidth, this.mapData.mapHeight);
     }
 
     private function onMapClosed(e:MapClosedEvent):void {
@@ -510,6 +525,7 @@ public class MainView extends Sprite {
         this.mapSelector.selectMap(nextId);
 
         this.mapView = this.mapViewContainer.viewMap(nextId);
+        this.mapInfoPanel.visible = false;
 
         var mapWidth:int = 0;
         var mapHeight:int = 0;
@@ -520,8 +536,9 @@ public class MainView extends Sprite {
 
             this.updateZoomLevel();
             this.gridCheckbox.setValue(this.mapView.gridEnabled);
+            this.mapInfoPanel.visible = true;
+            this.mapInfoPanel.setInfo(mapWidth, mapHeight);
         }
-        this.mapDimensionsText.setText("Width: " + mapWidth + "\nHeight: " + mapHeight);
     }
 
     private function onSaveClick(e:Event):void {
@@ -581,8 +598,8 @@ public class MainView extends Sprite {
 
         this.mapViewContainer.viewMap(mapId);
         this.timeControl.createHistory(this.mapView.id);
-
-        this.mapDimensionsText.setText("Width: " + this.mapData.mapWidth + "\nHeight: " + this.mapData.mapHeight);
+        this.mapInfoPanel.visible = true;
+        this.mapInfoPanel.setInfo(this.mapData.mapWidth, this.mapData.mapHeight);
     }
 
     private function onGridClick(e:Event):void {
@@ -741,6 +758,8 @@ public class MainView extends Sprite {
             return;
         }
 
+        this.updateSelectionPanel(this.mapView.selection);
+
         if (tilePos == null) {
             this.tileInfoPanel.visible = false;
             return;
@@ -763,6 +782,15 @@ public class MainView extends Sprite {
         this.tileInfoPanel.visible = true;
         this.tileInfoPanel.setInfo(tilePos.x_, tilePos.y_, tileData);
         this.updatePositions();
+    }
+
+    private function updateSelectionPanel(selection:MapSelectData):void {
+        if (selection == MapView.EMPTY_SELECTION) {
+            this.selectionInfoPanel.visible = false;
+            return;
+        }
+        this.selectionInfoPanel.visible = true;
+        this.selectionInfoPanel.setInfo(selection);
     }
 
     private function getMouseTilePosition():IntPoint { // Not to handle null value
@@ -999,7 +1027,8 @@ public class MainView extends Sprite {
         var height:int = this.mapDimensionsWindow.mapHeight;
 
         this.mapData.changeMapDimensions(this.mapView, width, height);
-        this.mapDimensionsText.setText("Width: " + width + "\nHeight: " + height);
+        this.mapInfoPanel.visible = true;
+        this.mapInfoPanel.setInfo(width, height);
 
         this.updatePositions();
     }
