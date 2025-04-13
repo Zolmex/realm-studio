@@ -1,7 +1,7 @@
 # realm-editor
 Zolmex's Realm Editor, but with old RotMG editor keybinds and a couple new features.
 
-# Changelog
+## Changelog
 
 * !!! Using <b>Little Endian</b> encoding for json maps:<br>
 DoM uses LITTLE_ENDIAN for maps, you can disable it by simply deleting all 3 lines in MainView. (If your maps aren't opening correctly)
