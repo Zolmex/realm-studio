@@ -14,5 +14,6 @@ DoM uses LITTLE_ENDIAN for maps, you can disable it by simply deleting all 3 lin
 * Selection info panel: shows width and height of current selection, useful cause it works as a ruler
 * Map Info Panel: Moved the map width/height to bottom left in its own panel, and made it more obvious that you can edit the dimensions.
 * Fixed a bug where name of objects was saved if it was empty
+* Fixed a bug where window would not close due to event listener still existing when closing editor
 * Added brush options panel, where you can type brush size, choose brush shape and change chance value
 * Added Shape tool functionality, currently only has 1 shape: Random, the 3 other shapes are just placeholders
