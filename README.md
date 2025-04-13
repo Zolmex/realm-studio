@@ -1,6 +1,10 @@
 # realm-editor
+Zolmex's Realm Editor, but with old RotMG editor keybinds and a couple new features.
 
 # Changelog
+
+* !!! Using <b>Little Endian</b> encoding for json maps:<br>
+DoM uses LITTLE_ENDIAN for maps, you can disable it by simply deleting all 3 lines in MainView. (If your maps aren't opening correctly)
 
 * Replaced all keybinds with the RotMG map editor layout
 * Added Ctrl dragging, Shift selecting, Selection deletion
@@ -9,6 +13,6 @@
 * To test maps, using a TEST_CONNECT event instead of Flash's Event.CONNECT
 * Selection info panel: shows width and height of current selection, useful cause it works as a ruler
 * Map Info Panel: Moved the map width/height to bottom left in its own panel, and made it more obvious that you can edit the dimensions.
-* !!! Using <b>Little Endian</b> encoding for json maps:<br>
-DoM uses LITTLE_ENDIAN for maps, you can disable it by simply deleting all 3 lines in MainView.
 * Fixed a bug where name of objects was saved if it was empty
+* Added brush options panel, where you can type brush size, choose brush shape and change chance value
+* Added Shape tool functionality, currently only has 1 shape: Random, the 3 other shapes are just placeholders
