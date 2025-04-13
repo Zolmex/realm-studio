@@ -6,6 +6,8 @@ import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
 
+import realmeditor.editor.ToolSwitchEvent;
+
 import realmeditor.editor.tools.METool;
 
 import realmeditor.util.FilterUtil;
@@ -65,7 +67,7 @@ public class MapToolbar extends Sprite {
         icon.filters = null;
 
         var idx:int = this.icons.indexOf(icon);
-        this.view.setSelectedTool(ICON_TO_TOOL[idx]);
+        this.view.onToolSwitch(new ToolSwitchEvent(ICON_TO_TOOL[idx]));
     }
 
     public function setSelected(toolId:int):void {

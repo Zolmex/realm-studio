@@ -69,6 +69,7 @@ public class MainView extends Sprite {
     private var mapInfoPanel:MapInfoPanel;
     private var mapDimensionsWindow:MapDimensionsWindow;
     private var selectionInfoPanel:SelectionInfoPanel;
+    private var brushOptions:BrushOptions;
 
     public var inputHandler:MapInputHandler;
     public var notifications:NotificationView;
@@ -107,7 +108,7 @@ public class MainView extends Sprite {
         ScaleX = Main.stage.stageWidth / 800;
         ScaleY = Main.stage.stageHeight / 600;
 
-        this.userBrush = new MEBrush(MEDrawType.GROUND, 0);
+        this.userBrush = new MEBrush(this, MEDrawType.GROUND, 0);
         this.clipBoard = new MEClipboard();
         this.timeControl = new TimeControl();
         this.selectedTool = new MESelectTool(this);
@@ -214,6 +215,11 @@ public class MainView extends Sprite {
         this.notifications = new NotificationView();
         addChild(this.notifications);
 
+        this.brushOptions = new BrushOptions(this);
+        this.addEventListener(MEEvent.BRUSH_CHANGED, this.onBrushChanged);
+        this.brushOptions.addEventListener(Event.CHANGE, this.updateBrushOptionsPosition);
+        addChild(this.brushOptions);
+
         Main.stage.addEventListener(Event.ENTER_FRAME, this.update);
         Main.stage.addEventListener(MouseEvent.MOUSE_WHEEL, this.onMouseWheel);
         Main.stage.addEventListener(Event.RESIZE, this.onStageResize);
@@ -282,7 +288,7 @@ public class MainView extends Sprite {
         this.mapSelector.x = this.loadButton.x;
         this.mapSelector.y = this.loadButton.y + this.loadButton.height + 10;
 
-        this.mapInfoPanel.x = 15;
+        this.mapInfoPanel.x = 19;
         this.mapInfoPanel.y = StageHeight - this.mapInfoPanel.height - 15;
 
         this.toolBoxBackground.x = 15;
@@ -318,6 +324,8 @@ public class MainView extends Sprite {
 
         this.objectFilterView.x = this.drawElementsList.x - 20;
         this.objectFilterView.y = this.drawElementsList.y;
+
+        this.updateBrushOptionsPosition(null);
 
         if (this.mapView) {
             this.mapView.x = (StageWidth - (this.mapData.mapWidth * TileMapView.TILE_SIZE) * this.mapView.scaleX) / 2;
@@ -357,14 +365,12 @@ public class MainView extends Sprite {
             return;
         }
 
-        if (e.ctrlKey && (this.selectedTool.id == METool.PENCIL_ID || this.selectedTool.id == METool.ERASER_ID)) { // We're increasing/decreasing the brush size
+        if (e.ctrlKey && (this.selectedTool.id == METool.PENCIL_ID || this.selectedTool.id == METool.ERASER_ID || this.selectedTool.id == METool.SHAPE_ID)) { // We're increasing/decreasing the brush size
             var val:int = Math.min(Math.max(int(Math.ceil(e.delta)), -1), 1);
-            this.userBrush.size += val;
+            this.userBrush.setSize(this.userBrush.size + val);
             if (this.userBrush.size < 0) {
-                this.userBrush.size = 0;
+                this.userBrush.setSize(0);
             }
-
-            this.onBrushSizeChanged();
             return;
         }
 
@@ -677,7 +683,7 @@ public class MainView extends Sprite {
 
         if (this.selectedTool.id != METool.SELECT_ID) {
             this.previousTool = this.selectedTool;
-            onToolSwitch(new ToolSwitchEvent(MEEvent.TOOL_SWITCH, METool.SELECT_ID));
+            onToolSwitch(new ToolSwitchEvent(METool.SELECT_ID));
         }
 
         this.selectedTool.mouseDrag(tilePos, this.timeControl.getHistory(this.mapView.id));
@@ -703,7 +709,7 @@ public class MainView extends Sprite {
         this.selectedTool.mouseDragEnd(tilePos, this.timeControl.getHistory(this.mapView.id));
         this.lastMousePos = null;
         if (this.previousTool != null) {
-            this.onToolSwitch(new ToolSwitchEvent(MEEvent.TOOL_SWITCH, this.previousTool.id));
+            this.onToolSwitch(new ToolSwitchEvent(this.previousTool.id));
             this.previousTool = null;
         }
     }
@@ -808,13 +814,12 @@ public class MainView extends Sprite {
         return new IntPoint(x, y);
     }
 
-    private function onToolSwitch(e:ToolSwitchEvent):void {
-        if (e.toolId == this.selectedTool.id) {
-            return;
-        }
-
+    public function onToolSwitch(e:ToolSwitchEvent):void {
         this.setSelectedTool(e.toolId);
         this.toolBar.setSelected(e.toolId);
+        this.brushOptions.onToolChanged(this.selectedTool);
+        this.userBrush.setBrushShape(0);
+        this.updatePositions();
     }
 
     public function setSelectedTool(toolId:int):void {
@@ -974,7 +979,7 @@ public class MainView extends Sprite {
         selectTool.dragSelection(1, 0, this.timeControl.getHistory(this.mapView.id));
     }
 
-    private function onBrushSizeChanged():void {
+    private function onBrushChanged(e:Event):void {
         var tilePos:IntPoint = this.getMouseTilePosition();
         if (tilePos == null) {
             return;
@@ -985,6 +990,9 @@ public class MainView extends Sprite {
         } else {
             this.mapView.drawBrushTiles(tilePos.x_, tilePos.y_, this.userBrush);
         }
+
+        this.brushOptions.updateBrush(this.userBrush);
+        this.selectedTool.brushChanged(tilePos, this.timeControl.getHistory(this.mapView.id));
     }
 
     private function onDeleteSelection(e:Event):void {
@@ -1031,6 +1039,11 @@ public class MainView extends Sprite {
         this.mapInfoPanel.setInfo(width, height);
 
         this.updatePositions();
+    }
+
+    private function updateBrushOptionsPosition(e:Event):void {
+        this.brushOptions.x = this.drawElementsList.x - this.brushOptions.width - 8;
+        this.brushOptions.y = this.testMapButton.y;
     }
 }
 }

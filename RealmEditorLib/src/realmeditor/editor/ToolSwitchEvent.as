@@ -5,8 +5,8 @@ public class ToolSwitchEvent extends Event{
 
     public var toolId:int;
 
-    public function ToolSwitchEvent(str:String, toolId:int) {
-        super(str);
+    public function ToolSwitchEvent(toolId:int) {
+        super(MEEvent.TOOL_SWITCH);
         this.toolId = toolId;
     }
 }

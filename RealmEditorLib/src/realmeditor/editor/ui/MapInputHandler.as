@@ -201,7 +201,7 @@ public class MapInputHandler extends EventDispatcher {
         }
         var evt:Event;
         if (eventStr.indexOf(MEEvent.TOOL_SWITCH) != -1) {
-            evt = new ToolSwitchEvent(MEEvent.TOOL_SWITCH, METool.ToolEventToId(eventStr))
+            evt = new ToolSwitchEvent(METool.ToolEventToId(eventStr))
         } else {
             evt = new Event(eventStr);
         }
