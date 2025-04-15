@@ -67,16 +67,25 @@ public class METool {
                 if (brush.groundType == -1 || prevData.groundType == brush.groundType) { // Don't update tile data if it's already the same. Also don't draw empty textures
                     return null;
                 }
+                if (!brush.replace && prevData.groundType != -1) {
+                    return null;
+                }
                 tileMap.setTileGround(mapX, mapY, brush.groundType);
                 break;
             case MEDrawType.OBJECTS:
                 if (brush.objType == 0 || prevData.objType == brush.objType) {
                     return null;
                 }
+                if (!brush.replace && prevData.objType != 0) {
+                    return null;
+                }
                 tileMap.setTileObject(mapX, mapY, brush.objType);
                 break;
             case MEDrawType.REGIONS:
                 if (brush.regType == 0 || prevData.regType == brush.regType) {
+                    return null;
+                }
+                if (!brush.replace && prevData.regType != 0) {
                     return null;
                 }
                 tileMap.setTileRegion(mapX, mapY, brush.regType);

@@ -38,11 +38,13 @@ public class BrushOptions extends Sprite {
         switch (tool.id) {
             case METool.PENCIL_ID:
             case METool.ERASER_ID:
+                newOptions.push(new BrushReplacePanel(mainView));
                 newOptions.push(new BrushSizePanel(mainView));
                 break;
             case METool.SHAPE_ID:
                 newOptions.push(new BrushShapePanel(mainView));
                 newOptions.push(new BrushChancePanel(mainView));
+                newOptions.push(new BrushReplacePanel(mainView));
                 newOptions.push(new BrushSizePanel(mainView));
                 break;
         }

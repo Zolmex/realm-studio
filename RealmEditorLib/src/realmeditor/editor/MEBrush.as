@@ -18,6 +18,7 @@ public class MEBrush {
     private var brushShape_:int = 0;
     private var size_:int = 0;
     private var chance_:int = 25;
+    private var replace_:Boolean = true;
 
     private var mainView:MainView;
 
@@ -52,6 +53,15 @@ public class MEBrush {
 
     public function setChance(chance:int):void {
         this.chance_ = chance;
+        this.mainView.dispatchEvent(new Event(MEEvent.BRUSH_CHANGED));
+    }
+
+    public function get replace():Boolean {
+        return this.replace_;
+    }
+
+    public function setReplace(value:Boolean):void {
+        this.replace_ = value;
         this.mainView.dispatchEvent(new Event(MEEvent.BRUSH_CHANGED));
     }
 

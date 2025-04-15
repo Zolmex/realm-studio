@@ -17,3 +17,4 @@ DoM uses LITTLE_ENDIAN for maps, you can disable it by simply deleting all 3 lin
 * Fixed a bug where window would not close due to event listener still existing when closing editor
 * Added brush options panel, where you can type brush size, choose brush shape and change chance value
 * Added Shape tool functionality, currently only has 1 shape: Random, the 3 other shapes are just placeholders
+* Added a "Replace" checkbox for brushes
