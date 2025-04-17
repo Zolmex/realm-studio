@@ -5,6 +5,7 @@ import flash.display.Bitmap;
 import flash.display.BitmapData;
 
 import flash.display.DisplayObject;
+import flash.text.StyleSheet;
 import flash.text.TextFormatAlign;
 
 import realmeditor.editor.MEDrawType;
@@ -24,6 +25,7 @@ public class DrawListTooltip extends Tooltip {
     private var idText:SimpleText;
     private var properties:String = "";
     private var propertiesText:SimpleText;
+    private var hintText:SimpleText;
 
     public function DrawListTooltip(target:DisplayObject, iconTexture:BitmapData, xml:XML, drawType:int) {
         this.drawType = drawType;
@@ -42,6 +44,8 @@ public class DrawListTooltip extends Tooltip {
             this.drawProperties();
         }
 
+        this.drawHints();
+
         super(target);
     }
 
@@ -51,6 +55,7 @@ public class DrawListTooltip extends Tooltip {
         if (this.propertiesText) {
             addChild(this.propertiesText);
         }
+        addChild(this.hintText);
     }
 
     protected override function positionChildren():void {
@@ -62,6 +67,8 @@ public class DrawListTooltip extends Tooltip {
             this.propertiesText.x = 10;
             this.propertiesText.y = this.icon.y + this.icon.height;
         }
+        this.hintText.x = this.width / 2 - this.hintText.width / 2;
+        this.hintText.y = this.height;
     }
 
     private function drawIcon():void {
@@ -187,11 +194,20 @@ public class DrawListTooltip extends Tooltip {
     }
 
     private function drawProperties():void {
-        this.propertiesText = new SimpleText(16, 0xB2B2B2);
+        this.propertiesText = new SimpleText(16, 0xB2B2B2, false, this.width);
+        this.propertiesText.styleSheet = new StyleSheet();
         this.propertiesText.htmlText = this.properties;
         this.propertiesText.setAlignment(TextFormatAlign.LEFT);
         this.propertiesText.useTextDimensions();
         this.propertiesText.filters = Constants.SHADOW_FILTER_1;
+    }
+
+    private function drawHints():void {
+        this.hintText = new SimpleText(12, 0xB2B2B2);
+        this.hintText.styleSheet = new StyleSheet();
+        this.hintText.htmlText = "<b>Press 0-9 to bind!</b>";
+        this.hintText.useTextDimensions();
+        this.hintText.filters = Constants.SHADOW_FILTER_1;
     }
 }
 }

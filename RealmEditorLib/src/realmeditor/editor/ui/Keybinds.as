@@ -1,5 +1,4 @@
 package realmeditor.editor.ui {
-import realmeditor.editor.MEEvent;
 
 import flash.ui.Keyboard;
 import flash.utils.Dictionary;
@@ -43,6 +42,16 @@ public class Keybinds {
         CTRL_KEYS[Keyboard.V] = MEEvent.PASTE;
         HELD_CTRL_KEYS[Keyboard.Z] = MEEvent.UNDO;
         HELD_CTRL_KEYS[Keyboard.Y] = MEEvent.REDO;
+        KEYS[Keyboard.NUMBER_1] = MEEvent.TILE_HOTKEY_SWITCH;
+        KEYS[Keyboard.NUMBER_2] = MEEvent.TILE_HOTKEY_SWITCH;
+        KEYS[Keyboard.NUMBER_3] = MEEvent.TILE_HOTKEY_SWITCH;
+        KEYS[Keyboard.NUMBER_4] = MEEvent.TILE_HOTKEY_SWITCH;
+        KEYS[Keyboard.NUMBER_5] = MEEvent.TILE_HOTKEY_SWITCH;
+        KEYS[Keyboard.NUMBER_6] = MEEvent.TILE_HOTKEY_SWITCH;
+        KEYS[Keyboard.NUMBER_7] = MEEvent.TILE_HOTKEY_SWITCH;
+        KEYS[Keyboard.NUMBER_8] = MEEvent.TILE_HOTKEY_SWITCH;
+        KEYS[Keyboard.NUMBER_9] = MEEvent.TILE_HOTKEY_SWITCH;
+        KEYS[Keyboard.NUMBER_0] = MEEvent.TILE_HOTKEY_SWITCH;
     }
 }
 }

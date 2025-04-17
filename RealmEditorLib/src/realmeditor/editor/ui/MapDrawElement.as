@@ -18,7 +18,7 @@ public class MapDrawElement extends Sprite {
 
     public var elementType:int;
     public var texture:BitmapData;
-    private var drawType:int;
+    public var drawType:int;
     private var tooltip:DrawListTooltip;
 
     public function MapDrawElement(elementType:int, texture:BitmapData, drawType:int) {

@@ -47,5 +47,6 @@ public class MEEvent {
     public static const DELETE_SELECTION:String = "DeleteSelection";
     public static const EXIT_EDITOR:String = "ExitEditor";
     public static const BRUSH_CHANGED:String = "BrushChanged";
+    public static const TILE_HOTKEY_SWITCH:String = "TileHotkeySwitch";
 }
 }

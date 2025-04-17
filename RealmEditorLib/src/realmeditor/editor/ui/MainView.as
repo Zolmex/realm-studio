@@ -27,6 +27,7 @@ import realmeditor.editor.MEBrush;
 import realmeditor.editor.MEClipboard;
 import realmeditor.editor.MEDrawType;
 import realmeditor.editor.MEEvent;
+import flash.display.DisplayObject;
 
 import realmeditor.editor.MapData;
 import realmeditor.editor.MapHistory;
@@ -70,6 +71,7 @@ public class MainView extends Sprite {
     private var mapDimensionsWindow:MapDimensionsWindow;
     private var selectionInfoPanel:SelectionInfoPanel;
     private var brushOptions:BrushOptions;
+    private var tileHotkeys:TileHotkeys;
 
     public var inputHandler:MapInputHandler;
     public var notifications:NotificationView;
@@ -220,6 +222,10 @@ public class MainView extends Sprite {
         this.brushOptions.addEventListener(Event.CHANGE, this.updateBrushOptionsPosition);
         addChild(this.brushOptions);
 
+        this.tileHotkeys = new TileHotkeys();
+        this.tileHotkeys.addEventListener(MEEvent.TILE_HOTKEY_SWITCH, this.onTileHotkey);
+        addChild(this.tileHotkeys);
+
         Main.stage.addEventListener(Event.ENTER_FRAME, this.update);
         Main.stage.addEventListener(MouseEvent.MOUSE_WHEEL, this.onMouseWheel);
         Main.stage.addEventListener(Event.RESIZE, this.onStageResize);
@@ -243,6 +249,7 @@ public class MainView extends Sprite {
         this.inputHandler.addEventListener(MEEvent.MIDDLE_MOUSE_DRAG_END, this.onMiddleMouseDragEnd);
         this.inputHandler.addEventListener(MouseEvent.MOUSE_MOVE, this.onMouseMoved);
         this.inputHandler.addEventListener(MEEvent.TOOL_SWITCH, this.onToolSwitch);
+        this.inputHandler.addEventListener(MEEvent.TILE_HOTKEY_SWITCH, this.onTileHotkey);
         this.inputHandler.addEventListener(MEEvent.UNDO, this.onUndoAction);
         this.inputHandler.addEventListener(MEEvent.REDO, this.onRedoAction);
         this.inputHandler.addEventListener(MEEvent.DRAW_TYPE_SWITCH, this.onDrawTypeSwitchKey);
@@ -326,6 +333,9 @@ public class MainView extends Sprite {
         this.objectFilterView.y = this.drawElementsList.y;
 
         this.updateBrushOptionsPosition(null);
+
+        this.tileHotkeys.x = this.drawElementsList.x - this.tileHotkeys.width - 8;
+        this.tileHotkeys.y = this.toolBar.y - this.tileHotkeys.height - 8;
 
         if (this.mapView) {
             this.mapView.x = (StageWidth - (this.mapData.mapWidth * TileMapView.TILE_SIZE) * this.mapView.scaleX) / 2;
@@ -1044,6 +1054,45 @@ public class MainView extends Sprite {
     private function updateBrushOptionsPosition(e:Event):void {
         this.brushOptions.x = this.drawElementsList.x - this.brushOptions.width - 8;
         this.brushOptions.y = this.testMapButton.y;
+    }
+
+    private function onTileHotkey(e:TileHotkeyEvent):void {
+        var select:MapDrawElement = null;
+        for each (var obj:DisplayObject in stage.getObjectsUnderPoint(new Point(stage.mouseX, stage.mouseY))) {
+            if (obj is MapDrawElement) {
+                select = obj as MapDrawElement;
+            }
+            if (obj.parent != null && obj.parent is MapDrawElement) {
+                select = obj.parent as MapDrawElement;
+            }
+        }
+
+        // Add hotkey for element
+        if (select != null) {
+            tileHotkeys.setHotkey(e.number, select);
+            this.updatePositions();
+            return;
+        }
+
+        // Switch to hotkey
+        var hotkeyElement:MapDrawElement = tileHotkeys.getElement(e.number);
+        if (hotkeyElement == null)
+            return;
+
+        switch (hotkeyElement.drawType) {
+            case MEDrawType.GROUND:
+                this.userBrush.setGroundType(hotkeyElement.elementType);
+                break;
+            case MEDrawType.OBJECTS:
+                this.userBrush.setObjectType(hotkeyElement.elementType);
+                break;
+            case MEDrawType.REGIONS:
+                this.userBrush.setRegionType(hotkeyElement.elementType);
+                break;
+        }
+
+        this.drawTypeSwitch.select(hotkeyElement.drawType);
+        this.tileHotkeys.switchTo(e.number);
     }
 }
 }

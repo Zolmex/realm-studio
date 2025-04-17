@@ -14,6 +14,16 @@ package realmeditor.util
       {
          super();
       }
+
+      public static function scale(bitmapData:BitmapData, scale:Number, padding:int = 0):BitmapData {
+         var matrix:Matrix = new Matrix();
+         matrix.scale(scale, scale);
+         matrix.translate(padding, padding);
+
+         var scaledBmp:BitmapData = new BitmapData(bitmapData.width * scale + padding * 2, bitmapData.height * scale + padding * 2, true, 0);
+         scaledBmp.draw(bitmapData, matrix);
+         return scaledBmp;
+      }
       
       public static function mirror(bitmapData:BitmapData, width:int = 0) : BitmapData
       {

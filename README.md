@@ -18,3 +18,4 @@ DoM uses LITTLE_ENDIAN for maps, you can disable it by simply deleting all 3 lin
 * Added brush options panel, where you can type brush size, choose brush shape and change chance value
 * Added Shape tool functionality, currently only has 1 shape: Random, the 3 other shapes are just placeholders
 * Added a "Replace" checkbox for brushes
+* Added Hot Keys for tiles, press 0-9 to bind a tile to that key

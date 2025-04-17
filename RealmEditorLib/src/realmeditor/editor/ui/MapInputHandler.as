@@ -1,12 +1,8 @@
 package realmeditor.editor.ui {
-import realmeditor.editor.MEEvent;
-import realmeditor.editor.tools.METool;
-import realmeditor.editor.ToolSwitchEvent;
 
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.KeyboardEvent;
-import flash.events.MouseEvent;
 import flash.events.MouseEvent;
 import flash.ui.Keyboard;
 import flash.utils.Dictionary;
@@ -202,6 +198,8 @@ public class MapInputHandler extends EventDispatcher {
         var evt:Event;
         if (eventStr.indexOf(MEEvent.TOOL_SWITCH) != -1) {
             evt = new ToolSwitchEvent(METool.ToolEventToId(eventStr))
+        } else if (eventStr.indexOf(MEEvent.TILE_HOTKEY_SWITCH) != -1) {
+            evt = new TileHotkeyEvent(e.keyCode - Keyboard.NUMBER_0);
         } else {
             evt = new Event(eventStr);
         }
