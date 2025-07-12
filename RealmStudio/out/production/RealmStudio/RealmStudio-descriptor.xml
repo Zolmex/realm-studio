@@ -1,0 +1,12 @@
+<application xmlns="http://ns.adobe.com/air/application/50.2">
+  <id>RealmStudio</id>
+  <filename>RealmStudio v1.0</filename>
+  <name>RealmStudio v1.0</name>
+  <versionNumber>1.0</versionNumber>
+  <architecture>64</architecture>
+  <versionLabel>1.0</versionLabel>
+  <initialWindow>
+    <content>RealmStudio.swf</content>
+    <visible>true</visible>
+  </initialWindow>
+</application>
