@@ -1,0 +1,283 @@
+{
+  "slices": {
+    "drawelementselector_selection.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 11,
+        "x": 29.5,
+        "w": 1
+      }
+    },
+    "pencil_tool_icon.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 32,
+        "x": 16,
+        "w": 1
+      }
+    },
+    "settings_background.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 124,
+        "x": 36.5,
+        "w": 1
+      }
+    },
+    "vertical_input_background.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 32,
+        "x": 14.5,
+        "w": 1
+      }
+    },
+    "eraser_tool_icon.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 32,
+        "x": 16,
+        "w": 1
+      }
+    },
+    "checkbox_title_background.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 13,
+        "x": 27,
+        "w": 1
+      }
+    },
+    "picker_tool_icon.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 32,
+        "x": 16,
+        "w": 1
+      }
+    },
+    "button_background.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 18,
+        "x": 25,
+        "w": 1
+      }
+    },
+    "checkbox_background.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 13,
+        "x": 6.5,
+        "w": 1
+      }
+    },
+    "bucket_tool_icon.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 32,
+        "x": 16,
+        "w": 1
+      }
+    },
+    "close_icon.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 12,
+        "x": 6,
+        "w": 1
+      }
+    },
+    "switch_button_background.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 11,
+        "x": 31.5,
+        "w": 1
+      }
+    },
+    "line_tool_icon.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 32,
+        "x": 16,
+        "w": 1
+      }
+    },
+    "scrollbar_position_icon.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 8,
+        "x": 4,
+        "w": 1
+      }
+    },
+    "horizontal_input_background.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 13,
+        "x": 51,
+        "w": 1
+      }
+    },
+    "shape_tool_icon.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 32,
+        "x": 16,
+        "w": 1
+      }
+    },
+    "search_input_background.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 19,
+        "x": 79,
+        "w": 1
+      }
+    },
+    "edit_tool_icon.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 32,
+        "x": 16,
+        "w": 1
+      }
+    },
+    "cross_icon.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 7,
+        "x": 3.5,
+        "w": 1
+      }
+    },
+    "disabled_icon.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 7,
+        "x": 6.5,
+        "w": 1
+      }
+    },
+    "drawelement_background.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 38,
+        "x": 19,
+        "w": 1
+      }
+    },
+    "enabled_icon.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 7,
+        "x": 6.5,
+        "w": 1
+      }
+    },
+    "drawelement_selection_decor.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 38,
+        "x": 19,
+        "w": 1
+      }
+    },
+    "maplist_element_background.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 12,
+        "x": 40,
+        "w": 1
+      }
+    },
+    "tooltip_header_background.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 14,
+        "x": 27,
+        "w": 1
+      }
+    },
+    "drawelementsview_background.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 850,
+        "x": 91,
+        "w": 1
+      }
+    },
+    "scrollbar_background.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 68,
+        "x": 6,
+        "w": 1
+      }
+    },
+    "toolbox_background.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 337,
+        "x": 20,
+        "w": 1
+      }
+    },
+    "drawelementselector_background.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 41,
+        "x": 31.5,
+        "w": 1
+      }
+    },
+    "selection_tool_icon.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 32,
+        "x": 16,
+        "w": 1
+      }
+    },
+    "maplist_background.png": {
+      "type": "3grid",
+      "rectangle": {
+        "y": 0,
+        "h": 92,
+        "x": 56,
+        "w": 1
+      }
+    }
+  }
+}

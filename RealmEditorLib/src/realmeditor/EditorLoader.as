@@ -26,6 +26,7 @@ import realmeditor.assets.RegionLibrary;
 import realmeditor.editor.Parameters;
 import realmeditor.editor.ui.Keybinds;
 import realmeditor.editor.ui.MainView;
+import realmeditor.editor.ui.embed.TextureParser;
 import realmeditor.editor.ui.embed.UIAssetLoader;
 import realmeditor.editor.ui.embed.Cursors;
 import realmeditor.editor.ui.embed.EditorTools;
@@ -67,7 +68,7 @@ public class EditorLoader {
             throw new Error("RealmEditor: " + readyCount + " out of 5 asset libraries weren't loaded.");
         }
 
-        UIAssetLoader.load();
+        TextureParser.load();
         Parameters.load();
         Keybinds.loadKeys();
 

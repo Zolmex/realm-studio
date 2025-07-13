@@ -1,0 +1,252 @@
+{
+  "frames": {
+    "drawelementselector_selection.png": {
+      "frame": {
+        "y": 78,
+        "x": 453,
+        "h": 11,
+        "w": 59
+      }
+    },
+    "pencil_tool_icon.png": {
+      "frame": {
+        "y": 248,
+        "x": 291,
+        "h": 32,
+        "w": 32
+      }
+    },
+    "settings_background.png": {
+      "frame": {
+        "y": 116,
+        "x": 253,
+        "h": 124,
+        "w": 73
+      }
+    },
+    "vertical_input_background.png": {
+      "frame": {
+        "y": 112,
+        "x": 387,
+        "h": 32,
+        "w": 29
+      }
+    },
+    "eraser_tool_icon.png": {
+      "frame": {
+        "y": 248,
+        "x": 331,
+        "h": 32,
+        "w": 32
+      }
+    },
+    "checkbox_title_background.png": {
+      "frame": {
+        "y": 131,
+        "x": 451,
+        "h": 13,
+        "w": 54
+      }
+    },
+    "picker_tool_icon.png": {
+      "frame": {
+        "y": 248,
+        "x": 371,
+        "h": 32,
+        "w": 32
+      }
+    },
+    "button_background.png": {
+      "frame": {
+        "y": 22,
+        "x": 373,
+        "h": 18,
+        "w": 50
+      }
+    },
+    "checkbox_background.png": {
+      "frame": {
+        "y": 131,
+        "x": 507,
+        "h": 13,
+        "w": 13
+      }
+    },
+    "bucket_tool_icon.png": {
+      "frame": {
+        "y": 248,
+        "x": 411,
+        "h": 32,
+        "w": 32
+      }
+    },
+    "close_icon.png": {
+      "frame": {
+        "y": 28,
+        "x": 429,
+        "h": 12,
+        "w": 12
+      }
+    },
+    "switch_button_background.png": {
+      "frame": {
+        "y": 149,
+        "x": 387,
+        "h": 11,
+        "w": 63
+      }
+    },
+    "line_tool_icon.png": {
+      "frame": {
+        "y": 248,
+        "x": 451,
+        "h": 32,
+        "w": 32
+      }
+    },
+    "scrollbar_position_icon.png": {
+      "frame": {
+        "y": 32,
+        "x": 445,
+        "h": 8,
+        "w": 8
+      }
+    },
+    "horizontal_input_background.png": {
+      "frame": {
+        "y": 147,
+        "x": 451,
+        "h": 13,
+        "w": 102
+      }
+    },
+    "shape_tool_icon.png": {
+      "frame": {
+        "y": 249,
+        "x": 491,
+        "h": 32,
+        "w": 32
+      }
+    },
+    "search_input_background.png": {
+      "frame": {
+        "y": 181,
+        "x": 331,
+        "h": 19,
+        "w": 158
+      }
+    },
+    "edit_tool_icon.png": {
+      "frame": {
+        "y": 248,
+        "x": 531,
+        "h": 32,
+        "w": 32
+      }
+    },
+    "cross_icon.png": {
+      "frame": {
+        "y": 33,
+        "x": 453,
+        "h": 7,
+        "w": 7
+      }
+    },
+    "disabled_icon.png": {
+      "frame": {
+        "y": 33,
+        "x": 461,
+        "h": 7,
+        "w": 13
+      }
+    },
+    "drawelement_background.png": {
+      "frame": {
+        "y": 202,
+        "x": 331,
+        "h": 38,
+        "w": 38
+      }
+    },
+    "enabled_icon.png": {
+      "frame": {
+        "y": 33,
+        "x": 477,
+        "h": 7,
+        "w": 13
+      }
+    },
+    "drawelement_selection_decor.png": {
+      "frame": {
+        "y": 202,
+        "x": 371,
+        "h": 38,
+        "w": 38
+      }
+    },
+    "maplist_element_background.png": {
+      "frame": {
+        "y": 44,
+        "x": 389,
+        "h": 12,
+        "w": 80
+      }
+    },
+    "tooltip_header_background.png": {
+      "frame": {
+        "y": 226,
+        "x": 411,
+        "h": 14,
+        "w": 54
+      }
+    },
+    "drawelementsview_background.png": {
+      "frame": {
+        "y": 19,
+        "x": 61,
+        "h": 850,
+        "w": 182
+      }
+    },
+    "scrollbar_background.png": {
+      "frame": {
+        "y": 44,
+        "x": 373,
+        "h": 68,
+        "w": 12
+      }
+    },
+    "toolbox_background.png": {
+      "frame": {
+        "y": 286,
+        "x": 21,
+        "h": 337,
+        "w": 40
+      }
+    },
+    "drawelementselector_background.png": {
+      "frame": {
+        "y": 63,
+        "x": 387,
+        "h": 41,
+        "w": 63
+      }
+    },
+    "selection_tool_icon.png": {
+      "frame": {
+        "y": 248,
+        "x": 251,
+        "h": 32,
+        "w": 32
+      }
+    },
+    "maplist_background.png": {
+      "frame": {
+        "y": 20,
+        "x": 253,
+        "h": 92,
+        "w": 112
+      }
+    }
+  }
+}
