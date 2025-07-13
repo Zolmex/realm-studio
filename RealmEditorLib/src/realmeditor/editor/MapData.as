@@ -15,6 +15,7 @@ import flash.events.IOErrorEvent;
 import flash.filesystem.File;
 import flash.filesystem.FileMode;
 import flash.filesystem.FileStream;
+import flash.geom.Rectangle;
 import flash.net.FileFilter;
 import flash.net.FileReference;
 import flash.utils.ByteArray;
@@ -24,9 +25,12 @@ import flash.utils.Endian;
 import realmeditor.assets.GroundLibrary;
 import realmeditor.assets.ObjectLibrary;
 import realmeditor.assets.RegionLibrary;
+import realmeditor.editor.ui.MainView;
+import realmeditor.editor.ui.MapView;
 
 import realmeditor.editor.ui.TileMapView;
 import realmeditor.util.BinaryUtils;
+import realmeditor.util.TimedAction;
 
 import util.BinaryUtils;
 
@@ -36,9 +40,85 @@ public class MapData extends EventDispatcher {
     public var mapWidth:int;
     public var mapHeight:int;
     private var loadedFile:FileReference;
+    private var selectedFile:FileReference;
     public var mapName:String;
     private var tileMap:TileMapView;
     public var savedChanges:Boolean;
+
+    public function changeMapDimensions(mapView:MapView, width:int, height:int):void {
+        var oldMapRect:Rectangle = this.getRealMapRect();
+        var oldWidth:int = this.mapWidth;
+        var oldHeight:int = this.mapHeight;
+        var mapRectEndX:int = oldMapRect.x + oldMapRect.width - 1;
+        var mapRectEndY:int = oldMapRect.y + oldMapRect.height - 1;
+//        trace("[Rect] X:", oldMapRect.x, "Y:", oldMapRect.y, "Width:", oldMapRect.width, "Height:", oldMapRect.height);
+
+        this.savedChanges = false;
+        this.mapWidth = width;
+        this.mapHeight = height;
+
+        var xOffset:int = (width - oldWidth) / 2;
+        var yOffset:int = (height - oldHeight) / 2;
+
+        this.tileMap.setup(this);
+        mapView.onMapLoadBegin();
+
+        var newTileDict:Dictionary = new Dictionary();
+        for (var yi:int = 0; yi < Math.max(height, oldHeight); yi++) {
+            for (var xi:int = 0; xi < Math.max(width, oldWidth); xi++) {
+                if (xi < width && yi < height &&
+                        (xi < oldMapRect.x + xOffset || xi > mapRectEndX + xOffset || yi < oldMapRect.y + yOffset || yi > mapRectEndY + yOffset)){
+                    this.tileMap.loadTileFromMap(null, xi, yi);
+                }
+
+                if (xi >= oldMapRect.x && xi <= mapRectEndX && yi >= oldMapRect.y && yi <= mapRectEndY) { // Current position is inside the "real" map area (area with tiles on it)
+                    var newX:int = xi + xOffset; // Transform the current old map coordinate to the new map
+                    var newY:int = yi + yOffset;
+                    if (newX < 0 || newY < 0 || newX >= width || newY >= height || xi >= oldWidth || yi >= oldHeight) { // Out of bounds
+                        continue;
+                    }
+
+                    var tile:MapTileData = this.tileDict[xi + yi * oldWidth];
+                    newTileDict[newX + newY * width] = tile;
+                    this.tileMap.loadTileFromMap(tile, newX, newY); // If tile is null when this method is called, the tilemap will create an empty tile data, while the map data holds a null value
+                }
+            }
+        }
+        this.tileDict = newTileDict;
+
+        mapView.onMapLoadEnd();
+    }
+
+    private function getRealMapRect():Rectangle {
+        var minX:int = this.mapWidth;
+        var minY:int = this.mapHeight;
+        var maxX:int = 0;
+        var maxY:int = 0;
+
+        for (var y:int = 0; y < this.mapHeight; y++) {
+            for (var x:int = 0; x < this.mapWidth; x++) {
+                var tile:MapTileData = this.tileDict[x + y * this.mapWidth];
+                if (tile == null) {
+                    continue;
+                }
+
+                if (x < minX) {
+                    minX = x;
+                }
+                if (y < minY) {
+                    minY = y;
+                }
+                if (x > maxX) {
+                    maxX = x;
+                }
+                if (y > maxY) {
+                    maxY = y;
+                }
+            }
+        }
+
+        return new Rectangle(minX, minY, maxX - minX + 1, maxY - minY + 1);
+    }
 
     public function newMap(tileMap:TileMapView, name:String, width:int, height:int):void {
         this.savedChanges = false;
@@ -76,8 +156,7 @@ public class MapData extends EventDispatcher {
             var saveFile:FileReference = new FileReference(); // Prompts the user to save to a specific folder
             saveFile.addEventListener(Event.SELECT, this.onMapSaved);
             saveFile.save(mapBytes, fullMapName);
-        }
-        else{ // Automatic saving every 15 seconds
+        } else { // Automatic saving every 15 seconds
             var autoSaveFolder:File = File.workingDirectory.resolvePath("autoSave");
             autoSaveFolder.createDirectory(); // This will create the directory if it doesn't exist already
 
@@ -104,15 +183,20 @@ public class MapData extends EventDispatcher {
         this.tileMap.addEventListener(MEEvent.MAP_CHANGED, this.onMapChanged);
         this.loadedFile = new FileReference();
         this.loadedFile.addEventListener(Event.SELECT, this.onFileBrowseSelect);
-        this.loadedFile.browse([new FileFilter("JSON Map (*.jm)", "*.jm;*.wmap")]);
+        this.loadedFile.browse([new FileFilter("Map file (*.jm, *.wmap)", "*.jm;*.wmap")]);
     }
 
     private function onFileBrowseSelect(e:Event):void {
-        var loadedFile:FileReference = e.target as FileReference;
-        loadedFile.addEventListener(Event.COMPLETE, this.onFileLoadComplete);
-        loadedFile.addEventListener(IOErrorEvent.IO_ERROR, onFileLoadIOError);
+        this.selectedFile = e.target as FileReference;
+        MainView.Instance.notifications.showNotification("Loading map " + this.selectedFile.name + "...");
+        MainView.Instance.timers.push(new TimedAction(100, this.finishLoadFile));
+    }
+
+    private function finishLoadFile():void {
+        this.selectedFile.addEventListener(Event.COMPLETE, this.onFileLoadComplete);
+        this.selectedFile.addEventListener(IOErrorEvent.IO_ERROR, onFileLoadIOError);
         try {
-            loadedFile.load();
+            this.loadedFile.load();
         } catch (e:Error) {
             trace("Error: " + e);
         }
@@ -257,6 +341,19 @@ public class MapData extends EventDispatcher {
         trace("JM Map load error: " + e);
     }
 
+    public function setTileData(x:int, y:int, tileData:MapTileData):void {
+        var tile:MapTileData = this.getTile(x, y);
+        if (tileData == null && tile == null) {
+            return;
+        }
+
+        if (tile == null){
+            tile = this.createTile(x, y);
+        }
+
+        tile.copy(tileData);
+    }
+
     public function getTile(x:int, y:int):MapTileData {
         var index:int = x + y * this.mapWidth;
         var tile:MapTileData = this.tileDict[index];
@@ -308,8 +405,7 @@ public class MapData extends EventDispatcher {
                             tiles[i].objType == tile.objType &&
                             tiles[i].regType == tile.regType &&
                             tiles[i].objCfg == tile.objCfg &&
-                            tiles[i].terrainType == tile.terrainType &&
-                            tiles[i].elevation == tile.elevation) {
+                            tiles[i].terrainType == tile.terrainType) {
                         idx = i;
                         break;
                     }
@@ -365,7 +461,7 @@ public class MapData extends EventDispatcher {
         return ret;
     }
 
-    public function getMapJsonString():String{
+    public function getMapJsonString():String {
         var jm:Object = {};
 
         jm["width"] = this.mapWidth;

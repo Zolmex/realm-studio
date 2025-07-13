@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="Flex" version="4">
-  <component name="FlexBuildConfigurationManager" active="RealmEditorLib">
+  <component name="FlexBuildConfigurationManager" active="RealmStudio">
     <configurations>
-      <configuration name="RealmEditorLib" target-platform="Desktop" pure-as="true" output-type="Library" output-file="RealmEditorLib.swc" output-folder="$MODULE_DIR$/out/production/RealmEditorLib">
+      <configuration name="RealmStudio" target-platform="Desktop" pure-as="true" main-class="Main" output-file="RealmStudio.swf" output-folder="$MODULE_DIR$/out/production/RealmStudio">
         <dependencies target-player="32.0">
           <entries>
-            <entry library-id="b271f8d5-45e2-47a2-8675-d64292271758">
+            <entry library-id="935b8a19-b9f1-4e02-8596-c0263e30d8b0">
               <dependency linkage="Merged" />
             </entry>
           </entries>
           <sdk name="AIRSDK_51.2.1" />
         </dependencies>
         <compiler-options />
-        <packaging-air-desktop />
+        <packaging-air-desktop use-generated-descriptor="false" custom-descriptor-path="$MODULE_DIR$/RealmStudio-descriptor.xml" package-file-name="RealmStudio" />
         <packaging-android />
         <packaging-ios />
       </configuration>
@@ -28,7 +28,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library" exported="">
       <library type="flex">
-        <properties id="b271f8d5-45e2-47a2-8675-d64292271758" />
+        <properties id="935b8a19-b9f1-4e02-8596-c0263e30d8b0" />
         <CLASSES>
           <root url="file://$MODULE_DIR$/libs" />
         </CLASSES>

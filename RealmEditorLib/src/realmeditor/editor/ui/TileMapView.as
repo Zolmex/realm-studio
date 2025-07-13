@@ -41,8 +41,11 @@ public class TileMapView extends Sprite {
     private var objectMap:Bitmap;
     private var regionMapTexture:BitmapData;
     private var regionMap:Bitmap;
-    private var highResLayer:Sprite; // For higher resolution sprites
-    private var highResSprites:Dictionary = new Dictionary();
+
+    private var highResObjLayer:Sprite; // For higher resolution object sprites
+    private var highResObjSprites:Dictionary = new Dictionary();
+    private var highResTileLayer:Sprite; // For higher resolution tile sprites
+    private var highResTileSprites:Dictionary = new Dictionary();
 
     public function setup(mapData:MapData):void {
         this.mapData = mapData;
@@ -60,15 +63,22 @@ public class TileMapView extends Sprite {
             this.regionMapTexture.dispose();
             removeChild(this.regionMap);
         }
-        if (this.highResLayer){
-            this.highResLayer.removeChildren();
-            removeChild(this.highResLayer);
+        if (this.highResObjLayer) {
+            this.highResObjLayer.removeChildren();
+            removeChild(this.highResObjLayer);
+        }
+        if (this.highResTileLayer) {
+            this.highResTileLayer.removeChildren();
+            removeChild(this.highResTileLayer);
         }
 
         this.tileMapTexture = new BitmapData(TILE_SIZE * mapData.mapWidth, TILE_SIZE * mapData.mapHeight, true, 0);
         this.objectMapTexture = new BitmapData(TILE_SIZE * mapData.mapWidth, TILE_SIZE * mapData.mapHeight, true, 0);
         this.regionMapTexture = new BitmapData(mapData.mapWidth, mapData.mapHeight, true, 0);
-        this.highResLayer = new Sprite();
+        this.highResObjLayer = new Sprite();
+        this.highResObjLayer.cacheAsBitmap = true;
+        this.highResTileLayer = new Sprite();
+        this.highResTileLayer.cacheAsBitmap = true;
     }
 
     // IMPORTANT: This should only be used when the map loads
@@ -89,7 +99,7 @@ public class TileMapView extends Sprite {
     }
 
     public function drawTile(mapX:int, mapY:int):void {
-        if (mapX < 0 || mapX >= this.mapData.mapWidth || mapY < 0 || mapY >= this.mapData.mapHeight){
+        if (mapX < 0 || mapX >= this.mapData.mapWidth || mapY < 0 || mapY >= this.mapData.mapHeight) {
             return;
         }
 
@@ -104,30 +114,29 @@ public class TileMapView extends Sprite {
 
         // Clear space before drawing object
         this.objectMapTexture.copyPixels(emptyBitmap, new Rectangle(0, 0, emptyBitmap.width, emptyBitmap.height), new Point(tile.spriteX, tile.spriteY));
-        if (this.highResSprites[idx] != null){
-            this.highResLayer.removeChild(this.highResSprites[idx]);
-            delete this.highResSprites[idx];
+        if (this.highResObjSprites[idx] != null && this.highResObjLayer.contains(this.highResObjSprites[idx])) {
+            this.highResObjLayer.removeChild(this.highResObjSprites[idx]);
+            delete this.highResObjSprites[idx];
         }
 
         // Draw object
         if (tile.objTexture != null) {
             var size:int = Math.max(tile.objTexture.width, tile.objTexture.height);
-            if (size != 8) {
+            if (size != 8) { // Draw high quality texture, but also draw on the low quality bitmap for when camera is zoomed out
                 var obj:Bitmap = new Bitmap(tile.objTexture);
                 obj.scaleX = 8 / tile.objTexture.width;
                 obj.scaleY = 8 / tile.objTexture.height;
                 obj.x = tile.spriteX;
                 obj.y = tile.spriteY;
-                this.highResLayer.addChild(obj);
-                this.highResSprites[idx] = obj; // Cache so that we can remove it later
+                this.highResObjLayer.addChild(obj);
+                this.highResObjSprites[idx] = obj; // Cache so that we can remove it later
             }
-            else {
-                var matrix:Matrix = new Matrix();
-                matrix.scale(TILE_SIZE / tile.objTexture.width, TILE_SIZE / tile.objTexture.height);
-                matrix.translate(tile.spriteX, tile.spriteY);
 
-                this.objectMapTexture.draw(tile.objTexture, matrix);
-            }
+            var matrix:Matrix = new Matrix();
+            matrix.scale(TILE_SIZE / tile.objTexture.width, TILE_SIZE / tile.objTexture.height);
+            matrix.translate(tile.spriteX, tile.spriteY);
+
+            this.objectMapTexture.draw(tile.objTexture, matrix);
         }
 
         // Draw region
@@ -138,14 +147,34 @@ public class TileMapView extends Sprite {
 
         // Draw tile
         this.tileMapTexture.copyPixels(emptyBitmap, new Rectangle(0, 0, emptyBitmap.width, emptyBitmap.height), new Point(tile.spriteX, tile.spriteY));
+        if (this.highResTileSprites[idx] != null && this.highResTileLayer.contains(this.highResTileSprites[idx])) {
+            this.highResTileLayer.removeChild(this.highResTileSprites[idx]);
+            delete this.highResTileSprites[idx];
+        }
+
         if (tile.groundTexture != null) {
-            this.tileMapTexture.copyPixels(tile.groundTexture, new Rectangle(0, 0, tile.groundTexture.width, tile.groundTexture.height), new Point(tile.spriteX, tile.spriteY));
+            var tileSize:int = Math.max(tile.groundTexture.width, tile.groundTexture.height);
+            if (tileSize != 8) { // Draw high quality texture, but also draw on the low quality bitmap for when camera is zoomed out
+                var tileTex:Bitmap = new Bitmap(tile.groundTexture);
+                tileTex.scaleX = 8 / tile.groundTexture.width;
+                tileTex.scaleY = 8 / tile.groundTexture.height;
+                tileTex.x = tile.spriteX;
+                tileTex.y = tile.spriteY;
+                this.highResTileLayer.addChild(tileTex);
+                this.highResTileSprites[idx] = tileTex; // Cache so that we can remove it later
+            }
+
+            matrix = new Matrix();
+            matrix.scale(TILE_SIZE / tile.groundTexture.width, TILE_SIZE / tile.groundTexture.height);
+            matrix.translate(tile.spriteX, tile.spriteY);
+
+            this.tileMapTexture.draw(tile.groundTexture, matrix);
         }
     }
 
     // Note: don't forget to call drawTile() after this method
-    public function setTileData(mapX:int, mapY:int, tileData:MapTileData):void{
-        if (mapX < 0 || mapX >= this.mapData.mapWidth || mapY < 0 || mapY >= this.mapData.mapHeight){
+    public function setTileData(mapX:int, mapY:int, tileData:MapTileData):void {
+        if (mapX < 0 || mapX >= this.mapData.mapWidth || mapY < 0 || mapY >= this.mapData.mapHeight) {
             return;
         }
 
@@ -159,11 +188,12 @@ public class TileMapView extends Sprite {
         }
 
         tile.setTileData(tileData);
+        this.mapData.setTileData(mapX, mapY, tileData);
         this.dispatchEvent(new Event(MEEvent.MAP_CHANGED));
     }
 
-    public function setTileGround(mapX:int, mapY:int, groundType:int):void{ // Modify the tile's data, but don't draw unless we want to, in that case we cal drawTile()
-        if (mapX < 0 || mapX >= this.mapData.mapWidth || mapY < 0 || mapY >= this.mapData.mapHeight){
+    public function setTileGround(mapX:int, mapY:int, groundType:int):void { // Modify the tile's data, but don't draw unless we want to, in that case we cal drawTile()
+        if (mapX < 0 || mapX >= this.mapData.mapWidth || mapY < 0 || mapY >= this.mapData.mapHeight) {
             return;
         }
 
@@ -177,11 +207,12 @@ public class TileMapView extends Sprite {
         }
 
         tile.setGroundType(groundType);
+        this.mapData.setTileData(mapX, mapY, tile.tileData);
         this.dispatchEvent(new Event(MEEvent.MAP_CHANGED));
     }
 
-    public function setTileObject(mapX:int, mapY:int, objType:int):void{
-        if (mapX < 0 || mapX >= this.mapData.mapWidth || mapY < 0 || mapY >= this.mapData.mapHeight){
+    public function setTileObject(mapX:int, mapY:int, objType:int):void {
+        if (mapX < 0 || mapX >= this.mapData.mapWidth || mapY < 0 || mapY >= this.mapData.mapHeight) {
             return;
         }
 
@@ -195,11 +226,12 @@ public class TileMapView extends Sprite {
         }
 
         tile.setObjectType(objType);
+        this.mapData.setTileData(mapX, mapY, tile.tileData);
         this.dispatchEvent(new Event(MEEvent.MAP_CHANGED));
     }
 
-    public function setTileRegion(mapX:int, mapY:int, regType:int):void{
-        if (mapX < 0 || mapX >= this.mapData.mapWidth || mapY < 0 || mapY >= this.mapData.mapHeight){
+    public function setTileRegion(mapX:int, mapY:int, regType:int):void {
+        if (mapX < 0 || mapX >= this.mapData.mapWidth || mapY < 0 || mapY >= this.mapData.mapHeight) {
             return;
         }
 
@@ -213,6 +245,7 @@ public class TileMapView extends Sprite {
         }
 
         tile.setRegionType(regType);
+        this.mapData.setTileData(mapX, mapY, tile.tileData);
         this.dispatchEvent(new Event(MEEvent.MAP_CHANGED));
     }
 
@@ -220,10 +253,12 @@ public class TileMapView extends Sprite {
         this.tileMap = new Bitmap(this.tileMapTexture);
         addChild(this.tileMap);
 
+        addChild(this.highResTileLayer);
+
         this.objectMap = new Bitmap(this.objectMapTexture);
         addChild(this.objectMap);
 
-        addChild(this.highResLayer);
+        addChild(this.highResObjLayer);
 
         this.regionMap = new Bitmap(this.regionMapTexture);
         this.regionMap.scaleX = TILE_SIZE;
@@ -232,7 +267,7 @@ public class TileMapView extends Sprite {
     }
 
     public function getTileSprite(mapX:int, mapY:int):MapTileSprite {
-        if (mapX < 0 || mapX >= this.mapData.mapWidth || mapY < 0 || mapY >= this.mapData.mapHeight){
+        if (mapX < 0 || mapX >= this.mapData.mapWidth || mapY < 0 || mapY >= this.mapData.mapHeight) {
             return null;
         }
 
@@ -244,7 +279,7 @@ public class TileMapView extends Sprite {
     }
 
     public function getTileData(mapX:int, mapY:int):MapTileData {
-        if (mapX < 0 || mapX >= this.mapData.mapWidth || mapY < 0 || mapY >= this.mapData.mapHeight){
+        if (mapX < 0 || mapX >= this.mapData.mapWidth || mapY < 0 || mapY >= this.mapData.mapHeight) {
             return null;
         }
 
@@ -256,7 +291,7 @@ public class TileMapView extends Sprite {
     }
 
     public function clearGround(mapX:int, mapY:int):void {
-        if (mapX < 0 || mapX >= this.mapData.mapWidth || mapY < 0 || mapY >= this.mapData.mapHeight){
+        if (mapX < 0 || mapX >= this.mapData.mapWidth || mapY < 0 || mapY >= this.mapData.mapHeight) {
             return;
         }
 
@@ -274,7 +309,7 @@ public class TileMapView extends Sprite {
     }
 
     public function clearObject(mapX:int, mapY:int):void {
-        if (mapX < 0 || mapX >= this.mapData.mapWidth || mapY < 0 || mapY >= this.mapData.mapHeight){
+        if (mapX < 0 || mapX >= this.mapData.mapWidth || mapY < 0 || mapY >= this.mapData.mapHeight) {
             return;
         }
 
@@ -292,7 +327,7 @@ public class TileMapView extends Sprite {
     }
 
     public function clearRegion(mapX:int, mapY:int):void {
-        if (mapX < 0 || mapX >= this.mapData.mapWidth || mapY < 0 || mapY >= this.mapData.mapHeight){
+        if (mapX < 0 || mapX >= this.mapData.mapWidth || mapY < 0 || mapY >= this.mapData.mapHeight) {
             return;
         }
 
@@ -313,6 +348,14 @@ public class TileMapView extends Sprite {
         this.clearGround(mapX, mapY);
         this.clearObject(mapX, mapY);
         this.clearRegion(mapX, mapY);
+    }
+
+    public function showHighQualityTiles(val:Boolean):void {
+        this.highResTileLayer.visible = val;
+    }
+
+    public function showHighQualityObjects(val:Boolean):void {
+        this.highResObjLayer.visible = val;
     }
 }
 }

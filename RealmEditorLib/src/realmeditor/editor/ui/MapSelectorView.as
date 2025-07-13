@@ -116,6 +116,27 @@ public class MapSelectorView extends Sprite {
         this.mapSlots[mapId].setSelected(true);
         this.selectedMap = mapId;
     }
+
+    public function selectNextMap(closedMapId:int):int {
+        var minDiff:int = -1;
+        var current:int = 0;
+        for each (var mapSlot:MapSelectorSlot in this.mapSlots){
+            var diff:int = Math.abs(closedMapId - mapSlot.mapId);
+            if (minDiff == -1 || diff < minDiff) {
+                minDiff = diff;
+                current = mapSlot.mapId;
+            }
+            mapSlot.setSelected(false);
+        }
+
+        if (minDiff == -1){
+            return 0;
+        }
+
+        this.mapSlots[current].setSelected(true);
+        this.selectedMap = current;
+        return current;
+    }
 }
 }
 
@@ -134,6 +155,7 @@ import flash.display.Shape;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
+import flash.text.TextFieldAutoSize;
 
 import realmeditor.editor.MEEvent;
 import realmeditor.editor.ui.Constants;
@@ -173,10 +195,12 @@ class MapSelectorSlot extends Sprite {
         this.background = new Shape();
         addChild(this.background);
 
-        this.text = new SimpleText(16, 0xFFFFFF, false, WIDTH);
-        this.text.setText(mapId.toString() + ". " + name + (!mapView.mapData.savedChanges ? " *" : ""));
+        this.text = new SimpleText(16, 0xFFFFFF, false, WIDTH - 10);
+        this.text.setAutoSize(TextFieldAutoSize.LEFT);
+        this.text.setText(mapId.toString() + (!mapView.mapData.savedChanges ? "* " : "") + ". " + name);
         this.text.updateMetrics();
         this.text.x = 3;
+        this.text.y = (HEIGHT - this.text.actualHeight_) / 2;
         this.text.filters = Constants.SHADOW_FILTER_1;
         addChild(this.text);
 
@@ -204,8 +228,9 @@ class MapSelectorSlot extends Sprite {
     }
 
     private function onMapChanged(e:Event):void {
-        this.text.setText(this.mapId.toString() + ". " + this.mapName + " *");
+        this.text.setText(this.mapId.toString() + ". * " + this.mapName);
         this.text.updateMetrics();
+        this.text.y = (HEIGHT - this.text.actualHeight_) / 2;
     }
 
     private function onMapSaved(e:Event):void {

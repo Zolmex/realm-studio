@@ -5,6 +5,8 @@ public class MEEvent {
     public static const MAP_LOAD_BEGIN:String = "MapLoadBegin";
     public static const MAP_LOAD_END:String = "MapLoadEnd";
     public static const GRID_ENABLE:String = "GridEnable";
+    public static const QUALITY_TILES:String = "QualityTiles";
+    public static const QUALITY_OBJECTS:String = "QualityObjects";
     public static const TILE_CLICK:String = "TileClick";
     public static const MOUSE_DRAG:String = "MouseDrag";
     public static const MIDDLE_MOUSE_DRAG:String = "MiddleMouseDrag";
@@ -41,5 +43,6 @@ public class MEEvent {
     public static const CLOSE_NO_SAVE:String = "ExitNoSave";
     public static const MAP_CHANGED:String = "MapChanged";
     public static const MAP_SAVED:String = "MapSaved";
+    public static const MAP_DIMENSIONS_CHANGE:String = "MapDimensionsChange";
 }
 }

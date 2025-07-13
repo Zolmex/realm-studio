@@ -48,6 +48,8 @@ import flash.ui.Mouse;
 import flash.utils.Dictionary;
 import flash.utils.getTimer;
 
+import org.osflash.signals.Signal;
+
 import realmeditor.RealmEditorTestEvent;
 
 import realmeditor.editor.AutoMapSaver;
@@ -71,6 +73,8 @@ import realmeditor.editor.ui.elements.SimpleTextButton;
 import realmeditor.editor.ui.elements.SimpleTextInput;
 import realmeditor.editor.ui.embed.Background;
 import realmeditor.util.IntPoint;
+import realmeditor.util.TimedAction;
+import realmeditor.util.TimedAction;
 
 import util.IntPoint;
 
@@ -99,6 +103,8 @@ public class MainView extends Sprite {
     private var testMapButton:SimpleTextButton;
     private var mapCreateWindow:CreateMapWindow;
     private var closePrompt:ClosePromptWindow;
+    private var mapDimensionsText:SimpleTextButton;
+    private var mapDimensionsWindow:MapDimensionsWindow;
 
     public var inputHandler:MapInputHandler;
     public var notifications:NotificationView;
@@ -107,6 +113,8 @@ public class MainView extends Sprite {
     private var tileInfoPanel:TileInfoPanel;
     private var gridCheckbox:SimpleCheckBox;
     private var autoSaveCheckbox:SimpleCheckBox;
+    private var qualityTilesCheckbox:SimpleCheckBox;
+    private var qualityObjectsCheckbox:SimpleCheckBox;
     private var drawTypeSwitch:MultiOptionalSwitch;
     private var editNameView:EditTileNameView;
     private var objectFilterView:ObjectFilterOptionsView;
@@ -126,6 +134,10 @@ public class MainView extends Sprite {
     private var window:NativeWindow;
 
     public var testMode:Boolean;
+    public var timers:Vector.<TimedAction> = new Vector.<TimedAction>();
+
+    public var qualityTiles:Boolean;
+    public var qualityObjects:Boolean = true;
 
     public function MainView(main:Sprite, embedded:Boolean) {
         Instance = this;
@@ -170,6 +182,14 @@ public class MainView extends Sprite {
         this.autoSaveCheckbox.addEventListener(Event.CHANGE, this.onAutoSaveClick);
         addChild(this.autoSaveCheckbox);
 
+        this.qualityTilesCheckbox = new SimpleCheckBox("Quality Tiles", false);
+        this.qualityTilesCheckbox.addEventListener(Event.CHANGE, this.onQualityTilesClick);
+        addChild(this.qualityTilesCheckbox);
+
+        this.qualityObjectsCheckbox = new SimpleCheckBox("Quality Objects", true);
+        this.qualityObjectsCheckbox.addEventListener(Event.CHANGE, this.onQualityObjectsClick);
+        addChild(this.qualityObjectsCheckbox);
+
         this.drawTypeSwitch = new MultiOptionalSwitch();
         this.drawTypeSwitch.addOption("Ground");
         this.drawTypeSwitch.addOption("Objects");
@@ -181,7 +201,7 @@ public class MainView extends Sprite {
         g.beginFill(Constants.BACK_COLOR_2, 0.8);
         g.drawRoundRect(0, 0,
                 this.autoSaveCheckbox.width + 10, // Add here all of the things that are supposed to go inside of the toolbox
-                this.zoomInput.height + this.gridCheckbox.height + this.autoSaveCheckbox.height + this.drawTypeSwitch.height + 32,
+                this.zoomInput.height + this.gridCheckbox.height + this.autoSaveCheckbox.height + this.drawTypeSwitch.height + this.qualityTilesCheckbox.height + this.qualityObjectsCheckbox.height + 44,
                 10, 10);
         g.endFill();
 
@@ -231,6 +251,10 @@ public class MainView extends Sprite {
         this.objectFilterView = new ObjectFilterOptionsView(this.drawElementsList);
         addChild(this.objectFilterView);
 
+        this.mapDimensionsText = new SimpleTextButton("Width: 0\nHeight: 0", 20, 0xFFFFFF, false);
+        this.mapDimensionsText.addEventListener(MouseEvent.CLICK, this.onMapDimensionsClick);
+        addChild(this.mapDimensionsText);
+
         this.notifications = new NotificationView();
         addChild(this.notifications);
 
@@ -247,6 +271,8 @@ public class MainView extends Sprite {
     private function setupInput():void {
         this.inputHandler = new MapInputHandler(this);
         this.inputHandler.addEventListener(MEEvent.GRID_ENABLE, this.onGridEnable);
+        this.inputHandler.addEventListener(MEEvent.QUALITY_TILES, this.onQualityTilesToggle);
+        this.inputHandler.addEventListener(MEEvent.QUALITY_OBJECTS, this.onQualityObjectsToggle);
         this.inputHandler.addEventListener(MEEvent.TILE_CLICK, this.onTileClick);
         this.inputHandler.addEventListener(MEEvent.MOUSE_DRAG, this.onMouseDrag);
         this.inputHandler.addEventListener(MEEvent.MOUSE_DRAG_END, this.onMouseDragEnd);
@@ -298,8 +324,14 @@ public class MainView extends Sprite {
         this.mapSelector.x = this.loadButton.x;
         this.mapSelector.y = this.loadButton.y + this.loadButton.height + 10;
 
+        this.mapDimensionsText.x = this.mapSelector.x + this.mapSelector.width + 5;
+        this.mapDimensionsText.y = this.mapSelector.y;
+
         this.toolBoxBackground.x = 15;
         this.toolBoxBackground.y = (StageHeight - this.toolBoxBackground.height) / 2;
+        if (this.toolBoxBackground.y < this.mapSelector.y + this.mapSelector.height){ // Make sure the lef side toolbox doesn't overlap with the map selector
+            this.toolBoxBackground.y = this.mapSelector.y + this.mapSelector.height + 15;
+        }
 
         this.zoomInput.x = this.toolBoxBackground.x + 5;
         this.zoomInput.y = this.toolBoxBackground.y + 7.5;
@@ -310,14 +342,19 @@ public class MainView extends Sprite {
         this.autoSaveCheckbox.x = this.zoomInput.x;
         this.autoSaveCheckbox.y = this.gridCheckbox.y + this.gridCheckbox.height + 6;
 
+        this.qualityTilesCheckbox.x = this.zoomInput.x;
+        this.qualityTilesCheckbox.y = this.autoSaveCheckbox.y + this.autoSaveCheckbox.height + 6;
+
+        this.qualityObjectsCheckbox.x = this.zoomInput.x;
+        this.qualityObjectsCheckbox.y = this.qualityTilesCheckbox.y + this.qualityTilesCheckbox.height + 6;
+
         this.drawTypeSwitch.x = this.zoomInput.x;
-        this.drawTypeSwitch.y = this.autoSaveCheckbox.y + this.autoSaveCheckbox.height + 6;
+        this.drawTypeSwitch.y = this.qualityObjectsCheckbox.y + this.qualityObjectsCheckbox.height + 6;
 
         this.drawElementsList.x = StageWidth - MapDrawElementListView.WIDTH - 15;
         if (this.backButton != null) {
             this.drawElementsList.y = this.backButton.y + this.backButton.height + 15;
-        }
-        else{
+        } else {
             this.drawElementsList.y = 15;
         }
 
@@ -347,14 +384,19 @@ public class MainView extends Sprite {
             this.editNameView.y = (StageHeight - this.editNameView.height) / 2;
         }
 
-        if (this.debugView != null && this.debugView.visible){
+        if (this.debugView != null && this.debugView.visible) {
             this.debugView.x = 10;
             this.debugView.y = StageHeight - this.debugView.height - 10;
         }
 
-        if (this.closePrompt != null && this.closePrompt.visible){
+        if (this.closePrompt != null && this.closePrompt.visible) {
             this.closePrompt.x = (StageWidth - this.closePrompt.width) / 2;
             this.closePrompt.y = (StageHeight - this.closePrompt.height) / 2;
+        }
+
+        if (this.mapDimensionsWindow != null && this.mapDimensionsWindow.visible) {
+            this.mapDimensionsWindow.x = (StageWidth - this.mapDimensionsWindow.width) / 2;
+            this.mapDimensionsWindow.y = (StageHeight - this.mapDimensionsWindow.height) / 2;
         }
     }
 
@@ -377,11 +419,11 @@ public class MainView extends Sprite {
         var zoomLevel:int = this.mapView.zoomLevel + (this.mapView.zoomLevel / e.delta + 1); // + 1 for divisions that result in less than 1
         zoomLevel = Math.max(1, Math.min(zoomLevel, MAX_ZOOM));
 
-        if (this.mapView.zoomLevel != zoomLevel){
+        if (this.mapView.zoomLevel != zoomLevel) {
             this.mapView.zoomLevel = zoomLevel;
             var deltaX:Number = StageWidth / 2 - Main.stage.mouseX; // Figure out how far from the middle the mouse is
             var deltaY:Number = StageHeight / 2 - Main.stage.mouseY;
-            if (e.delta < 0){ // Invert the order if we're zooming out
+            if (e.delta < 0) { // Invert the order if we're zooming out
                 deltaX *= -1;
                 deltaY *= -1;
             }
@@ -415,11 +457,10 @@ public class MainView extends Sprite {
     }
 
     private function update(e:Event):void { // Runs every frame
-        if (this.testMode){
+        if (this.testMode) {
             if (this.visible) { // If we are visible then that means we're no longer in test mode
                 this.testMode = false;
-            }
-            else {
+            } else {
                 return;
             }
         }
@@ -428,12 +469,23 @@ public class MainView extends Sprite {
         var deltaTime:int = time - this.lastUpdate;
         this.lastUpdate = time;
 
-        if (this.debugView != null && this.debugView.visible){
+        if (this.debugView != null && this.debugView.visible) {
             this.debugView.updateStats(time, deltaTime);
         }
 
         if (this.mapData != null) {
             this.autoSaver.trySaveMap(this.mapData, deltaTime);
+        }
+
+        for (var i:int = 0; i < this.timers.length; i++) {
+            var act:TimedAction = this.timers[i];
+            act.timeLeftMS -= deltaTime;
+            if (act.timeLeftMS > 0){
+                continue;
+            }
+
+            act.callback();
+            this.timers.removeAt(i);
         }
     }
 
@@ -445,14 +497,14 @@ public class MainView extends Sprite {
     private function onExiting(e:Event):void {
         e.preventDefault();
         var unsavedChanges:Boolean = false;
-        for each (var view:MapView in this.mapViewContainer.maps){ // Find out if we have unsaved changes
-            if (!view.mapData.savedChanges){
+        for each (var view:MapView in this.mapViewContainer.maps) { // Find out if we have unsaved changes
+            if (!view.mapData.savedChanges) {
                 unsavedChanges = true;
                 break;
             }
         }
 
-        if (!unsavedChanges){
+        if (!unsavedChanges) {
             onExit(null);
             return;
         }
@@ -516,6 +568,8 @@ public class MainView extends Sprite {
         this.mapView = this.mapViewContainer.viewMap(this.mapSelector.selectedMap);
         this.mapData = this.mapView.mapData;
 
+        this.mapDimensionsText.setText("Width: " + this.mapData.mapWidth + "\nHeight: " + this.mapData.mapHeight);
+
         this.updateZoomLevel();
         this.gridCheckbox.setValue(this.mapView.gridEnabled);
     }
@@ -525,24 +579,39 @@ public class MainView extends Sprite {
         this.mapViewContainer.removeMapView(e.mapId);
         this.timeControl.eraseHistory(e.mapId);
 
-        var nextId:int = this.mapSelector.selectedMap - 1 < 0 ? 0 : this.mapSelector.selectedMap - 1;
-        this.mapSelector.selectMap(nextId);
+        var nextId:int = this.mapSelector.selectNextMap(this.mapSelector.selectedMap);
 
         this.mapView = this.mapViewContainer.viewMap(nextId);
 
+        var mapWidth:int = 0;
+        var mapHeight:int = 0;
         if (this.mapView) {
             this.mapData = this.mapView.mapData;
+            mapWidth = this.mapData.mapWidth;
+            mapHeight = this.mapData.mapHeight;
 
             this.updateZoomLevel();
             this.gridCheckbox.setValue(this.mapView.gridEnabled);
         }
+        this.mapDimensionsText.setText("Width: " + mapWidth + "\nHeight: " + mapHeight);
     }
 
     private function onSaveClick(e:Event):void {
         if (this.mapData != null) {
             this.mapData.addEventListener(MEEvent.MAP_SAVED, this.onJsonSaved);
-            this.mapData.save(false);
+            this.notifications.showNotification("Serializing map to JSON...", 18, -1); // Need to clear notification if duration is -1
+            this.timers.push(new TimedAction(100, this.saveJson)); // Wait like 100 ms to make sure the serializing notification is visible
         }
+    }
+
+    private function saveJson():void {
+        this.mapData.save(false);
+        this.notifications.clear();
+    }
+
+    private function saveWmap():void {
+        this.mapData.save(true);
+        this.notifications.clear();
     }
 
     private function onBackClick(e:Event):void {
@@ -553,7 +622,8 @@ public class MainView extends Sprite {
     private function onSaveWmapClick(e:Event):void {
         if (this.mapData != null) {
             this.mapData.addEventListener(MEEvent.MAP_SAVED, this.onWmapSaved);
-            this.mapData.save(true);
+            this.notifications.showNotification("Serializing map to WMap...", 18, -1);
+            this.timers.push(new TimedAction(100, this.saveWmap));
         }
     }
 
@@ -594,7 +664,11 @@ public class MainView extends Sprite {
         this.mapSelector.selectMap(mapId);
 
         this.mapViewContainer.viewMap(mapId);
-        this.timeControl.createHistory(this.mapView.id);
+        this.timeControl.createHistory(mapId);
+
+        this.mapDimensionsText.setText("Width: " + this.mapData.mapWidth + "\nHeight: " + this.mapData.mapHeight);
+
+        MainView.Instance.notifications.clear(); // Clear "loading map..." notification
     }
 
     private function onGridClick(e:Event):void {
@@ -614,9 +688,54 @@ public class MainView extends Sprite {
         }
     }
 
+    private function onQualityTilesToggle(e:Event):void {
+        this.qualityTiles = !this.qualityTiles;
+        this.qualityTilesCheckbox.setValue(this.qualityTiles);
+        if (this.mapView){
+            this.mapView.tileMap.showHighQualityTiles(this.qualityTiles);
+            this.updateBrushOverlayQuality();
+        }
+    }
+
+    private function onQualityTilesClick(e:Event):void {
+        this.qualityTiles = this.qualityTilesCheckbox.value;
+        if (this.mapView){
+            this.mapView.tileMap.showHighQualityTiles(this.qualityTiles);
+            this.updateBrushOverlayQuality();
+        }
+    }
+
+    private function onQualityObjectsToggle(e:Event):void {
+        this.qualityObjects = !this.qualityObjects;
+        this.qualityObjectsCheckbox.setValue(this.qualityObjects);
+        if (this.mapView){
+            this.mapView.tileMap.showHighQualityObjects(this.qualityObjects);
+            this.updateBrushOverlayQuality();
+        }
+    }
+
+    private function onQualityObjectsClick(e:Event):void {
+        this.qualityObjects = this.qualityObjectsCheckbox.value;
+        if (this.mapView){
+            this.mapView.tileMap.showHighQualityObjects(this.qualityObjects);
+            this.updateBrushOverlayQuality();
+        }
+    }
+
+    private function updateBrushOverlayQuality():void {
+        if (this.mapView.brushOverlay.visible) {
+            var tilePos:IntPoint = this.getMouseTilePosition();
+            if (tilePos == null) {
+                return;
+            }
+
+            this.mapView.drawBrushTiles(tilePos.x_, tilePos.y_, this.userBrush); // Force draw the brush again
+        }
+    }
+
     private function onZoomInputChange(e:Event):void {
         var zoomLevel:int = int(this.zoomInput.inputText.text);
-        if (this.mapView.zoomLevel == zoomLevel){
+        if (this.mapView.zoomLevel == zoomLevel) {
             return;
         }
 
@@ -641,7 +760,11 @@ public class MainView extends Sprite {
 
     private function onMouseDrag(e:Event):void {
         var tilePos:IntPoint = getMouseTilePosition();
-        if (this.mapView == null){
+        if (this.mapView == null) {
+            return;
+        }
+
+        if (this.isWindowOpened()){
             return;
         }
 
@@ -649,6 +772,10 @@ public class MainView extends Sprite {
     }
 
     private function onMiddleMouseDrag(e:Event):void {
+        if (this.isWindowOpened()){
+            return;
+        }
+
         if (this.lastMousePos == null) {
             this.lastMousePos = new Point(Main.stage.mouseX, Main.stage.mouseY);
         }
@@ -669,7 +796,11 @@ public class MainView extends Sprite {
 
     private function onMouseDragEnd(e:Event):void {
         var tilePos:IntPoint = this.getMouseTilePosition();
-        if (this.mapView == null){
+        if (this.mapView == null) {
+            return;
+        }
+
+        if (this.isWindowOpened()){
             return;
         }
 
@@ -682,11 +813,25 @@ public class MainView extends Sprite {
 
     private function onTileClick(e:Event):void { // Perform select/draw/erase actions here
         var tilePos:IntPoint = this.getMouseTilePosition();
-        if (this.mapView == null){
+        if (tilePos == null){
+            this.onClearSelection(null);
+            return;
+        }
+
+        if (this.mapView == null) {
+            return;
+        }
+
+        if (this.isWindowOpened()){
             return;
         }
 
         this.selectedTool.tileClick(tilePos, this.timeControl.getHistory(this.mapView.id));
+    }
+
+    private function isWindowOpened():Boolean{
+        return (this.mapDimensionsWindow != null && this.mapDimensionsWindow.visible) ||
+                (this.mapCreateWindow != null && this.mapCreateWindow.visible);
     }
 
     public function showEditNameView(x:int, y:int, objName:String):void {
@@ -703,11 +848,15 @@ public class MainView extends Sprite {
     }
 
     private function onEditName(e:Event):void {
+        if (this.isWindowOpened()){
+            return;
+        }
+
         var mapX:int = this.editNameView.tileX;
         var mapY:int = this.editNameView.tileY;
         var history:MapHistory = this.timeControl.getHistory(this.mapView.id);
         var prevData:MapTileData = this.mapView.tileMap.getTileData(mapX, mapY);
-        if (prevData.objType == 0){
+        if (prevData.objType == 0) {
             return;
         }
 
@@ -717,12 +866,16 @@ public class MainView extends Sprite {
 
     private function onMouseMoved(e:Event):void {
         var tilePos:IntPoint = this.getMouseTilePosition();
-        if (this.mapView == null){
+        if (this.mapView == null) {
             return;
         }
 
         if (tilePos == null) {
             this.tileInfoPanel.visible = false;
+            return;
+        }
+
+        if (this.isWindowOpened()){
             return;
         }
 
@@ -761,7 +914,7 @@ public class MainView extends Sprite {
     }
 
     private function onToolSwitch(e:ToolSwitchEvent):void {
-        if (e.toolId == this.selectedTool.id){
+        if (e.toolId == this.selectedTool.id) {
             return;
         }
 
@@ -775,7 +928,7 @@ public class MainView extends Sprite {
         this.selectedTool.reset(); // Reset tool data
         this.selectedTool = METool.GetTool(toolId, this);
 
-        if (this.mapView == null){
+        if (this.mapView == null) {
             return;
         }
 
@@ -784,7 +937,7 @@ public class MainView extends Sprite {
         }
 
         var tilePos:IntPoint = this.getMouseTilePosition();
-        if (this.mapView == null){
+        if (this.mapView == null) {
             return;
         }
 
@@ -793,7 +946,7 @@ public class MainView extends Sprite {
     }
 
     private function onUndoAction(e:Event):void {
-        if (this.mapView == null){
+        if (this.mapView == null) {
             return;
         }
 
@@ -802,7 +955,7 @@ public class MainView extends Sprite {
     }
 
     private function onRedoAction(e:Event):void {
-        if (this.mapView == null){
+        if (this.mapView == null) {
             return;
         }
 
@@ -863,12 +1016,21 @@ public class MainView extends Sprite {
             return;
         }
 
+        if (this.isWindowOpened()){
+            return;
+        }
+
         this.clipBoard.clear();
         this.mapView.copySelectionToClipboard(this.clipBoard);
+        this.notifications.showNotification("Copy");
     }
 
     private function onPaste(e:Event):void {
         if (this.mapView == null) {
+            return;
+        }
+
+        if (this.isWindowOpened()){
             return;
         }
 
@@ -878,10 +1040,15 @@ public class MainView extends Sprite {
         }
 
         this.mapView.pasteFromClipboard(this.clipBoard, tilePos.x_, tilePos.y_, this.timeControl.getHistory(this.mapView.id));
+        this.notifications.showNotification("Paste");
     }
 
     private function onClearSelection(e:Event):void {
-        if (this.selectedTool.id == METool.SELECT_ID){
+        if (this.mapView == null || this.isWindowOpened()){
+            return;
+        }
+
+        if (this.selectedTool.id == METool.SELECT_ID) {
             this.selectedTool.reset();
         }
 
@@ -891,7 +1058,11 @@ public class MainView extends Sprite {
     }
 
     private function onMoveSelectionUp(e:Event):void {
-        if (this.mapView == null || this.selectedTool.id != METool.SELECT_ID){
+        if (this.mapView == null || this.selectedTool.id != METool.SELECT_ID) {
+            return;
+        }
+
+        if (this.isWindowOpened()){
             return;
         }
 
@@ -900,7 +1071,11 @@ public class MainView extends Sprite {
     }
 
     private function onMoveSelectionDown(e:Event):void {
-        if (this.mapView == null || this.selectedTool.id != METool.SELECT_ID){
+        if (this.mapView == null || this.selectedTool.id != METool.SELECT_ID) {
+            return;
+        }
+
+        if (this.isWindowOpened()){
             return;
         }
 
@@ -909,7 +1084,11 @@ public class MainView extends Sprite {
     }
 
     private function onMoveSelectionLeft(e:Event):void {
-        if (this.mapView == null || this.selectedTool.id != METool.SELECT_ID){
+        if (this.mapView == null || this.selectedTool.id != METool.SELECT_ID) {
+            return;
+        }
+
+        if (this.isWindowOpened()){
             return;
         }
 
@@ -918,7 +1097,11 @@ public class MainView extends Sprite {
     }
 
     private function onMoveSelectionRight(e:Event):void {
-        if (this.mapView == null || this.selectedTool.id != METool.SELECT_ID){
+        if (this.mapView == null || this.selectedTool.id != METool.SELECT_ID) {
+            return;
+        }
+
+        if (this.isWindowOpened()){
             return;
         }
 
@@ -932,22 +1115,51 @@ public class MainView extends Sprite {
             return;
         }
 
-        if (this.selectedTool.id == METool.ERASER_ID){
-            this.mapView.drawBrushOutline(tilePos.x_, tilePos.y_, this.userBrush);
+        if (this.isWindowOpened()){
+            return;
         }
-        else {
+
+        if (this.selectedTool.id == METool.ERASER_ID) {
+            this.mapView.drawBrushOutline(tilePos.x_, tilePos.y_, this.userBrush);
+        } else {
             this.mapView.drawBrushTiles(tilePos.x_, tilePos.y_, this.userBrush);
         }
     }
 
     private function onToggleDebug(e:Event):void {
-        if (this.debugView == null){
+        if (this.debugView == null) {
             this.debugView = new DebugView();
             addChild(this.debugView);
-        }
-        else {
+        } else {
             this.debugView.show(!this.debugView.visible);
         }
+
+        this.updatePositions();
+    }
+
+    private function onMapDimensionsClick(e:Event):void {
+        if (this.mapView == null){
+            return;
+        }
+
+        if (this.mapDimensionsWindow == null) {
+            this.mapDimensionsWindow = new MapDimensionsWindow();
+            this.mapDimensionsWindow.x = (StageWidth - this.mapDimensionsWindow.width) / 2;
+            this.mapDimensionsWindow.y = (StageHeight - this.mapDimensionsWindow.height) / 2;
+            this.mapDimensionsWindow.addEventListener(MEEvent.MAP_DIMENSIONS_CHANGE, this.onMapDimensionsChange);
+            addChild(this.mapDimensionsWindow);
+        } else {
+            this.mapDimensionsWindow.visible = true;
+        }
+        this.updatePositions();
+    }
+
+    private function onMapDimensionsChange(e:Event):void { // Changing map size basically creates a new map and pastes the previous map's data onto it
+        var width:int = this.mapDimensionsWindow.mapWidth;
+        var height:int = this.mapDimensionsWindow.mapHeight;
+
+        this.mapData.changeMapDimensions(this.mapView, width, height);
+        this.mapDimensionsText.setText("Width: " + width + "\nHeight: " + height);
 
         this.updatePositions();
     }
