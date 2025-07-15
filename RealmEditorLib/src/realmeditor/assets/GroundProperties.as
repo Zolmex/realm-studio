@@ -1,11 +1,8 @@
 package realmeditor.assets
 {
-import assets.*;
-   import flash.display.BitmapData;
+import flash.display.BitmapData;
 
 import realmeditor.util.BitmapUtil;
-
-import util.BitmapUtil;
 
 public class GroundProperties
    {

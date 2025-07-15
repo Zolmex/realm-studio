@@ -1,6 +1,6 @@
 package realmeditor.editor.ui.embed
 {
-   import mx.core.ByteArrayAsset;
+import mx.core.ByteArrayAsset;
 
 [Embed(source="UIAssets_UI_SLICE_CONFIG.json", mimeType="application/octet-stream")]
    public class UIAssets_UI_SLICE_CONFIG extends ByteArrayAsset

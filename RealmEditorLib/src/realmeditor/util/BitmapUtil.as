@@ -1,12 +1,12 @@
 package realmeditor.util
 {
-   import flash.display.BitmapData;
-   import flash.geom.Matrix;
-   import flash.geom.Point;
-   import flash.geom.Rectangle;
-   import flash.utils.Dictionary;
-   
-   public class BitmapUtil
+import flash.display.BitmapData;
+import flash.geom.Matrix;
+import flash.geom.Point;
+import flash.geom.Rectangle;
+import flash.utils.Dictionary;
+
+public class BitmapUtil
    {
        
       

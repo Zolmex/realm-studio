@@ -1,8 +1,8 @@
 package realmeditor.util
 {
-   import flash.geom.Point;
-   
-   public class PointUtil
+import flash.geom.Point;
+
+public class PointUtil
    {
       
       public static const ORIGIN:Point = new Point(0,0);
