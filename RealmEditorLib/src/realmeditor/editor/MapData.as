@@ -253,12 +253,21 @@ public class MapData extends EventDispatcher {
                         this.updateTileRegion(xi, yi, regType);
                     }
                 }
+                if (entry.hasOwnProperty("terrain")) {
+                    var terrain:int = entry["terrain"];
+                    this.updateTileTerrain(xi, yi, terrain);
+                }
 //                trace("TILE DATA X:", xi, "Y:", yi);
 
                 this.tileMap.loadTileFromMap(getTile(xi, yi), xi, yi);
             }
         }
         this.dispatchEvent(new Event(MEEvent.MAP_LOAD_END));
+    }
+
+    private function updateTileTerrain(x:int, y:int, terrain:int):void {
+        var tile:MapTileData = this.getTile(x, y) || createTile(x, y);
+        tile.terrainType = terrain;
     }
 
     private function loadWMap(origData:ByteArray):void {
@@ -494,7 +503,7 @@ public class MapData extends EventDispatcher {
         }
         if (tileData.objType != 0) {
             var obj:Object = {"id": ObjectLibrary.getIdFromType(tileData.objType)};
-            if (tileData.objCfg != null) {
+            if (tileData.objCfg != null && tileData.objCfg != "") {
                 obj["name"] = tileData.objCfg;
             }
             ret["objs"] = [obj];
@@ -502,6 +511,9 @@ public class MapData extends EventDispatcher {
         if (tileData.regType != 0) {
             var reg:Object = {"id": RegionLibrary.getIdFromType(tileData.regType)};
             ret["regions"] = [reg];
+        }
+        if (tileData.terrainType != 0) {
+            ret["terrain"] = tileData.terrainType.toString();
         }
         return ret;
     }

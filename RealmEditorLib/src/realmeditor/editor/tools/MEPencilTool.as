@@ -2,11 +2,9 @@ package realmeditor.editor.tools {
 import realmeditor.editor.MEBrush;
 import realmeditor.editor.MEDrawType;
 import realmeditor.editor.MapHistory;
-import realmeditor.editor.MapTileData;
 import realmeditor.editor.actions.MapActionSet;
 import realmeditor.editor.actions.MapReplaceTileAction;
 import realmeditor.editor.ui.MainView;
-import realmeditor.editor.ui.TileMapView;
 import realmeditor.util.IntPoint;
 
 public class MEPencilTool extends METool {
@@ -84,42 +82,6 @@ public class MEPencilTool extends METool {
         }
 
         history.recordSet(actions);
-    }
-
-    private function paintTile(mapX:int, mapY:int):MapReplaceTileAction {
-        var brush:MEBrush = this.mainView.userBrush;
-        var tileMap:TileMapView = this.mainView.mapView.tileMap;
-        var prevData:MapTileData = tileMap.getTileData(mapX, mapY);
-        if (prevData == null){
-            return null;
-        }
-        else {
-            prevData = prevData.clone();
-        }
-
-        switch (brush.elementType) {
-            case MEDrawType.GROUND:
-                if (brush.groundType == -1 || prevData.groundType == brush.groundType) { // Don't update tile data if it's already the same. Also don't draw empty textures
-                    return null;
-                }
-                tileMap.setTileGround(mapX, mapY, brush.groundType);
-                break;
-            case MEDrawType.OBJECTS:
-                if (brush.objType == 0 || prevData.objType == brush.objType) {
-                    return null;
-                }
-                tileMap.setTileObject(mapX, mapY, brush.objType);
-                break;
-            case MEDrawType.REGIONS:
-                if (brush.regType == 0 || prevData.regType == brush.regType) {
-                    return null;
-                }
-                tileMap.setTileRegion(mapX, mapY, brush.regType);
-                break;
-        }
-
-        tileMap.drawTile(mapX, mapY);
-        return new MapReplaceTileAction(mapX, mapY, prevData, tileMap.getTileData(mapX, mapY).clone());
     }
 }
 }

@@ -23,12 +23,12 @@ public class IntPoint
          return new IntPoint(Math.round(p.x),Math.round(p.y));
       }
       
-      public function x() : int
+      public function get x() : int
       {
          return this.x_;
       }
       
-      public function y() : int
+      public function get y() : int
       {
          return this.y_;
       }

@@ -1,15 +1,20 @@
 package realmeditor.editor.ui.elements {
 import flash.display.DisplayObject;
+import flash.text.StyleSheet;
 
 public class TextTooltip extends Tooltip {
+
+    private static const CSS_TEXT:String = ".in { }";
 
     private var textField:SimpleText;
     private var subTextField:SimpleText;
 
-    public function TextTooltip(target:DisplayObject, text:String, size:int = 18, color:uint = 0xFFFFFF, bold:Boolean = false) {
+    public function TextTooltip(target:DisplayObject, text:String, size:int = 18, color:uint = 0xFFFFFF) {
         this.textField = new SimpleText(size, color);
-        this.textField.setText(text);
-        this.textField.setBold(bold);
+        var sheet:StyleSheet = new StyleSheet();
+        sheet.parseCSS(CSS_TEXT);
+        this.textField.styleSheet = sheet;
+        this.textField.htmlText = text;
         this.textField.useTextDimensions();
 
         super(target);
@@ -34,9 +39,11 @@ public class TextTooltip extends Tooltip {
 
     public function addSubText(text:String, size:int = 14, color:uint = 0xFFFFFF, bold:Boolean = false):void {
         this.subTextField = new SimpleText(size, color);
-        this.subTextField.setText(text);
-        this.subTextField.setBold(bold);
-        this.subTextField.useTextDimensions();
+        var sheet:StyleSheet = new StyleSheet();
+        sheet.parseCSS(CSS_TEXT);
+        this.textField.styleSheet = sheet;
+        this.textField.htmlText = text;
+        this.textField.useTextDimensions();
 
         this.updateChildren();
     }

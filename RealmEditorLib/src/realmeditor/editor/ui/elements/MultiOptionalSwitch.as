@@ -77,6 +77,22 @@ public class MultiOptionalSwitch extends Sprite {
 
         this.dispatchEvent(new Event(MEEvent.OPTION_SWITCH));
     }
+
+    public function select(id:int):void {
+        if (id >= this.options.length || id < 0)
+            return;
+
+        for (var i:int = 0; i < this.options.length; i++){
+            this.options[i].filters = FilterUtil.GREY_COLOR_FILTER_2;
+        }
+
+        var nextOption:SwitchOption = this.options[id];
+        nextOption.filters = null;
+
+        this.selected = id;
+
+        this.dispatchEvent(new Event(MEEvent.OPTION_SWITCH));
+    }
 }
 }
 

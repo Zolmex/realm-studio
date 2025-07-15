@@ -197,7 +197,7 @@ public class MapView extends Sprite {
                 return;
             }
         } else {
-            if (forceDraw || brush.elementType != this.brushElementType) { // Re-draw if the draw type has changed
+            if (forceDraw || brush.size != this.brushSize || brush.elementType != this.brushElementType) { // Re-draw if the draw type has changed
                 this.drawBrushTiles(mapX, mapY, brush);
                 return;
             }
@@ -268,18 +268,16 @@ public class MapView extends Sprite {
                 break;
         }
 
+        var xi:int;
+        var yi:int;
         var diameter:int = 1 + (brush.size * 2); // Times 2 because we have tiles on the front and on the back
         var radius:int = diameter / 2;
         var bitmapSize:int = diameter * size;
         var brushTexture:BitmapData = new BitmapData(bitmapSize, bitmapSize, true, 0);
-        for (var yi:int = 0; yi <= diameter; yi++) { // The brush size represents the amount of tiles from the center we will render
-            for (var xi:int = 0; xi <= diameter; xi++) {
-                var dx:int = xi - radius;
-                var dy:int = yi - radius;
-                var distSq:int = dx * dx + dy * dy;
-                if (distSq > radius * radius) {
-                    continue;
-                }
+        if (brush.brushShape != 0) {
+            for each (var tile:IntPoint in brush.shapeTiles) {
+                xi = tile.x + radius;
+                yi = tile.y + radius;
 
                 if (texture != null) {
                     if (texture.width > size || texture.height > size) {
@@ -292,6 +290,31 @@ public class MapView extends Sprite {
                     }
                 } else { // Must mean we're rendering a region
                     brushTexture.fillRect(new Rectangle(xi * size, yi * size, size, size), 1593835520 | regColor);
+                }
+            }
+        }
+        else {
+            for (yi = 0; yi <= diameter; yi++) { // The brush size represents the amount of tiles from the center we will render
+                for (xi = 0; xi <= diameter; xi++) {
+                    var dx:int = xi - radius;
+                    var dy:int = yi - radius;
+                    var distSq:int = dx * dx + dy * dy;
+                    if (distSq > radius * radius) {
+                        continue;
+                    }
+
+                    if (texture != null) {
+                        if (texture.width > size || texture.height > size) {
+                            var matrix:Matrix = new Matrix();
+                            matrix.scale(size / texture.width, size / texture.height);
+                            matrix.translate(xi * size, yi * size);
+                            brushTexture.draw(texture, matrix);
+                        } else {
+                            brushTexture.copyPixels(texture, new Rectangle(0, 0, texture.width, texture.height), new Point(xi * texture.width, yi * texture.height));
+                        }
+                    } else { // Must mean we're rendering a region
+                        brushTexture.fillRect(new Rectangle(xi * size, yi * size, size, size), 1593835520 | regColor);
+                    }
                 }
             }
         }
