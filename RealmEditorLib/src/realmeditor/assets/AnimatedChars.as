@@ -1,5 +1,4 @@
 package realmeditor.assets {
-import flash.display.BitmapData;
 import flash.utils.Dictionary;
 
 public class AnimatedChars {

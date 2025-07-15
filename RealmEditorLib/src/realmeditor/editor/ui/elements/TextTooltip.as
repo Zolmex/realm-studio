@@ -1,6 +1,4 @@
 package realmeditor.editor.ui.elements {
-import editor.ui.elements.SimpleText;
-
 import flash.display.DisplayObject;
 
 public class TextTooltip extends Tooltip {

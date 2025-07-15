@@ -1,6 +1,4 @@
 package realmeditor.editor.ui {
-import editor.MEEvent;
-
 import flash.display.Graphics;
 import flash.display.Shape;
 import flash.display.Sprite;
@@ -140,18 +138,8 @@ public class MapSelectorView extends Sprite {
 }
 }
 
-import editor.MEEvent;
-import editor.ui.Constants;
-import editor.ui.MainView;
-import editor.ui.MapSelectorView;
-import editor.ui.MapView;
-import editor.ui.elements.TextTooltip;
-import editor.ui.elements.SimpleText;
-
 import flash.display.Graphics;
-
 import flash.display.Shape;
-
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
@@ -159,16 +147,12 @@ import flash.text.TextFieldAutoSize;
 
 import realmeditor.editor.MEEvent;
 import realmeditor.editor.ui.Constants;
-
 import realmeditor.editor.ui.MainView;
-
 import realmeditor.editor.ui.MapSelectorView;
 import realmeditor.editor.ui.MapView;
 import realmeditor.editor.ui.elements.SimpleText;
 import realmeditor.editor.ui.elements.TextTooltip;
 import realmeditor.util.MoreColorUtil;
-
-import util.MoreColorUtil;
 
 class MapSelectorSlot extends Sprite {
 

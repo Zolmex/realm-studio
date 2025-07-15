@@ -1,21 +1,12 @@
 package realmeditor.editor.ui {
-import editor.ui.elements.SimpleCloseButton;
-import editor.ui.elements.SimpleOkButton;
-import editor.ui.elements.SimpleText;
-import editor.ui.elements.SimpleTextInput;
-
 import flash.display.Graphics;
-
 import flash.display.Shape;
-
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
 
 import realmeditor.editor.ui.elements.SimpleCloseButton;
-
 import realmeditor.editor.ui.elements.SimpleOkButton;
-
 import realmeditor.editor.ui.elements.SimpleText;
 
 public class MEWindow extends Sprite {

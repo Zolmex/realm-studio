@@ -1,7 +1,6 @@
 package realmeditor.editor.ui.embed
 {
-   import mx.core.BitmapAsset;
-
+import mx.core.BitmapAsset;
 
 [Embed(source="UIAssets_UI.png")]
    public class UIAssets_UI extends BitmapAsset

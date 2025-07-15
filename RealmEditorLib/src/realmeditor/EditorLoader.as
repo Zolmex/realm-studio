@@ -1,35 +1,19 @@
 package realmeditor {
-import assets.AnimatedChars;
-import assets.AssetLibrary;
-import assets.GroundLibrary;
-import assets.ObjectLibrary;
-import assets.RegionLibrary;
-
-import editor.Parameters;
-import editor.ui.Keybinds;
-import editor.ui.MainView;
-import editor.ui.embed.Cursors;
-import editor.ui.embed.EditorTools;
-
 import flash.display.BitmapData;
-
 import flash.display.Sprite;
 import flash.utils.Dictionary;
 
 import realmeditor.assets.AnimatedChars;
-
 import realmeditor.assets.AssetLibrary;
-
 import realmeditor.assets.GroundLibrary;
 import realmeditor.assets.ObjectLibrary;
 import realmeditor.assets.RegionLibrary;
 import realmeditor.editor.Parameters;
 import realmeditor.editor.ui.Keybinds;
 import realmeditor.editor.ui.MainView;
-import realmeditor.editor.ui.embed.TextureParser;
-import realmeditor.editor.ui.embed.UIAssetLoader;
 import realmeditor.editor.ui.embed.Cursors;
 import realmeditor.editor.ui.embed.EditorTools;
+import realmeditor.editor.ui.embed.TextureParser;
 
 public class EditorLoader {
 

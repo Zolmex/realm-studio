@@ -1,16 +1,7 @@
 package realmeditor.editor.tools {
-import editor.MEBrush;
-import editor.MapHistory;
-import editor.MapTileData;
-import editor.ui.MainView;
-import editor.ui.MapView;
-
 import realmeditor.editor.MapHistory;
-
 import realmeditor.editor.ui.MainView;
 import realmeditor.util.IntPoint;
-
-import util.IntPoint;
 
 public class MEShapeTool extends METool {
 

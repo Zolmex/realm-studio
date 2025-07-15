@@ -1,13 +1,7 @@
 package realmeditor.editor {
-import assets.GroundLibrary;
-import assets.ObjectLibrary;
-import assets.RegionLibrary;
-
 import com.brokenfunction.json.decodeJson;
 import com.brokenfunction.json.encodeJson;
 import com.hurlant.util.Base64;
-
-import editor.ui.TileMapView;
 
 import flash.events.Event;
 import flash.events.EventDispatcher;
@@ -27,12 +21,9 @@ import realmeditor.assets.ObjectLibrary;
 import realmeditor.assets.RegionLibrary;
 import realmeditor.editor.ui.MainView;
 import realmeditor.editor.ui.MapView;
-
 import realmeditor.editor.ui.TileMapView;
 import realmeditor.util.BinaryUtils;
 import realmeditor.util.TimedAction;
-
-import util.BinaryUtils;
 
 public class MapData extends EventDispatcher {
 

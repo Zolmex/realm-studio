@@ -1,17 +1,7 @@
 package realmeditor.editor.ui {
-import assets.GroundLibrary;
-import assets.ObjectLibrary;
-import assets.RegionLibrary;
-
-import editor.MapTileData;
-import editor.ui.elements.SimpleText;
-
 import flash.display.Bitmap;
 import flash.display.BitmapData;
-
-import flash.display.BitmapData;
 import flash.display.Graphics;
-
 import flash.display.Shape;
 import flash.display.Sprite;
 import flash.geom.Matrix;
@@ -20,7 +10,6 @@ import flash.geom.Rectangle;
 import realmeditor.assets.GroundLibrary;
 import realmeditor.assets.ObjectLibrary;
 import realmeditor.assets.RegionLibrary;
-
 import realmeditor.editor.MapTileData;
 import realmeditor.editor.ui.elements.SimpleText;
 

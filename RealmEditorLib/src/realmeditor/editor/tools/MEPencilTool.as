@@ -1,26 +1,13 @@
 package realmeditor.editor.tools {
-import editor.MEBrush;
-import editor.MEDrawType;
-import editor.MapTileData;
-import editor.actions.MapActionSet;
-import editor.actions.MapReplaceTileAction;
-import editor.ui.MainView;
-import editor.MapHistory;
-import editor.ui.TileMapView;
-
 import realmeditor.editor.MEBrush;
 import realmeditor.editor.MEDrawType;
-
 import realmeditor.editor.MapHistory;
 import realmeditor.editor.MapTileData;
 import realmeditor.editor.actions.MapActionSet;
 import realmeditor.editor.actions.MapReplaceTileAction;
-
 import realmeditor.editor.ui.MainView;
 import realmeditor.editor.ui.TileMapView;
 import realmeditor.util.IntPoint;
-
-import util.IntPoint;
 
 public class MEPencilTool extends METool {
 

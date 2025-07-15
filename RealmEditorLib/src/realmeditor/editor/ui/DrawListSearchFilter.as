@@ -1,16 +1,8 @@
 package realmeditor.editor.ui {
-import assets.GroundLibrary;
-import assets.ObjectLibrary;
-import assets.RegionLibrary;
-
-import editor.MEDrawType;
-import editor.ui.elements.IDrawElementFilter;
-
 import realmeditor.assets.GroundLibrary;
 import realmeditor.assets.ObjectLibrary;
 import realmeditor.assets.RegionLibrary;
 import realmeditor.editor.MEDrawType;
-
 import realmeditor.editor.ui.elements.IDrawElementFilter;
 
 public class DrawListSearchFilter implements IDrawElementFilter {

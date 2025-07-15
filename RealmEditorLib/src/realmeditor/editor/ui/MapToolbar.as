@@ -1,9 +1,4 @@
 package realmeditor.editor.ui {
-import assets.AssetLibrary;
-
-import editor.tools.METool;
-
-import flash.display.Bitmap;
 import flash.display.Graphics;
 import flash.display.Shape;
 import flash.display.Sprite;
@@ -11,10 +6,7 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 
 import realmeditor.editor.tools.METool;
-
 import realmeditor.util.FilterUtil;
-
-import util.FilterUtil;
 
 public class MapToolbar extends Sprite {
 
@@ -109,13 +101,6 @@ public class MapToolbar extends Sprite {
 }
 }
 
-import assets.AssetLibrary;
-
-import editor.tools.METool;
-import editor.ui.MainView;
-
-import editor.ui.elements.TextTooltip;
-
 import flash.display.Bitmap;
 import flash.display.Sprite;
 import flash.events.Event;
@@ -124,7 +109,6 @@ import flash.events.MouseEvent;
 import realmeditor.assets.AssetLibrary;
 import realmeditor.editor.tools.METool;
 import realmeditor.editor.ui.MainView;
-
 import realmeditor.editor.ui.elements.TextTooltip;
 
 class ToolIconContainer extends Sprite {

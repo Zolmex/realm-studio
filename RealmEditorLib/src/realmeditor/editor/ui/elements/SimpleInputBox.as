@@ -1,10 +1,5 @@
 package realmeditor.editor.ui.elements {
-import editor.ui.Constants;
-
-import flash.display.Graphics;
-import flash.display.Shape;
 import flash.display.Sprite;
-import flash.filters.DropShadowFilter;
 
 public class SimpleInputBox extends Sprite {
 

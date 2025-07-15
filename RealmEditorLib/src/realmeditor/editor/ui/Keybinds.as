@@ -1,6 +1,4 @@
 package realmeditor.editor.ui {
-import editor.MEEvent;
-
 import flash.ui.Keyboard;
 import flash.utils.Dictionary;
 

@@ -1,48 +1,19 @@
 package realmeditor.editor.ui {
-import assets.GroundLibrary;
-import assets.ObjectLibrary;
-import assets.RegionLibrary;
-
-import editor.MapDragController;
-
-import editor.MapHistory;
-
-import editor.actions.MapAction;
-import editor.MEBrush;
-import editor.MEClipboard;
-import editor.MEDrawType;
-import editor.actions.MapActionSet;
-import editor.actions.MapDragAction;
-import editor.actions.MapReplaceTileAction;
-import editor.actions.MapSelectAction;
-import editor.actions.data.MapSelectData;
-import editor.tools.MESelectTool;
-import editor.tools.METool;
-import editor.actions.MapAction;
-import editor.actions.MapAction;
-import editor.MapData;
-import editor.MapTileData;
-
 import flash.display.Bitmap;
-
 import flash.display.BitmapData;
-
 import flash.display.Graphics;
 import flash.display.Shape;
 import flash.display.Sprite;
 import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.geom.Rectangle;
-import flash.utils.Dictionary;
 
 import realmeditor.assets.GroundLibrary;
 import realmeditor.assets.ObjectLibrary;
 import realmeditor.assets.RegionLibrary;
-
 import realmeditor.editor.MEBrush;
 import realmeditor.editor.MEClipboard;
 import realmeditor.editor.MEDrawType;
-
 import realmeditor.editor.MapData;
 import realmeditor.editor.MapDragController;
 import realmeditor.editor.MapHistory;
@@ -53,8 +24,6 @@ import realmeditor.editor.actions.MapReplaceTileAction;
 import realmeditor.editor.actions.MapSelectAction;
 import realmeditor.editor.actions.data.MapSelectData;
 import realmeditor.util.IntPoint;
-
-import util.IntPoint;
 
 public class MapView extends Sprite {
 

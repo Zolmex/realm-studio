@@ -1,6 +1,5 @@
 package realmeditor.editor.ui.embed {
 import flash.display.Bitmap;
-import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.filesystem.File;
 import flash.filesystem.FileMode;
@@ -8,12 +7,6 @@ import flash.filesystem.FileStream;
 import flash.geom.Rectangle;
 import flash.utils.ByteArray;
 import flash.utils.Dictionary;
-
-import io.decagames.rotmg.ui.assets.UIAssets;
-import io.decagames.rotmg.ui.sliceScaling.SliceScalingBitmap;
-
-import kabam.lib.json.JsonParser;
-import kabam.rotmg.core.StaticInjectorContext;
 
 public class TextureParser {
 

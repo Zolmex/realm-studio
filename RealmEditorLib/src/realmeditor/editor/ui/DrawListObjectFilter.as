@@ -1,15 +1,6 @@
 package realmeditor.editor.ui {
-import assets.ObjectLibrary;
-
-import editor.MEDrawType;
-import editor.ui.elements.IDrawElementFilter;
-
-import flash.utils.Dictionary;
-
 import realmeditor.assets.ObjectLibrary;
-
 import realmeditor.editor.MEDrawType;
-
 import realmeditor.editor.ui.elements.IDrawElementFilter;
 
 public class DrawListObjectFilter implements IDrawElementFilter {

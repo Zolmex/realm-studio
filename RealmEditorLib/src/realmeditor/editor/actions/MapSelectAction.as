@@ -1,8 +1,4 @@
 package realmeditor.editor.actions {
-import editor.actions.data.MapSelectData;
-import editor.ui.MainView;
-import editor.ui.MapView;
-
 import realmeditor.editor.actions.data.MapSelectData;
 import realmeditor.editor.ui.MainView;
 import realmeditor.editor.ui.MapView;

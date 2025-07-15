@@ -1,14 +1,8 @@
 package realmeditor.editor.ui {
-import editor.MEEvent;
-import editor.tools.METool;
-import editor.ToolSwitchEvent;
-
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
-import flash.events.MouseEvent;
-import flash.ui.Keyboard;
 import flash.utils.Dictionary;
 
 import realmeditor.editor.MEEvent;

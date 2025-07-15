@@ -4,8 +4,6 @@ import flash.utils.Dictionary;
 
 import realmeditor.util.BitmapUtil;
 
-import util.BitmapUtil;
-
 public class GroundLibrary {
 
     public static var propsLibrary_:Dictionary = new Dictionary();

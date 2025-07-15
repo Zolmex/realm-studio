@@ -1,64 +1,21 @@
 package realmeditor.editor.ui {
-import editor.AutoMapSaver;
-
-import editor.MEBrush;
-import editor.MEClipboard;
-import editor.MEDrawType;
-
-import editor.MEEvent;
-import editor.MapHistory;
-import editor.TimeControl;
-import editor.actions.MapEditAction;
-import editor.actions.MapSelectAction;
-import editor.actions.data.MapSelectData;
-import editor.tools.MESelectTool;
-import editor.tools.METool;
-import editor.tools.METool;
-import editor.actions.MapAction;
-import editor.MapData;
-import editor.MapTileData;
-import editor.ToolSwitchEvent;
-import editor.ui.MapDrawElementListView;
-import editor.ui.elements.IDrawElementFilter;
-import editor.ui.elements.MultiOptionalSwitch;
-import editor.ui.elements.SimpleCheckBox;
-import editor.ui.elements.SimpleTextInput;
-import editor.ui.embed.Background;
-
 import flash.desktop.NativeApplication;
-
 import flash.display.Graphics;
 import flash.display.NativeWindow;
 import flash.display.Shape;
-import flash.display.SimpleButton;
 import flash.display.Sprite;
 import flash.events.Event;
-
-import editor.ui.elements.SimpleTextButton;
-
-import flash.events.KeyboardEvent;
-
 import flash.events.MouseEvent;
-import flash.geom.Matrix;
 import flash.geom.Point;
-import flash.geom.Vector3D;
 import flash.system.fscommand;
-import flash.ui.Keyboard;
-import flash.ui.Mouse;
-import flash.utils.Dictionary;
 import flash.utils.getTimer;
 
-import org.osflash.signals.Signal;
-
 import realmeditor.RealmEditorTestEvent;
-
 import realmeditor.editor.AutoMapSaver;
-
 import realmeditor.editor.MEBrush;
 import realmeditor.editor.MEClipboard;
 import realmeditor.editor.MEDrawType;
 import realmeditor.editor.MEEvent;
-
 import realmeditor.editor.MapData;
 import realmeditor.editor.MapHistory;
 import realmeditor.editor.MapTileData;
@@ -74,9 +31,6 @@ import realmeditor.editor.ui.elements.SimpleTextInput;
 import realmeditor.editor.ui.embed.Background;
 import realmeditor.util.IntPoint;
 import realmeditor.util.TimedAction;
-import realmeditor.util.TimedAction;
-
-import util.IntPoint;
 
 public class MainView extends Sprite {
 

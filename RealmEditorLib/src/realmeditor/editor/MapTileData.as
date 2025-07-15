@@ -1,7 +1,4 @@
 package realmeditor.editor {
-import flash.events.Event;
-import flash.events.EventDispatcher;
-
 public class MapTileData {
 
     public var groundType:int = -1; // These are the default values used everywhere

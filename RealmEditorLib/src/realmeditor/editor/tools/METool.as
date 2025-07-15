@@ -1,19 +1,10 @@
 package realmeditor.editor.tools {
-import editor.*;
-import editor.ui.MainView;
-import editor.MapHistory;
-import editor.ui.MapView;
-
 import flash.utils.Dictionary;
 
 import realmeditor.editor.MEEvent;
-
 import realmeditor.editor.MapHistory;
-
 import realmeditor.editor.ui.MainView;
 import realmeditor.util.IntPoint;
-
-import util.IntPoint;
 
 public class METool {
 
