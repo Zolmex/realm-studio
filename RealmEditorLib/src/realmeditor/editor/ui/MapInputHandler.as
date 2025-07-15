@@ -1,12 +1,7 @@
 package realmeditor.editor.ui {
-import editor.MEEvent;
-import editor.tools.METool;
-import editor.ToolSwitchEvent;
-
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.KeyboardEvent;
-import flash.events.MouseEvent;
 import flash.events.MouseEvent;
 import flash.ui.Keyboard;
 import flash.utils.Dictionary;
@@ -116,7 +111,15 @@ public class MapInputHandler extends EventDispatcher {
         }
 
         this.dragging = true;
-        this.dispatchEvent(new Event(MEEvent.MOUSE_DRAG));
+        if (e.shiftKey) {
+            this.dispatchEvent(new Event(MEEvent.SHIFT_MOUSE_DRAG));
+        }
+        else if (e.ctrlKey) {
+            this.dispatchEvent(new Event(MEEvent.CTRL_MOUSE_DRAG));
+        }
+        else {
+            this.dispatchEvent(new Event(MEEvent.MOUSE_DRAG));
+        }
     }
 
     private function onMouseDown(e:MouseEvent):void {
@@ -193,7 +196,9 @@ public class MapInputHandler extends EventDispatcher {
         }
         var evt:Event;
         if (eventStr.indexOf(MEEvent.TOOL_SWITCH) != -1) {
-            evt = new ToolSwitchEvent(MEEvent.TOOL_SWITCH, METool.ToolEventToId(eventStr))
+            evt = new ToolSwitchEvent(METool.ToolEventToId(eventStr))
+        } else if (eventStr.indexOf(MEEvent.TILE_HOTKEY_SWITCH) != -1) {
+            evt = new TileHotkeyEvent(e.keyCode - Keyboard.NUMBER_0);
         } else {
             evt = new Event(eventStr);
         }

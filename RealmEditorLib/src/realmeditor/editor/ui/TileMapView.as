@@ -1,28 +1,16 @@
 package realmeditor.editor.ui {
 
-import editor.MEEvent;
-
-import editor.MapData;
-import editor.MapTileData;
-
 import flash.display.Bitmap;
-
 import flash.display.BitmapData;
-
-import flash.display.Graphics;
-import flash.display.Shape;
 import flash.display.Sprite;
 import flash.events.Event;
-import flash.geom.ColorTransform;
 import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.utils.Dictionary;
 
 import realmeditor.editor.MEEvent;
-
 import realmeditor.editor.MapData;
-
 import realmeditor.editor.MapTileData;
 
 public class TileMapView extends Sprite {

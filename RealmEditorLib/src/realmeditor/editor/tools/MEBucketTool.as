@@ -1,37 +1,14 @@
 package realmeditor.editor.tools {
-import editor.MEBrush;
-import editor.MEDrawType;
-import editor.MapData;
-import editor.MapTileData;
-import editor.MapTileData;
-import editor.actions.MapAction;
-import editor.actions.MapActionSet;
-import editor.actions.MapReplaceTileAction;
-import editor.actions.data.MapSelectData;
-import editor.ui.MainView;
-import editor.MapHistory;
-import editor.ui.MapView;
-import editor.ui.TileMapView;
-
-import flash.display.Shape;
-
 import realmeditor.editor.MEBrush;
 import realmeditor.editor.MEDrawType;
-
 import realmeditor.editor.MapData;
-
 import realmeditor.editor.MapHistory;
 import realmeditor.editor.MapTileData;
 import realmeditor.editor.actions.MapActionSet;
 import realmeditor.editor.actions.MapReplaceTileAction;
-
 import realmeditor.editor.ui.MainView;
 import realmeditor.editor.ui.TileMapView;
 import realmeditor.util.IntPoint;
-
-import util.IntPoint;
-
-import util.IntPoint;
 
 public class MEBucketTool extends METool {
 

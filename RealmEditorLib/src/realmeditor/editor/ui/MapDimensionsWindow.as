@@ -1,11 +1,7 @@
 package realmeditor.editor.ui {
-import editor.MEEvent;
-import editor.ui.elements.SimpleTextInput;
-
 import flash.events.Event;
 
 import realmeditor.editor.MEEvent;
-
 import realmeditor.editor.ui.elements.SimpleTextInput;
 
 public class MapDimensionsWindow extends MEWindow {

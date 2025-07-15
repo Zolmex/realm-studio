@@ -1,16 +1,12 @@
 package realmeditor.editor.ui.elements {
-import editor.ui.*;
-
 import flash.display.DisplayObject;
 import flash.display.Graphics;
 import flash.display.Shape;
 import flash.display.Sprite;
-import flash.display.Stage;
 import flash.events.Event;
 import flash.events.MouseEvent;
 
 import realmeditor.editor.ui.Constants;
-
 import realmeditor.editor.ui.MainView;
 
 public class Tooltip extends Sprite {

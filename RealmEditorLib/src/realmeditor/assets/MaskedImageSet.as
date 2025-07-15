@@ -1,8 +1,8 @@
 package realmeditor.assets
 {
-   import flash.display.BitmapData;
-   
-   public class MaskedImageSet
+import flash.display.BitmapData;
+
+public class MaskedImageSet
    {
        
       

@@ -1,7 +1,4 @@
 package realmeditor.editor {
-import editor.actions.MapAction;
-import editor.actions.MapActionSet;
-
 import realmeditor.editor.actions.MapAction;
 import realmeditor.editor.actions.MapActionSet;
 

@@ -1,11 +1,8 @@
 package realmeditor.editor.ui {
-import editor.ui.elements.SimpleText;
-
 import flash.display.Graphics;
 import flash.display.Shape;
 import flash.display.Sprite;
 import flash.system.System;
-import flash.utils.getTimer;
 
 import realmeditor.editor.ui.elements.SimpleText;
 

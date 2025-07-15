@@ -1,6 +1,4 @@
 package realmeditor.util {
-import assets.AssetLibrary;
-
 import flash.display.BitmapData;
 import flash.display.Shader;
 import flash.filters.BitmapFilterQuality;

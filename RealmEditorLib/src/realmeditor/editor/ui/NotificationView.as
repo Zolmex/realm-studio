@@ -1,19 +1,11 @@
 package realmeditor.editor.ui {
 import com.gskinner.motion.GTween;
-import com.gskinner.motion.GTween;
-
-import editor.ui.elements.SimpleText;
 
 import flash.display.Graphics;
-
 import flash.display.Shape;
-
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
-import flash.filters.DropShadowFilter;
-import flash.text.TextFieldAutoSize;
-import flash.text.TextFormatAlign;
 
 import realmeditor.editor.ui.elements.SimpleText;
 

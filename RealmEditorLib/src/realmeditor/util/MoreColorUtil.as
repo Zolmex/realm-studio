@@ -1,8 +1,8 @@
 package realmeditor.util
 {
-   import flash.geom.ColorTransform;
-   
-   public class MoreColorUtil
+import flash.geom.ColorTransform;
+
+public class MoreColorUtil
    {
       
       public static const greyscaleFilterMatrix:Array = [0.3,0.59,0.11,0,0,0.3,0.59,0.11,0,0,0.3,0.59,0.11,0,0,0,0,0,1,0];

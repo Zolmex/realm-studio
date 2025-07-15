@@ -1,12 +1,4 @@
 package realmeditor.editor.ui.elements {
-import com.gsolo.encryption.SHA1;
-
-import editor.MEEvent;
-
-import editor.ui.Constants;
-
-import flash.display.Bitmap;
-import flash.display.BitmapData;
 import flash.display.Graphics;
 import flash.display.Shape;
 import flash.display.Sprite;
@@ -14,12 +6,8 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 
 import realmeditor.editor.MEEvent;
-
 import realmeditor.editor.ui.Constants;
-
 import realmeditor.util.FilterUtil;
-
-import util.FilterUtil;
 
 public class MultiOptionalSwitch extends Sprite {
 
@@ -89,19 +77,29 @@ public class MultiOptionalSwitch extends Sprite {
 
         this.dispatchEvent(new Event(MEEvent.OPTION_SWITCH));
     }
-}
-}
 
-import editor.ui.Constants;
-import editor.ui.elements.SimpleText;
+    public function select(id:int):void {
+        if (id >= this.options.length || id < 0)
+            return;
+
+        for (var i:int = 0; i < this.options.length; i++){
+            this.options[i].filters = FilterUtil.GREY_COLOR_FILTER_2;
+        }
+
+        var nextOption:SwitchOption = this.options[id];
+        nextOption.filters = null;
+
+        this.selected = id;
+
+        this.dispatchEvent(new Event(MEEvent.OPTION_SWITCH));
+    }
+}
+}
 
 import flash.display.Sprite;
 
 import realmeditor.editor.ui.Constants;
-
 import realmeditor.editor.ui.elements.SimpleText;
-
-import util.FilterUtil;
 
 class SwitchOption extends Sprite {
 

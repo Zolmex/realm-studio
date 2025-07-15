@@ -1,6 +1,4 @@
 package realmeditor.editor.actions.data {
-import editor.actions.MapDragAction;
-
 import realmeditor.editor.actions.MapDragAction;
 
 public class MapSelectData {

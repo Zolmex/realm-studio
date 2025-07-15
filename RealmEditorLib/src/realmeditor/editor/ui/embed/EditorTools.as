@@ -1,6 +1,4 @@
 package realmeditor.editor.ui.embed {
-import assets.*;
-
 import mx.core.BitmapAsset;
 
 [Embed(source="EditorTools.png")]

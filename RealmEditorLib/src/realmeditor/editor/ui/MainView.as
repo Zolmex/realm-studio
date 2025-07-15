@@ -1,70 +1,30 @@
 package realmeditor.editor.ui {
-import editor.AutoMapSaver;
-
-import editor.MEBrush;
-import editor.MEClipboard;
-import editor.MEDrawType;
-
-import editor.MEEvent;
-import editor.MapHistory;
-import editor.TimeControl;
-import editor.actions.MapEditAction;
-import editor.actions.MapSelectAction;
-import editor.actions.data.MapSelectData;
-import editor.tools.MESelectTool;
-import editor.tools.METool;
-import editor.tools.METool;
-import editor.actions.MapAction;
-import editor.MapData;
-import editor.MapTileData;
-import editor.ToolSwitchEvent;
-import editor.ui.MapDrawElementListView;
-import editor.ui.elements.IDrawElementFilter;
-import editor.ui.elements.MultiOptionalSwitch;
-import editor.ui.elements.SimpleCheckBox;
-import editor.ui.elements.SimpleTextInput;
-import editor.ui.embed.Background;
-
 import flash.desktop.NativeApplication;
-
+import flash.display.DisplayObject;
 import flash.display.Graphics;
 import flash.display.NativeWindow;
 import flash.display.Shape;
-import flash.display.SimpleButton;
 import flash.display.Sprite;
 import flash.events.Event;
-
-import editor.ui.elements.SimpleTextButton;
-
-import flash.events.KeyboardEvent;
-
 import flash.events.MouseEvent;
-import flash.geom.Matrix;
 import flash.geom.Point;
-import flash.geom.Vector3D;
 import flash.system.fscommand;
-import flash.ui.Keyboard;
-import flash.ui.Mouse;
-import flash.utils.Dictionary;
 import flash.utils.getTimer;
 
-import org.osflash.signals.Signal;
-
 import realmeditor.RealmEditorTestEvent;
-
 import realmeditor.editor.AutoMapSaver;
-
 import realmeditor.editor.MEBrush;
 import realmeditor.editor.MEClipboard;
 import realmeditor.editor.MEDrawType;
 import realmeditor.editor.MEEvent;
-
 import realmeditor.editor.MapData;
 import realmeditor.editor.MapHistory;
 import realmeditor.editor.MapTileData;
 import realmeditor.editor.TimeControl;
 import realmeditor.editor.ToolSwitchEvent;
 import realmeditor.editor.actions.MapEditAction;
+import realmeditor.editor.actions.data.MapSelectData;
+import realmeditor.editor.tools.MEEraserTool;
 import realmeditor.editor.tools.MESelectTool;
 import realmeditor.editor.tools.METool;
 import realmeditor.editor.ui.elements.MultiOptionalSwitch;
@@ -74,9 +34,6 @@ import realmeditor.editor.ui.elements.SimpleTextInput;
 import realmeditor.editor.ui.embed.Background;
 import realmeditor.util.IntPoint;
 import realmeditor.util.TimedAction;
-import realmeditor.util.TimedAction;
-
-import util.IntPoint;
 
 public class MainView extends Sprite {
 
@@ -103,8 +60,11 @@ public class MainView extends Sprite {
     private var testMapButton:SimpleTextButton;
     private var mapCreateWindow:CreateMapWindow;
     private var closePrompt:ClosePromptWindow;
-    private var mapDimensionsText:SimpleTextButton;
+    private var mapInfoPanel:MapInfoPanel;
     private var mapDimensionsWindow:MapDimensionsWindow;
+    private var selectionInfoPanel:SelectionInfoPanel;
+    private var brushOptions:BrushOptions;
+    private var tileHotkeys:TileHotkeys;
 
     public var inputHandler:MapInputHandler;
     public var notifications:NotificationView;
@@ -126,6 +86,7 @@ public class MainView extends Sprite {
     public var userBrush:MEBrush;
     public var selectedTool:METool;
     private var lastMousePos:Point;
+    private var previousTool:METool;
     private var clipBoard:MEClipboard;
     public var timeControl:TimeControl; // Controls actions done/undone in each map
 
@@ -148,7 +109,7 @@ public class MainView extends Sprite {
         ScaleX = Main.stage.stageWidth / 800;
         ScaleY = Main.stage.stageHeight / 600;
 
-        this.userBrush = new MEBrush(MEDrawType.GROUND, 0);
+        this.userBrush = new MEBrush(this, MEDrawType.GROUND, 0);
         this.clipBoard = new MEClipboard();
         this.timeControl = new TimeControl();
         this.selectedTool = new MESelectTool(this);
@@ -251,17 +212,32 @@ public class MainView extends Sprite {
         this.objectFilterView = new ObjectFilterOptionsView(this.drawElementsList);
         addChild(this.objectFilterView);
 
-        this.mapDimensionsText = new SimpleTextButton("Width: 0\nHeight: 0", 20, 0xFFFFFF, false);
-        this.mapDimensionsText.addEventListener(MouseEvent.CLICK, this.onMapDimensionsClick);
-        addChild(this.mapDimensionsText);
+        this.mapInfoPanel = new MapInfoPanel();
+        this.mapInfoPanel.addEventListener(MouseEvent.CLICK, onMapDimensionsClick);
+        this.mapInfoPanel.visible = false;
+        addChild(this.mapInfoPanel);
+
+        this.selectionInfoPanel = new SelectionInfoPanel();
+        this.selectionInfoPanel.visible = false;
+        addChild(this.selectionInfoPanel);
 
         this.notifications = new NotificationView();
         addChild(this.notifications);
+
+        this.brushOptions = new BrushOptions(this);
+        this.addEventListener(MEEvent.BRUSH_CHANGED, this.onBrushChanged);
+        this.brushOptions.addEventListener(Event.CHANGE, this.updateBrushOptionsPosition);
+        addChild(this.brushOptions);
+
+        this.tileHotkeys = new TileHotkeys();
+        this.tileHotkeys.addEventListener(MEEvent.TILE_HOTKEY_SWITCH, this.onTileHotkey);
+        addChild(this.tileHotkeys);
 
         Main.stage.addEventListener(Event.ENTER_FRAME, this.update);
         Main.stage.addEventListener(MouseEvent.MOUSE_WHEEL, this.onMouseWheel);
         Main.stage.addEventListener(Event.RESIZE, this.onStageResize);
         Main.stage.addEventListener(Event.REMOVED_FROM_STAGE, this.onRemovedFromStage);
+        this.addEventListener(MEEvent.EXIT_EDITOR, this.onRemovedFromStage);
         this.window.addEventListener(Event.CLOSING, this.onExiting); // Closing the window
 
         this.updateScale();
@@ -291,6 +267,10 @@ public class MainView extends Sprite {
         this.inputHandler.addEventListener(MEEvent.MOVE_SELECTION_LEFT, this.onMoveSelectionLeft);
         this.inputHandler.addEventListener(MEEvent.MOVE_SELECTION_RIGHT, this.onMoveSelectionRight);
         this.inputHandler.addEventListener(MEEvent.TOGGLE_DEBUG, this.onToggleDebug);
+        this.inputHandler.addEventListener(MEEvent.CTRL_MOUSE_DRAG, this.onCtrlMouseDrag);
+        this.inputHandler.addEventListener(MEEvent.SHIFT_MOUSE_DRAG, this.onShiftMouseDrag);
+        this.inputHandler.addEventListener(MEEvent.TILE_HOTKEY_SWITCH, this.onTileHotkey);
+        this.inputHandler.addEventListener(MEEvent.DELETE_SELECTION, this.onDeleteSelection);
     }
 
     private function updateScale():void {
@@ -324,8 +304,8 @@ public class MainView extends Sprite {
         this.mapSelector.x = this.loadButton.x;
         this.mapSelector.y = this.loadButton.y + this.loadButton.height + 10;
 
-        this.mapDimensionsText.x = this.mapSelector.x + this.mapSelector.width + 5;
-        this.mapDimensionsText.y = this.mapSelector.y;
+        this.mapInfoPanel.x = 19;
+        this.mapInfoPanel.y = StageHeight - this.mapInfoPanel.height - 15;
 
         this.toolBoxBackground.x = 15;
         this.toolBoxBackground.y = (StageHeight - this.toolBoxBackground.height) / 2;
@@ -361,11 +341,19 @@ public class MainView extends Sprite {
         this.tileInfoPanel.x = this.drawElementsList.x - this.tileInfoPanel.width - 15;
         this.tileInfoPanel.y = StageHeight - this.tileInfoPanel.height - 15;
 
+        this.selectionInfoPanel.x = this.tileInfoPanel.x - this.selectionInfoPanel.width - 5;
+        this.selectionInfoPanel.y = StageHeight - this.selectionInfoPanel.height - 15;
+
         this.toolBar.x = this.drawElementsList.x - this.toolBar.width - 8;
         this.toolBar.y = (StageHeight - this.toolBar.height) / 2;
 
         this.objectFilterView.x = this.drawElementsList.x - 20;
         this.objectFilterView.y = this.drawElementsList.y;
+
+        this.updateBrushOptionsPosition(null);
+
+        this.tileHotkeys.x = this.drawElementsList.x - this.tileHotkeys.width - 8;
+        this.tileHotkeys.y = this.toolBar.y - this.tileHotkeys.height - 8;
 
         if (this.mapView) {
             this.mapView.x = (StageWidth - (this.mapData.mapWidth * TileMapView.TILE_SIZE) * this.mapView.scaleX) / 2;
@@ -405,14 +393,14 @@ public class MainView extends Sprite {
             return;
         }
 
-        if (e.ctrlKey && (this.selectedTool.id == METool.PENCIL_ID || this.selectedTool.id == METool.ERASER_ID)) { // We're increasing/decreasing the brush size
+        if (e.ctrlKey && (this.selectedTool.id == METool.PENCIL_ID || this.selectedTool.id == METool.ERASER_ID || this.selectedTool.id == METool.SHAPE_ID)) { // We're increasing/decreasing the brush size
             var val:int = Math.min(Math.max(int(Math.ceil(e.delta)), -1), 1);
-            this.userBrush.size += val;
+            this.userBrush.setSize(this.userBrush.size + val);
             if (this.userBrush.size < 0) {
-                this.userBrush.size = 0;
+                this.userBrush.setSize(0);
             }
 
-            this.onBrushSizeChanged();
+            this.onBrushChanged(null);
             return;
         }
 
@@ -454,6 +442,7 @@ public class MainView extends Sprite {
         Main.stage.removeEventListener(MouseEvent.MOUSE_WHEEL, this.onMouseWheel);
         Main.stage.removeEventListener(Event.RESIZE, this.onStageResize);
         Main.stage.removeEventListener(Event.REMOVED_FROM_STAGE, this.onRemovedFromStage);
+        this.window.removeEventListener(Event.CLOSING, this.onExiting);
     }
 
     private function update(e:Event):void { // Runs every frame
@@ -568,10 +557,11 @@ public class MainView extends Sprite {
         this.mapView = this.mapViewContainer.viewMap(this.mapSelector.selectedMap);
         this.mapData = this.mapView.mapData;
 
-        this.mapDimensionsText.setText("Width: " + this.mapData.mapWidth + "\nHeight: " + this.mapData.mapHeight);
-
         this.updateZoomLevel();
         this.gridCheckbox.setValue(this.mapView.gridEnabled);
+
+        this.mapInfoPanel.visible = true;
+        this.mapInfoPanel.setInfo(this.mapData.mapWidth, this.mapData.mapHeight);
     }
 
     private function onMapClosed(e:MapClosedEvent):void {
@@ -579,7 +569,8 @@ public class MainView extends Sprite {
         this.mapViewContainer.removeMapView(e.mapId);
         this.timeControl.eraseHistory(e.mapId);
 
-        var nextId:int = this.mapSelector.selectNextMap(this.mapSelector.selectedMap);
+        var nextId:int = this.mapSelector.selectedMap - 1 < 0 ? 0 : this.mapSelector.selectedMap - 1;
+        this.mapSelector.selectMap(nextId);
 
         this.mapView = this.mapViewContainer.viewMap(nextId);
 
@@ -593,7 +584,8 @@ public class MainView extends Sprite {
             this.updateZoomLevel();
             this.gridCheckbox.setValue(this.mapView.gridEnabled);
         }
-        this.mapDimensionsText.setText("Width: " + mapWidth + "\nHeight: " + mapHeight);
+        this.mapInfoPanel.visible = true;
+        this.mapInfoPanel.setInfo(mapWidth, mapHeight);
     }
 
     private function onSaveClick(e:Event):void {
@@ -666,7 +658,8 @@ public class MainView extends Sprite {
         this.mapViewContainer.viewMap(mapId);
         this.timeControl.createHistory(mapId);
 
-        this.mapDimensionsText.setText("Width: " + this.mapData.mapWidth + "\nHeight: " + this.mapData.mapHeight);
+        this.mapInfoPanel.visible = true;
+        this.mapInfoPanel.setInfo(this.mapData.mapWidth, this.mapData.mapHeight);
 
         MainView.Instance.notifications.clear(); // Clear "loading map..." notification
     }
@@ -759,6 +752,14 @@ public class MainView extends Sprite {
     }
 
     private function onMouseDrag(e:Event):void {
+        if (this.lastMousePos == null) {
+            this.lastMousePos = new Point(Main.stage.mouseX, Main.stage.mouseY);
+        }
+
+        this.dragMap();
+    }
+
+    private function onCtrlMouseDrag(e:Event):void {
         var tilePos:IntPoint = getMouseTilePosition();
         if (this.mapView == null) {
             return;
@@ -766,6 +767,20 @@ public class MainView extends Sprite {
 
         if (this.isWindowOpened()){
             return;
+        }
+
+        this.selectedTool.mouseDrag(tilePos, this.timeControl.getHistory(this.mapView.id));
+    }
+
+    private function onShiftMouseDrag(e:Event):void {
+        var tilePos:IntPoint = this.getMouseTilePosition();
+        if (this.mapView == null) {
+            return;
+        }
+
+        if (this.selectedTool.id != METool.SELECT_ID) {
+            this.previousTool = this.selectedTool;
+            onToolSwitch(new ToolSwitchEvent(METool.SELECT_ID));
         }
 
         this.selectedTool.mouseDrag(tilePos, this.timeControl.getHistory(this.mapView.id));
@@ -805,6 +820,11 @@ public class MainView extends Sprite {
         }
 
         this.selectedTool.mouseDragEnd(tilePos, this.timeControl.getHistory(this.mapView.id));
+        this.lastMousePos = null;
+        if (this.previousTool != null) {
+            this.onToolSwitch(new ToolSwitchEvent(this.previousTool.id));
+            this.previousTool = null;
+        }
     }
 
     private function onMiddleMouseDragEnd(e:Event):void {
@@ -814,7 +834,6 @@ public class MainView extends Sprite {
     private function onTileClick(e:Event):void { // Perform select/draw/erase actions here
         var tilePos:IntPoint = this.getMouseTilePosition();
         if (tilePos == null){
-            this.onClearSelection(null);
             return;
         }
 
@@ -870,6 +889,8 @@ public class MainView extends Sprite {
             return;
         }
 
+        this.updateSelectionPanel(this.mapView.selection);
+
         if (tilePos == null) {
             this.tileInfoPanel.visible = false;
             return;
@@ -884,6 +905,15 @@ public class MainView extends Sprite {
         this.mapView.hideOverlays();
 
         this.selectedTool.mouseMoved(tilePos, this.timeControl.getHistory(this.mapView.id));
+    }
+
+    private function updateSelectionPanel(selection:MapSelectData):void {
+        if (selection == MapView.EMPTY_SELECTION) {
+            this.selectionInfoPanel.visible = false;
+            return;
+        }
+        this.selectionInfoPanel.visible = true;
+        this.selectionInfoPanel.setInfo(selection);
     }
 
     private function updateTileInfoPanel(tilePos:IntPoint):void {
@@ -913,13 +943,12 @@ public class MainView extends Sprite {
         return new IntPoint(x, y);
     }
 
-    private function onToolSwitch(e:ToolSwitchEvent):void {
-        if (e.toolId == this.selectedTool.id) {
-            return;
-        }
-
+    public function onToolSwitch(e:ToolSwitchEvent):void {
         this.setSelectedTool(e.toolId);
         this.toolBar.setSelected(e.toolId);
+        this.brushOptions.onToolChanged(this.selectedTool);
+        this.userBrush.setBrushShape(0);
+        this.updatePositions();
     }
 
     public function setSelectedTool(toolId:int):void {
@@ -1109,7 +1138,7 @@ public class MainView extends Sprite {
         selectTool.dragSelection(1, 0, this.timeControl.getHistory(this.mapView.id));
     }
 
-    private function onBrushSizeChanged():void {
+    private function onBrushChanged(e:Event):void {
         var tilePos:IntPoint = this.getMouseTilePosition();
         if (tilePos == null) {
             return;
@@ -1124,6 +1153,16 @@ public class MainView extends Sprite {
         } else {
             this.mapView.drawBrushTiles(tilePos.x_, tilePos.y_, this.userBrush);
         }
+
+        this.brushOptions.updateBrush(this.userBrush);
+        this.selectedTool.brushChanged(tilePos, this.timeControl.getHistory(this.mapView.id));
+    }
+
+    private function onDeleteSelection(e:Event):void {
+        if (this.mapView.selection == MapView.EMPTY_SELECTION)
+            return;
+
+        MEEraserTool.eraseSelection(this, this.mapView.selection, this.timeControl.getHistory(this.mapView.id));
     }
 
     private function onToggleDebug(e:Event):void {
@@ -1159,9 +1198,54 @@ public class MainView extends Sprite {
         var height:int = this.mapDimensionsWindow.mapHeight;
 
         this.mapData.changeMapDimensions(this.mapView, width, height);
-        this.mapDimensionsText.setText("Width: " + width + "\nHeight: " + height);
+        this.mapInfoPanel.visible = true;
+        this.mapInfoPanel.setInfo(width, height);
 
         this.updatePositions();
+    }
+
+    private function updateBrushOptionsPosition(e:Event):void {
+        this.brushOptions.x = this.drawElementsList.x - this.brushOptions.width - 8;
+        this.brushOptions.y = this.testMapButton.y;
+    }
+
+    private function onTileHotkey(e:TileHotkeyEvent):void {
+        var select:MapDrawElement = null;
+        for each (var obj:DisplayObject in stage.getObjectsUnderPoint(new Point(stage.mouseX, stage.mouseY))) {
+            if (obj is MapDrawElement) {
+                select = obj as MapDrawElement;
+            }
+            if (obj.parent != null && obj.parent is MapDrawElement) {
+                select = obj.parent as MapDrawElement;
+            }
+        }
+
+        // Add hotkey for element
+        if (select != null) {
+            tileHotkeys.setHotkey(e.number, select);
+            this.updatePositions();
+            return;
+        }
+
+        // Switch to hotkey
+        var hotkeyElement:MapDrawElement = tileHotkeys.getElement(e.number);
+        if (hotkeyElement == null)
+            return;
+
+        switch (hotkeyElement.drawType) {
+            case MEDrawType.GROUND:
+                this.userBrush.setGroundType(hotkeyElement.elementType);
+                break;
+            case MEDrawType.OBJECTS:
+                this.userBrush.setObjectType(hotkeyElement.elementType);
+                break;
+            case MEDrawType.REGIONS:
+                this.userBrush.setRegionType(hotkeyElement.elementType);
+                break;
+        }
+
+        this.drawTypeSwitch.select(hotkeyElement.drawType);
+        this.tileHotkeys.switchTo(e.number);
     }
 }
 }

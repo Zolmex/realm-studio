@@ -1,21 +1,8 @@
 package realmeditor.editor.actions {
-import editor.MapDragController;
-import editor.MapDragController;
-import editor.MapHistory;
-import editor.MapTileData;
-import editor.actions.data.MapSelectData;
-import editor.ui.MainView;
-import editor.ui.MapView;
-import editor.ui.TileMapView;
-
 import realmeditor.editor.MapDragController;
-
 import realmeditor.editor.MapTileData;
-
 import realmeditor.editor.actions.data.MapSelectData;
 import realmeditor.editor.ui.MainView;
-
-import util.IntPoint;
 
 public class MapDragAction extends MapAction {
 

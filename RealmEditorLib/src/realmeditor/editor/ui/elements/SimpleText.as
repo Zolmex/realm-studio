@@ -6,14 +6,7 @@ import flash.text.Font;
 import flash.text.TextField;
 import flash.text.TextFieldType;
 import flash.text.TextFormat;
-import flash.text.TextFormatAlign;
 import flash.text.TextLineMetrics;
-
-import editor.ui.embed.fonts.MyriadPro;
-
-import editor.ui.embed.fonts.MyriadProBold;
-import editor.ui.embed.fonts.MyriadProBoldCFF;
-import editor.ui.embed.fonts.MyriadProCFF;
 
 import realmeditor.editor.ui.embed.fonts.MyriadPro;
 import realmeditor.editor.ui.embed.fonts.MyriadProBold;

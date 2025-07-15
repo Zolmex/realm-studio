@@ -1,9 +1,9 @@
 package realmeditor.util
 {
-   import flash.geom.Matrix;
-   import flash.geom.Point;
-   
-   public class IntPoint
+import flash.geom.Matrix;
+import flash.geom.Point;
+
+public class IntPoint
    {
        
       
@@ -23,12 +23,12 @@ package realmeditor.util
          return new IntPoint(Math.round(p.x),Math.round(p.y));
       }
       
-      public function x() : int
+      public function get x() : int
       {
          return this.x_;
       }
       
-      public function y() : int
+      public function get y() : int
       {
          return this.y_;
       }

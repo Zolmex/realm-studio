@@ -1,20 +1,13 @@
 package realmeditor.editor.ui {
-import assets.AssetLibrary;
-
-import editor.tools.METool;
-
-import flash.display.Bitmap;
 import flash.display.Graphics;
 import flash.display.Shape;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
 
+import realmeditor.editor.ToolSwitchEvent;
 import realmeditor.editor.tools.METool;
-
 import realmeditor.util.FilterUtil;
-
-import util.FilterUtil;
 
 public class MapToolbar extends Sprite {
 
@@ -71,7 +64,7 @@ public class MapToolbar extends Sprite {
         icon.filters = null;
 
         var idx:int = this.icons.indexOf(icon);
-        this.view.setSelectedTool(ICON_TO_TOOL[idx]);
+        this.view.onToolSwitch(new ToolSwitchEvent(ICON_TO_TOOL[idx]));
     }
 
     public function setSelected(toolId:int):void {
@@ -109,13 +102,6 @@ public class MapToolbar extends Sprite {
 }
 }
 
-import assets.AssetLibrary;
-
-import editor.tools.METool;
-import editor.ui.MainView;
-
-import editor.ui.elements.TextTooltip;
-
 import flash.display.Bitmap;
 import flash.display.Sprite;
 import flash.events.Event;
@@ -124,7 +110,6 @@ import flash.events.MouseEvent;
 import realmeditor.assets.AssetLibrary;
 import realmeditor.editor.tools.METool;
 import realmeditor.editor.ui.MainView;
-
 import realmeditor.editor.ui.elements.TextTooltip;
 
 class ToolIconContainer extends Sprite {
@@ -144,7 +129,16 @@ class ToolIconContainer extends Sprite {
     private function onRollOver(e:Event):void {
         this.removeEventListener(MouseEvent.ROLL_OVER, this.onRollOver);
 
-        this.tooltip = new TextTooltip(this, METool.ToolTextureIdToName(this.toolTextureId), 18, 0xFFFFFF, true);
+        var name:String = METool.ToolTextureIdToName(this.toolTextureId);
+        var text:String = "<b>" + name + "</b>\n";
+        text += font(METool.GetToolDescription(name), "#b3b3b3", 14);
+
+        this.tooltip = new TextTooltip(this, text, 18, 0xFFFFFF);
         MainView.Main.stage.addChild(this.tooltip);
+    }
+
+    public static function font(text:String, color:String, size:int):String {
+        var tagStr:String = "<font size=\"" + size + "\" color=\"" + color + "\">" + text + "</font>";
+        return tagStr;
     }
 }
