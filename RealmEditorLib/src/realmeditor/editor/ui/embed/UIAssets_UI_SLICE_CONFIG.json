@@ -246,10 +246,10 @@
     "toolbox_background.png": {
       "type": "3grid",
       "rectangle": {
-        "y": 0,
-        "h": 337,
-        "x": 20,
-        "w": 1
+        "y": 12,
+        "h": 322,
+        "x": 0,
+        "w": 40
       }
     },
     "drawelementselector_background.png": {

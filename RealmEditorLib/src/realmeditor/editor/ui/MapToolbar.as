@@ -1,4 +1,5 @@
 package realmeditor.editor.ui {
+import flash.display.Bitmap;
 import flash.display.Graphics;
 import flash.display.Shape;
 import flash.display.Sprite;
@@ -7,23 +8,36 @@ import flash.events.MouseEvent;
 
 import realmeditor.editor.ToolSwitchEvent;
 import realmeditor.editor.tools.METool;
+import realmeditor.editor.ui.elements.SimpleText;
+import realmeditor.editor.ui.embed.SliceScalingBitmap;
+import realmeditor.editor.ui.embed.TextureParser;
 import realmeditor.util.FilterUtil;
+import realmeditor.util.MoreColorUtil;
 
 public class MapToolbar extends Sprite {
 
-    private static const ICON_SIZE:int = 20;
+    private static const ICON_SIZE:int = 34;
     private static const ICON_TO_TOOL:Array = [0, 1, 6, 5, 4, 2, 3, 7];
 
+    private var title:SimpleText;
     private var view:MainView;
-    private var background:Shape;
+    private var background:Bitmap;
     private var icons:Vector.<ToolIconContainer>; // 0: select, 1: pencil, 2: erase, 3: picker, 4 (skip), 5: bucket, 6: line, 7: shape, 8 (skip), 9: edit
+    private var selectionSquare:Bitmap;
 
     public function MapToolbar(view:MainView) {
         this.view = view;
         this.icons = new Vector.<ToolIconContainer>();
 
-        this.background = new Shape();
+        this.background = TextureParser.instance.getTexture("UI", "toolbox_background");
         addChild(this.background);
+
+        this.title = new SimpleText(9, 0xB9A960);
+        this.title.setText("Tools");
+        this.title.updateMetrics();
+        this.title.x = (this.background.width - this.title.width) / 2;
+        this.title.y = 1;
+        addChild(this.title);
 
         var iconCount:int = 0;
         for (var i:int = 0; i < 10; i++) {
@@ -34,9 +48,9 @@ public class MapToolbar extends Sprite {
             var container:ToolIconContainer = new ToolIconContainer(i);
             container.scaleX = ICON_SIZE / container.icon.width;
             container.scaleY = ICON_SIZE / container.icon.height;
-            container.x = 5;
-            container.y = 6 + iconCount * container.icon.height + 6 * iconCount;
-            container.filters = FilterUtil.GREY_COLOR_FILTER_1; // Set as unselected
+            container.x = 4;
+            container.y = 16 + iconCount * ICON_SIZE + 3 * iconCount;
+            container.transform.colorTransform = MoreColorUtil.darkCT; // Set as unselected
             container.addEventListener(MouseEvent.CLICK, this.onIconClick);
             iconCount++;
 
@@ -44,14 +58,13 @@ public class MapToolbar extends Sprite {
             this.icons.push(container);
         }
 
-        this.icons[0].filters = null;
+        this.selectionSquare = TextureParser.instance.getTexture("UI", "drawelement_selection_decor");
+        this.selectionSquare.visible = false;
+        addChild(this.selectionSquare);
 
-        var g:Graphics = this.background.graphics;
-        g.beginFill(Constants.BACK_COLOR_2, 0.8);
-        g.drawRoundRect(0, 0, width + 10, height + 12, 5, 5);
-        g.endFill();
+        this.background.height = this.icons[7].y + ICON_SIZE + 5;
 
-        filters = Constants.SHADOW_FILTER_1;
+        this.icons[0].transform.colorTransform = MoreColorUtil.identity;
     }
 
     private function onIconClick(e:Event):void {
@@ -59,9 +72,12 @@ public class MapToolbar extends Sprite {
 
         var icon:ToolIconContainer = e.target as ToolIconContainer;
         for (var i:int = 0; i < this.icons.length; i++) {
-            this.icons[i].filters = FilterUtil.GREY_COLOR_FILTER_1;
+            this.icons[i].transform.colorTransform = MoreColorUtil.darkCT;
         }
-        icon.filters = null;
+        icon.transform.colorTransform = MoreColorUtil.identity;
+        this.selectionSquare.visible = true;
+        this.selectionSquare.x = icon.x - 2;
+        this.selectionSquare.y = icon.y - 2;
 
         var idx:int = this.icons.indexOf(icon);
         this.view.onToolSwitch(new ToolSwitchEvent(ICON_TO_TOOL[idx]));
@@ -69,50 +85,73 @@ public class MapToolbar extends Sprite {
 
     public function setSelected(toolId:int):void {
         for (var i:int = 0; i < this.icons.length; i++) {
-            this.icons[i].filters = FilterUtil.GREY_COLOR_FILTER_1;
+            this.icons[i].transform.colorTransform = MoreColorUtil.darkCT;
         }
 
+        var icon:ToolIconContainer;
         switch (toolId) {
             case METool.SELECT_ID:
-                this.icons[0].filters = null;
+                icon = this.icons[0];
                 break;
             case METool.PENCIL_ID:
-                this.icons[1].filters = null;
+                icon = this.icons[1];
                 break;
             case METool.ERASER_ID:
-                this.icons[2].filters = null;
+                icon = this.icons[2];
                 break;
             case METool.PICKER_ID:
-                this.icons[3].filters = null;
+                icon = this.icons[3];
                 break;
             case METool.BUCKET_ID:
-                this.icons[4].filters = null;
+                icon = this.icons[4];
                 break;
             case METool.LINE_ID:
-                this.icons[5].filters = null;
+                icon = this.icons[5];
                 break;
             case METool.SHAPE_ID:
-                this.icons[6].filters = null;
+                icon = this.icons[6];
                 break;
             case METool.EDIT_ID:
-                this.icons[7].filters = null;
+                icon = this.icons[7];
                 break;
+            default:
+                trace("Invalid icon id");
+                return;
         }
+
+        icon.transform.colorTransform = MoreColorUtil.identity;
+        this.selectionSquare.visible = true;
+        this.selectionSquare.x = icon.x - 2;
+        this.selectionSquare.y = icon.y - 2;
     }
 }
 }
 
 import flash.display.Bitmap;
+import flash.display.PixelSnapping;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
+import flash.utils.Dictionary;
 
 import realmeditor.assets.AssetLibrary;
 import realmeditor.editor.tools.METool;
 import realmeditor.editor.ui.MainView;
 import realmeditor.editor.ui.elements.TextTooltip;
+import realmeditor.editor.ui.embed.TextureParser;
 
 class ToolIconContainer extends Sprite {
+
+    private static const TOOL_ICONS:Object = {
+        0: "selection_tool_icon",
+        1: "pencil_tool_icon",
+        2: "eraser_tool_icon",
+        3: "picker_tool_icon",
+        5: "bucket_tool_icon",
+        6: "line_tool_icon",
+        7: "shape_tool_icon",
+        9: "edit_tool_icon"
+    };
 
     public var icon:Bitmap;
     private var toolTextureId:int;
@@ -120,7 +159,9 @@ class ToolIconContainer extends Sprite {
 
     public function ToolIconContainer(toolTextureId:int) {
         this.toolTextureId = toolTextureId;
-        this.icon = new Bitmap(AssetLibrary.getImageFromSet("editorTools", toolTextureId));
+        this.icon = TextureParser.instance.getTexture("UI", TOOL_ICONS[toolTextureId]);
+        this.icon.smoothing = true;
+        this.icon.pixelSnapping = PixelSnapping.ALWAYS;
         addChild(this.icon);
 
         this.addEventListener(MouseEvent.ROLL_OVER, this.onRollOver);

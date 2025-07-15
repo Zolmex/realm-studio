@@ -344,7 +344,7 @@ public class MainView extends Sprite {
         this.selectionInfoPanel.x = this.tileInfoPanel.x - this.selectionInfoPanel.width - 5;
         this.selectionInfoPanel.y = StageHeight - this.selectionInfoPanel.height - 15;
 
-        this.toolBar.x = this.drawElementsList.x - this.toolBar.width - 8;
+        this.toolBar.x = this.drawElementsList.x - this.toolBar.width + 1;
         this.toolBar.y = (StageHeight - this.toolBar.height) / 2;
 
         this.objectFilterView.x = this.drawElementsList.x - 20;
