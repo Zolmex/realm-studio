@@ -19,7 +19,7 @@ public class SimpleTextButton extends Sprite {
     private var textField:SimpleText;
     private var background:Boolean;
 
-    public function SimpleTextButton(textStr:String, size:int = 9, color:uint = 0x696969, background:Boolean = true) {
+    public function SimpleTextButton(textStr:String, size:int = 10, color:uint = 0x888888, background:Boolean = true) {
         this.backgroundBmp = TextureParser.instance.getSliceScalingBitmap("UI", "button_background");
         this.backgroundBmp.visible = false;
         addChild(this.backgroundBmp);

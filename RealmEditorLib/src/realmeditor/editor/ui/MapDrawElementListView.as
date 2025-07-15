@@ -29,7 +29,7 @@ public class MapDrawElementListView extends Sprite {
     private var background:SliceScalingBitmap;
     private var listMask:Shape;
     private var listContainer:Sprite;
-    private var selectionSquare:Shape;
+    private var selectionSquare:Bitmap;
     public var selectedElement:MapDrawElement;
     public var totalHeight:int;
     private var searchInputBox:SearchInputBox;
@@ -65,7 +65,7 @@ public class MapDrawElementListView extends Sprite {
         this.listContainer = new Sprite();
         addChild(this.listContainer);
 
-        this.searchInputBox = new SearchInputBox("Enter name to find...", 0x313131);
+        this.searchInputBox = new SearchInputBox(154, 15, 9, "Enter name to find...", 0x414141);
         this.searchInputBox.x = 5;
         this.searchInputBox.y = 19;
         this.searchInputBox.inputText.addEventListener(Event.CHANGE, this.onInputChange);
@@ -78,22 +78,15 @@ public class MapDrawElementListView extends Sprite {
         addChild(this.listMask);
 
         this.scrollbar = new SimpleScrollbar();
-        this.scrollbar.setup(this.totalHeight - this.listYLimit - 4, 0, 0);
-        this.scrollbar.x = WIDTH - this.scrollbar.width - 2;
-        this.scrollbar.y = this.listYLimit;
+        this.scrollbar.setup(this.totalHeight - this.searchInputBox.y - 2, 0, 0);
+        this.scrollbar.x = WIDTH - this.scrollbar.width - 4;
+        this.scrollbar.y = this.searchInputBox.y;
         this.scrollbar.addEventListener(Event.CHANGE, this.onScrollbarChange);
         addChild(this.scrollbar);
 
-        this.selectionSquare = new Shape();
-        var squareSize:int = ELEMENT_SIZE + 5;
-        var g:Graphics = this.selectionSquare.graphics;
-        g.lineStyle(1, 0xFFFFFF);
-        g.lineTo(squareSize, 0);
-        g.lineTo(squareSize, squareSize);
-        g.lineTo(0, squareSize);
-        g.lineTo(0, 0);
-        g.lineStyle();
+        this.selectionSquare = parser.getTexture("UI", "drawelement_selection_decor");
         this.selectionSquare.visible = false;
+        addChild(this.selectionSquare);
 
         this.addEventListener(MouseEvent.MOUSE_WHEEL, this.onScroll);
 
@@ -171,7 +164,7 @@ public class MapDrawElementListView extends Sprite {
 
         this.selectionSquare.visible = false;
         this.listContainer.addChild(this.selectionSquare);
-        this.scrollbar.setup(this.totalHeight - this.listYLimit - 4, this.listContainer.y - this.listYLimit, this.listContainer.height - this.totalHeight + this.listYLimit);
+        this.scrollbar.setup(this.totalHeight - this.searchInputBox.y - 2, this.listContainer.y - this.listYLimit, this.listContainer.height - this.totalHeight + this.listYLimit);
     }
 
     private function onElementClick(e:Event):void {
@@ -183,8 +176,8 @@ public class MapDrawElementListView extends Sprite {
         }
 
         this.selectedElement = targetElement;
-        this.selectionSquare.x = this.selectedElement.x - 2.5;
-        this.selectionSquare.y = this.selectedElement.y - 2.5;
+        this.selectionSquare.x = this.selectedElement.x;
+        this.selectionSquare.y = this.selectedElement.y;
         this.selectionSquare.visible = true;
 
         this.dispatchEvent(new Event(Event.SELECT));
@@ -197,11 +190,11 @@ public class MapDrawElementListView extends Sprite {
         }
 
         this.selectedElement = element;
-        this.selectionSquare.x = this.selectedElement.x - 2.5;
-        this.selectionSquare.y = this.selectedElement.y - 2.5;
+        this.selectionSquare.x = this.selectedElement.x;
+        this.selectionSquare.y = this.selectedElement.y;
         this.selectionSquare.visible = true;
 
-        this.listContainer.y = this.listYLimit - this.selectionSquare.y + 2.5;
+        this.listContainer.y = this.listYLimit - this.selectionSquare.y;
         this.fixListPosition();
     }
 
@@ -247,7 +240,7 @@ public class MapDrawElementListView extends Sprite {
         this.resizeBackground();
         this.fixListPosition();
         this.drawListMask();
-        this.scrollbar.setup(this.totalHeight - this.listYLimit - 4, this.listContainer.y - this.listYLimit, this.listContainer.height - this.totalHeight + this.listYLimit);
+        this.scrollbar.setup(this.totalHeight - this.searchInputBox.y - 2, this.listContainer.y - this.listYLimit, this.listContainer.height - this.totalHeight + this.listYLimit);
     }
 
     private function drawElement(id:int, element:MapDrawElement):void {
