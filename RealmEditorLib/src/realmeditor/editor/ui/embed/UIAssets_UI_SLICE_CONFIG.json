@@ -64,11 +64,11 @@
       }
     },
     "button_background.png": {
-      "type": "3grid",
+      "type": "9grid",
       "rectangle": {
-        "y": 0,
-        "h": 18,
-        "x": 25,
+        "y": 5,
+        "h": 1,
+        "x": 5,
         "w": 1
       }
     },
@@ -228,19 +228,19 @@
     "drawelementsview_background.png": {
       "type": "3grid",
       "rectangle": {
-        "y": 0,
-        "h": 850,
-        "x": 91,
-        "w": 1
+        "y": 17,
+        "h": 830,
+        "x": 0,
+        "w": 182
       }
     },
     "scrollbar_background.png": {
       "type": "3grid",
       "rectangle": {
-        "y": 0,
-        "h": 68,
-        "x": 6,
-        "w": 1
+        "y": 1,
+        "h": 1,
+        "x": 0,
+        "w": 12
       }
     },
     "toolbox_background.png": {

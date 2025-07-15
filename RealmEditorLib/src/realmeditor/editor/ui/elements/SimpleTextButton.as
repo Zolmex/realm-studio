@@ -4,21 +4,28 @@ import flash.display.Shape;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
+import flash.filters.ColorMatrixFilter;
+import flash.geom.ColorTransform;
 
 import realmeditor.editor.ui.Constants;
+import realmeditor.editor.ui.embed.SliceScalingBitmap;
+import realmeditor.editor.ui.embed.TextureParser;
 import realmeditor.util.FilterUtil;
+import realmeditor.util.MoreColorUtil;
 
 public class SimpleTextButton extends Sprite {
 
-    private var shape:Shape;
+    private var backgroundBmp:SliceScalingBitmap;
     private var textField:SimpleText;
     private var background:Boolean;
 
-    public function SimpleTextButton(textStr:String, size:int = 18, color:uint = 0xFFFFFF, background:Boolean = true) {
-        this.shape = new Shape();
-        addChild(this.shape);
+    public function SimpleTextButton(textStr:String, size:int = 9, color:uint = 0x696969, background:Boolean = true) {
+        this.backgroundBmp = TextureParser.instance.getSliceScalingBitmap("UI", "button_background");
+        this.backgroundBmp.visible = false;
+        addChild(this.backgroundBmp);
 
         this.textField = new SimpleText(size, color);
+        this.textField.setBold(true);
         this.textField.htmlText = textStr;
         this.textField.filters = Constants.SHADOW_FILTER_1;
         this.textField.updateMetrics();
@@ -28,10 +35,9 @@ public class SimpleTextButton extends Sprite {
         if (background) {
             var shapeW:int = this.width + 10;
             var shapeH:int = this.height + 5;
-            var gShape:Graphics = this.shape.graphics;
-            gShape.beginFill(Constants.BACK_COLOR_1, 0.8);
-            gShape.drawRoundRect(0, 0, shapeW, shapeH, 5, 5);
-            gShape.endFill();
+            this.backgroundBmp.width = shapeW;
+            this.backgroundBmp.height = shapeH;
+            this.backgroundBmp.visible = true;
             this.textField.x = (this.width - this.textField.width) / 2;
             this.textField.y = (this.height - this.textField.height) / 2;
         }
@@ -48,11 +54,11 @@ public class SimpleTextButton extends Sprite {
     }
 
     private function onMouseRollOver(e:Event):void {
-        this.shape.filters = FilterUtil.GREY_COLOR_FILTER_1;
+        transform.colorTransform = new ColorTransform(1, 1, 1, 1, 40, 40, 40, 0.5);
     }
 
     private function onMouseRollOut(e:Event):void {
-        this.shape.filters = null;
+        transform.colorTransform = MoreColorUtil.identity;
     }
 }
 }

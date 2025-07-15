@@ -2,6 +2,7 @@ package realmeditor.editor.ui.elements {
 
 import flash.events.Event;
 import flash.events.KeyboardEvent;
+import flash.text.AntiAliasType;
 import flash.text.Font;
 import flash.text.TextField;
 import flash.text.TextFieldType;
@@ -64,6 +65,7 @@ public class SimpleText extends TextField {
         format.size = textSize;
         format.color = color;
         embedFonts = true;
+        this.fixAntiAlias();
         defaultTextFormat = format;
         if (makeSelectable) {
             selectable = true;
@@ -85,6 +87,15 @@ public class SimpleText extends TextField {
         }
     }
 
+    private function fixAntiAlias():void {
+        if (defaultTextFormat.size < 13) {
+            antiAliasType = AntiAliasType.ADVANCED; // Good for small sized text
+        }
+        else {
+            antiAliasType = AntiAliasType.NORMAL;
+        }
+    }
+
     private static function onKeyUp(e:Event):void {
         e.stopImmediatePropagation();
     }
@@ -92,6 +103,7 @@ public class SimpleText extends TextField {
     public function setSize(size:int):SimpleText {
         var format:TextFormat = defaultTextFormat;
         format.size = size;
+        this.fixAntiAlias();
         this.applyFormat(format);
         return this;
     }

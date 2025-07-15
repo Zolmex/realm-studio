@@ -10,7 +10,7 @@ import flash.utils.Dictionary;
 
 public class TextureParser {
 
-    private static var instance:TextureParser;
+    public static var instance:TextureParser;
 
     private var textures:Dictionary;
 
