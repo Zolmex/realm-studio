@@ -192,8 +192,8 @@ public class DrawListTooltip extends Tooltip {
 
     private function drawProperties():void {
         this.propertiesText = new SimpleText(16, 0xB2B2B2);
+        this.propertiesText.styleSheet = new StyleSheet();
         this.propertiesText.htmlText = this.properties;
-        this.propertiesText.setAlignment(TextFormatAlign.LEFT);
         this.propertiesText.useTextDimensions();
         this.propertiesText.filters = Constants.SHADOW_FILTER_1;
     }

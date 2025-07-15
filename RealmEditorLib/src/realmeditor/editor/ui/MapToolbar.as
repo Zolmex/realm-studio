@@ -65,6 +65,8 @@ public class MapToolbar extends Sprite {
         this.background.height = this.icons[7].y + ICON_SIZE + 5;
 
         this.icons[0].transform.colorTransform = MoreColorUtil.identity;
+
+        filters = Constants.SHADOW_FILTER_1;
     }
 
     private function onIconClick(e:Event):void {
