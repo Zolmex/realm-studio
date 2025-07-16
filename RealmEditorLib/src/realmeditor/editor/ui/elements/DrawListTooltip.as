@@ -76,7 +76,7 @@ public class DrawListTooltip extends Tooltip {
 
     private function drawElementId():void {
         this.id = this.xml.@id;
-        this.idText = new SimpleText(18, 0xFFFFFF);
+        this.idText = new SimpleText(16, 0xFFFFFF);
         this.idText.setText(this.id);
         this.idText.setBold(true);
         this.idText.filters = Constants.SHADOW_FILTER_1;
@@ -191,7 +191,7 @@ public class DrawListTooltip extends Tooltip {
     }
 
     private function drawProperties():void {
-        this.propertiesText = new SimpleText(16, 0xB2B2B2);
+        this.propertiesText = new SimpleText(14, 0xB2B2B2);
         this.propertiesText.styleSheet = new StyleSheet();
         this.propertiesText.htmlText = this.properties;
         this.propertiesText.useTextDimensions();

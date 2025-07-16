@@ -176,7 +176,7 @@ class ToolIconContainer extends Sprite {
         var text:String = "<b>" + name + "</b>\n";
         text += font(METool.GetToolDescription(name), "#b3b3b3", 14);
 
-        this.tooltip = new TextTooltip(this, text, 18, 0xFFFFFF);
+        this.tooltip = new TextTooltip(this, text, 16, 0xFFFFFF);
         MainView.Main.stage.addChild(this.tooltip);
     }
 

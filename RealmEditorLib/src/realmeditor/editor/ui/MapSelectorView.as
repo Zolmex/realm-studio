@@ -262,8 +262,8 @@ class MapSelectorSlot extends Sprite {
 
     private function onRollOver(e:Event):void {
         if (this.closeTooltip == null) {
-            this.closeTooltip = new TextTooltip(this.cross, "<b>Close</b>", 18, 0xFFFFFF);
-            this.closeTooltip.addSubText("<b>Save map before closing!</b>");
+            this.closeTooltip = new TextTooltip(this.cross, "<b>Close</b>", 16, 0xFFFFFF);
+            this.closeTooltip.addSubText("<b>Save map before closing!</b>", 12, 0x888888);
             MainView.Main.stage.addChild(this.closeTooltip);
         }
     }

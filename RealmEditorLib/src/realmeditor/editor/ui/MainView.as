@@ -267,7 +267,6 @@ public class MainView extends Sprite {
         this.inputHandler.addEventListener(MEEvent.MOVE_SELECTION_LEFT, this.onMoveSelectionLeft);
         this.inputHandler.addEventListener(MEEvent.MOVE_SELECTION_RIGHT, this.onMoveSelectionRight);
         this.inputHandler.addEventListener(MEEvent.TOGGLE_DEBUG, this.onToggleDebug);
-        this.inputHandler.addEventListener(MEEvent.CTRL_MOUSE_DRAG, this.onCtrlMouseDrag);
         this.inputHandler.addEventListener(MEEvent.SHIFT_MOUSE_DRAG, this.onShiftMouseDrag);
         this.inputHandler.addEventListener(MEEvent.TILE_HOTKEY_SWITCH, this.onTileHotkey);
         this.inputHandler.addEventListener(MEEvent.DELETE_SELECTION, this.onDeleteSelection);
@@ -753,15 +752,7 @@ public class MainView extends Sprite {
     }
 
     private function onMouseDrag(e:Event):void {
-        if (this.lastMousePos == null) {
-            this.lastMousePos = new Point(Main.stage.mouseX, Main.stage.mouseY);
-        }
-
-        this.dragMap();
-    }
-
-    private function onCtrlMouseDrag(e:Event):void {
-        var tilePos:IntPoint = getMouseTilePosition();
+        var tilePos:IntPoint = this.getMouseTilePosition();
         if (this.mapView == null) {
             return;
         }
@@ -773,7 +764,7 @@ public class MainView extends Sprite {
         this.selectedTool.mouseDrag(tilePos, this.timeControl.getHistory(this.mapView.id));
     }
 
-    private function onShiftMouseDrag(e:Event):void {
+    private function onShiftMouseDrag(e:Event):void { // Switches to select tool while holding shift, when mouse drag ends the previous tool is re-selected
         var tilePos:IntPoint = this.getMouseTilePosition();
         if (this.mapView == null) {
             return;

@@ -202,20 +202,21 @@ public class METool {
     public static function GetToolDescription(name:String):String {
         switch (name){
             case SELECT:
-                return "Keybind: <b>S</b>\n" +
-                        "Hold <b>Shift</b> while dragging to activate.\n" +
+                return "Keybind: <b>M</b>\n" +
+                        "Hold <b>Shift</b> while dragging to use.\n" +
                         "<b>Escape</b> to unselect.\n" +
                         "<b>Delete</b> to delete tiles in selection.";
             case PENCIL:
-                return "Keybind: <b>D</b>\n" +
+                return "Keybind: <b>B</b>\n" +
                         "Ctrl + Scroll to change brush size.";
             case ERASER:
                 return "Keybind: <b>E</b>\n" +
                         "Ctrl + Scroll to change brush size.";
             case PICKER:
-                return "Keybind: <b>A</b>\n";
+                return "Keybind: <b>I</b>\n";
             case BUCKET:
-                return "Keybind: <b>F</b>\n";
+                return "Keybind: <b>G</b>\n" +
+                        "Ctrl + Click to use";
             case LINE:
                 return "Keybind: <b>L</b>\n" +
                         "Not implemented";
@@ -223,7 +224,7 @@ public class METool {
                 return "Keybind: <b>U</b>\n" +
                         "Draw shapes with your brush.";
             case EDIT:
-                return "Keybind: <b>I</b>\n" +
+                return "Keybind: <b>D</b>\n" +
                         "Can only edit names of objects for now... (useful for Signs)";
             default:
                 trace("Unknown tool name for tool name:", name.toString());
