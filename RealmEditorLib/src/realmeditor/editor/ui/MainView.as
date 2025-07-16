@@ -569,10 +569,11 @@ public class MainView extends Sprite {
         this.mapViewContainer.removeMapView(e.mapId);
         this.timeControl.eraseHistory(e.mapId);
 
-        var nextId:int = this.mapSelector.selectedMap - 1 < 0 ? 0 : this.mapSelector.selectedMap - 1;
-        this.mapSelector.selectMap(nextId);
+        if (e.mapId == this.mapSelector.selectedMap) { // Select first map
+            this.mapSelector.selectMap(-1); // -1 indicates to select fist map in the dictionary
+        }
 
-        this.mapView = this.mapViewContainer.viewMap(nextId);
+        this.mapView = this.mapViewContainer.viewMap(this.mapSelector.selectedMap);
 
         var mapWidth:int = 0;
         var mapHeight:int = 0;

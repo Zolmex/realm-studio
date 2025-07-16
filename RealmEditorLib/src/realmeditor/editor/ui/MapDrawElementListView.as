@@ -200,6 +200,7 @@ public class MapDrawElementListView extends Sprite {
 
     private function onScrollbarChange(e:Event):void {
         this.listContainer.y = -this.scrollbar.cursorPos + this.listYLimit;
+        this.fixListPosition();
     }
 
     private function onScroll(e:MouseEvent):void {

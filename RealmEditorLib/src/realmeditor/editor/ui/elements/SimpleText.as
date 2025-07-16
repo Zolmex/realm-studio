@@ -65,8 +65,8 @@ public class SimpleText extends TextField {
         format.size = textSize;
         format.color = color;
         embedFonts = true;
-        this.fixAntiAlias();
         defaultTextFormat = format;
+        this.fixAntiAlias();
         if (makeSelectable) {
             selectable = true;
             mouseEnabled = true;

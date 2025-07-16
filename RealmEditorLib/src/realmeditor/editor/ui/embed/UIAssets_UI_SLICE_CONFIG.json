@@ -208,11 +208,11 @@
       }
     },
     "maplist_element_background.png": {
-      "type": "3grid",
+      "type": "9grid",
       "rectangle": {
-        "y": 0,
-        "h": 12,
-        "x": 40,
+        "y": 5,
+        "h": 1,
+        "x": 5,
         "w": 1
       }
     },
@@ -271,11 +271,11 @@
       }
     },
     "maplist_background.png": {
-      "type": "3grid",
+      "type": "9grid",
       "rectangle": {
-        "y": 0,
-        "h": 92,
-        "x": 56,
+        "y": 17,
+        "h": 1,
+        "x": 6,
         "w": 1
       }
     }

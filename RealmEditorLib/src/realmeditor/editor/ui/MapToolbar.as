@@ -32,7 +32,7 @@ public class MapToolbar extends Sprite {
         this.background = TextureParser.instance.getTexture("UI", "toolbox_background");
         addChild(this.background);
 
-        this.title = new SimpleText(9, 0xB9A960);
+        this.title = new SimpleText(8, 0xB9A960);
         this.title.setText("Tools");
         this.title.updateMetrics();
         this.title.x = (this.background.width - this.title.width) / 2;

@@ -85,12 +85,12 @@ public class SliceScalingBitmap extends Bitmap
       
       override public function get width() : Number
       {
-         return this.currentWidth;
+         return this.currentWidth * this.scaleX;
       }
       
       override public function get height() : Number
       {
-         return this.currentHeight;
+         return this.currentHeight * this.scaleY;
       }
       
       protected function render() : void

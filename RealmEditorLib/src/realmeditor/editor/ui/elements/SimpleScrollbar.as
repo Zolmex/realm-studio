@@ -57,7 +57,7 @@ public class SimpleScrollbar extends Sprite {
     public function setup(height:int, currentScrollPos:Number, maxScroll:Number):void {
         this.background.height = height;
         this.cursorPos = Math.abs(currentScrollPos);
-        this.maxScroll = maxScroll;
+        this.maxScroll = Math.abs(maxScroll);
         this.drawCursor();
     }
 
