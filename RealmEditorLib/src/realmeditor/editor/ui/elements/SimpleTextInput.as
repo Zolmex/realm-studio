@@ -4,16 +4,23 @@ import flash.display.Shape;
 import flash.display.Sprite;
 
 import realmeditor.editor.ui.Constants;
+import realmeditor.editor.ui.embed.SliceScalingBitmap;
+import realmeditor.editor.ui.embed.TextureParser;
 
 public class SimpleTextInput extends Sprite {
 
-    private var background:Shape;
+    private var background:SliceScalingBitmap;
     private var titleText:SimpleText;
     public var inputText:SimpleText;
+    private var content:Sprite;
 
-    public function SimpleTextInput(title:String, inline:Boolean = false, inputText:String = "", titleSize:int = 18, titleColor:uint = 0xFFFFFF, inputSize:int = 15, inputColor:uint = 0xEAEAEA, stopKeyPropagation:Boolean = false) {
-        this.background = new Shape();
+    public function SimpleTextInput(title:String, horizontal:Boolean = false, inputText:String = "", titleSize:int = 13, titleColor:uint = 0xB2B2B2, inputSize:int = 13, inputColor:uint = 0x777777, stopKeyPropagation:Boolean = false) {
+        this.background = TextureParser.instance.getSliceScalingBitmap("UI", "switch_button_background");
+        this.background.alpha = 0.9;
         addChild(this.background);
+
+        this.content = new Sprite();
+        addChild(this.content);
 
         this.titleText = new SimpleText(titleSize, titleColor);
         this.titleText.x = 2;
@@ -21,11 +28,11 @@ public class SimpleTextInput extends Sprite {
         this.titleText.text = title;
         this.titleText.filters = Constants.SHADOW_FILTER_1;
         this.titleText.updateMetrics();
-        addChild(this.titleText);
+        this.content.addChild(this.titleText);
 
         this.inputText = new SimpleText(inputSize, inputColor, true, this.titleText.textWidth, this.titleText.textHeight, false, stopKeyPropagation);
         this.inputText.text = inputText;
-        if (inline){
+        if (horizontal){
             this.inputText.x = this.titleText.x + this.titleText.width;
             this.inputText.y = this.titleText.y + (this.titleText.height - this.inputText.height) / 2;
         }
@@ -35,7 +42,7 @@ public class SimpleTextInput extends Sprite {
         }
         this.inputText.border = false;
         this.inputText.updateMetrics();
-        addChild(this.inputText);
+        this.content.addChild(this.inputText);
 
         this.drawBackground();
     }
@@ -48,13 +55,8 @@ public class SimpleTextInput extends Sprite {
     }
 
     private function drawBackground():void {
-        var bgWidth:int = width + 5;
-        var bgHeight:int = height;
-        var bg:Graphics = this.background.graphics;
-        bg.clear();
-        bg.beginFill(Constants.BACK_COLOR_1, 0.9);
-        bg.drawRoundRect(0, 0, bgWidth, bgHeight, 5, 5);
-        bg.endFill();
+        this.background.width = this.content.width + 5;
+        this.background.height = this.content.height + 5;
     }
 }
 }

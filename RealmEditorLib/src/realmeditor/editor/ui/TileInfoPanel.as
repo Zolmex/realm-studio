@@ -47,21 +47,21 @@ public class TileInfoPanel extends Sprite {
         this.content = new Sprite();
         addChild(this.content);
 
-        this.posText = new SimpleText(12, 0xFFFFFF);
+        this.posText = new SimpleText(12, 0xB2B2B2);
         this.posText.filters = Constants.SHADOW_FILTER_1;
         this.content.addChild(this.posText);
 
-        this.groundText = new SimpleText(13, 0xFFFFFF);
+        this.groundText = new SimpleText(13, 0xB2B2B2);
         this.groundText.setBold(true);
         this.groundText.filters = Constants.SHADOW_FILTER_1;
         this.content.addChild(this.groundText);
 
-        this.objectText = new SimpleText(13, 0xFFFFFF);
+        this.objectText = new SimpleText(13, 0xB2B2B2);
         this.objectText.setBold(true);
         this.objectText.filters = Constants.SHADOW_FILTER_1;
         this.content.addChild(this.objectText);
 
-        this.regionText = new SimpleText(13, 0xFFFFFF);
+        this.regionText = new SimpleText(13, 0xB2B2B2);
         this.regionText.setBold(true);
         this.regionText.filters = Constants.SHADOW_FILTER_1;
         this.content.addChild(this.regionText);

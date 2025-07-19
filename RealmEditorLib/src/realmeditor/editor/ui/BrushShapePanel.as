@@ -11,17 +11,17 @@ public class BrushShapePanel extends BrushOptionPanel {
     private var choiceBox:ChoiceBox;
 
     private var shapeElements:Vector.<ChoiceElement> = new <ChoiceElement>[
-        new ChoiceElement(MEBrush.SHAPE_RANDOM, "Random", 12, 0xEAEAEA, 10),
-        new ChoiceElement(MEBrush.SHAPE_RANDOM_2, "Random2", 12, 0xEAEAEA, 10),
-        new ChoiceElement(MEBrush.SHAPE_RANDOM_2, "Random3", 12, 0xEAEAEA, 10),
-        new ChoiceElement(MEBrush.SHAPE_RANDOM_2, "Random4", 12, 0xEAEAEA, 10)
+        new ChoiceElement(MEBrush.SHAPE_RANDOM, "Random", 12, 0xB2B2B2, 10),
+        new ChoiceElement(MEBrush.SHAPE_RANDOM_2, "Random2", 12, 0xB2B2B2, 10),
+        new ChoiceElement(MEBrush.SHAPE_RANDOM_2, "Random3", 12, 0xB2B2B2, 10),
+        new ChoiceElement(MEBrush.SHAPE_RANDOM_2, "Random4", 12, 0xB2B2B2, 10)
     ];
 
     public function BrushShapePanel(main:MainView) {
         super("Shape: ", main);
         var choiceId:int = getShapeIdFromValue(main.userBrush.brushShape);
         if (choiceId == -1) choiceId = 0;
-        this.choiceBox = new ChoiceBox(shapeElements, 12, 0xEAEAEA, choiceId);
+        this.choiceBox = new ChoiceBox(shapeElements, 12, 0xB2B2B2, choiceId);
         this.choiceBox.addEventListener(Event.CHANGE, this.onChange);
         addChild(this.choiceBox);
         updatePositions();

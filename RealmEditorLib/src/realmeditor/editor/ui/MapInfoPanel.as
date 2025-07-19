@@ -32,7 +32,7 @@ public class MapInfoPanel extends Sprite {
         this.content = new Sprite();
         addChild(this.content);
 
-        this.dimensionText = new SimpleText(12, 0xFFFFFF);
+        this.dimensionText = new SimpleText(12, 0xB2B2B2);
         this.dimensionText.filters = Constants.SHADOW_FILTER_1;
         this.content.addChild(this.dimensionText);
 

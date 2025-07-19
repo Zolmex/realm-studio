@@ -20,10 +20,10 @@ public class SliceScalingBitmap extends Bitmap
        
       
       private var scaleGrid:Rectangle;
+
+      public var currentWidth:int;
       
-      private var currentWidth:int;
-      
-      private var currentHeight:int;
+      public var currentHeight:int;
       
       private var bitmapDataToSlice:BitmapData;
       

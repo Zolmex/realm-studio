@@ -29,7 +29,7 @@ public class ClosePromptWindow extends Sprite {
         this.content = new Sprite();
         addChild(this.content);
 
-        this.title = new SimpleText(16, 0xFFFFFF);
+        this.title = new SimpleText(14, 0xB2B2B2);
         this.title.setText("You have unsaved changes");
         this.title.setBold(true);
         this.title.updateMetrics();

@@ -21,7 +21,7 @@ public class SelectionInfoPanel extends Sprite {
         this.background.y = -4;
         addChild(this.background);
 
-        this.dimensionText = new SimpleText(12, 0xFFFFFF);
+        this.dimensionText = new SimpleText(12, 0xB2B2B2);
         this.dimensionText.filters = Constants.SHADOW_FILTER_1;
         addChild(this.dimensionText);
 

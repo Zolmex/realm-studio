@@ -20,7 +20,7 @@ public class MEWindow extends Sprite {
     protected var content:Sprite;
 
     public function MEWindow(title:String) {
-        this.background = TextureParser.instance.getSliceScalingBitmap("UI", "tooltip_header_background");
+        this.background = TextureParser.instance.getSliceScalingBitmap("UI", "maplist_background");
         this.background.x = -4;
         this.background.y = -4;
         addChild(this.background);
@@ -28,10 +28,10 @@ public class MEWindow extends Sprite {
         this.content = new Sprite();
         addChild(this.content);
 
-        this.title = new SimpleText(20, 0xFFFFFF);
+        this.title = new SimpleText(10, 0xB9A960);
         this.title.setText(title);
-        this.title.setBold(true);
         this.title.updateMetrics();
+        this.title.y = -2;
         this.title.filters = Constants.SHADOW_FILTER_1;
         this.content.addChild(this.title);
 
