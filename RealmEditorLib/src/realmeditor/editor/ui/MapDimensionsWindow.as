@@ -17,11 +17,11 @@ public class MapDimensionsWindow extends MEWindow {
 
         this.inputWidth = new SimpleTextInput("Width:", true, "", 18, 0xFFFFFF, 15, 0xEAEAEA, true);
         this.inputWidth.inputText.restrict = "0-9";
-        addChild(this.inputWidth);
+        this.content.addChild(this.inputWidth);
 
         this.inputHeight = new SimpleTextInput("Height:", true, "", 18, 0xFFFFFF, 15, 0xEAEAEA, true);
         this.inputHeight.inputText.restrict = "0-9";
-        addChild(this.inputHeight);
+        this.content.addChild(this.inputHeight);
     }
 
     protected override function updatePositions():void {

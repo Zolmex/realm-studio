@@ -217,11 +217,11 @@
       }
     },
     "tooltip_header_background.png": {
-      "type": "3grid",
+      "type": "9grid",
       "rectangle": {
-        "y": 0,
-        "h": 14,
-        "x": 27,
+        "y": 2,
+        "h": 1,
+        "x": 2,
         "w": 1
       }
     },

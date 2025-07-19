@@ -6,18 +6,27 @@ import flash.events.Event;
 
 import realmeditor.editor.MEBrush;
 import realmeditor.editor.tools.METool;
+import realmeditor.editor.ui.embed.SliceScalingBitmap;
+import realmeditor.editor.ui.embed.TextureParser;
 
 public class BrushOptions extends Sprite {
 
     private var options:Vector.<BrushOptionPanel>;
     private var mainView:MainView;
-    private var background:Shape;
+    private var background:SliceScalingBitmap;
+    private var content:Sprite;
 
     public function BrushOptions(mainView:MainView) {
         this.mainView = mainView;
         this.options = new Vector.<BrushOptionPanel>();
-        this.background = new Shape();
+        this.background = TextureParser.instance.getSliceScalingBitmap("UI", "tooltip_header_background");
+        this.background.alpha = 0.8;
+        this.background.visible = false;
         addChild(this.background);
+
+        this.content = new Sprite();
+        addChild(this.content);
+
         updateBrush(mainView.userBrush);
     }
 
@@ -30,7 +39,7 @@ public class BrushOptions extends Sprite {
 
     public function onToolChanged(tool:METool):void {
         for each (var old:BrushOptionPanel in this.options) {
-            removeChild(old);
+            this.content.removeChild(old);
         }
         this.options.length = 0;
 
@@ -52,7 +61,7 @@ public class BrushOptions extends Sprite {
         for each(var opt:BrushOptionPanel in newOptions) {
             opt.update(this.mainView.userBrush);
             opt.addEventListener(Event.CHANGE, this.onChange);
-            addChild(opt);
+            this.content.addChild(opt);
             this.options.push(opt);
         }
         updatePositions();
@@ -60,15 +69,13 @@ public class BrushOptions extends Sprite {
     }
 
     private function drawBackground():void {
-        var g:Graphics = this.background.graphics;
         if (this.options.length == 0) {
-            g.clear();
+            this.background.visible = false;
             return;
         }
-        g.clear();
-        g.beginFill(Constants.BACK_COLOR_2, 0.8);
-        g.drawRoundRect(0, 0, width + 10, height + 12, 5, 5);
-        g.endFill();
+        this.background.visible = true;
+        this.background.width = this.content.width + 10;
+        this.background.height = this.content.height + 12;
     }
 
     private function updatePositions():void {

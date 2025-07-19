@@ -12,12 +12,15 @@ import realmeditor.assets.ObjectLibrary;
 import realmeditor.assets.RegionLibrary;
 import realmeditor.editor.MapTileData;
 import realmeditor.editor.ui.elements.SimpleText;
+import realmeditor.editor.ui.embed.SliceScalingBitmap;
+import realmeditor.editor.ui.embed.TextureParser;
 
 public class TileInfoPanel extends Sprite {
 
     private static const IMAGE_SIZE:int = 20;
 
-    private var background:Shape;
+    private var background:SliceScalingBitmap;
+    private var content:Sprite;
 
     private var tile:MapTileData;
     private var posText:SimpleText;
@@ -35,27 +38,33 @@ public class TileInfoPanel extends Sprite {
     private var regionImage:Bitmap;
 
     public function TileInfoPanel() {
-        this.background = new Shape();
+        this.background = TextureParser.instance.getSliceScalingBitmap("UI", "tooltip_header_background");
+        this.background.alpha = 0.8;
+        this.background.x = -4;
+        this.background.y = -4;
         addChild(this.background);
+
+        this.content = new Sprite();
+        addChild(this.content);
 
         this.posText = new SimpleText(12, 0xFFFFFF);
         this.posText.filters = Constants.SHADOW_FILTER_1;
-        addChild(this.posText);
+        this.content.addChild(this.posText);
 
         this.groundText = new SimpleText(13, 0xFFFFFF);
         this.groundText.setBold(true);
         this.groundText.filters = Constants.SHADOW_FILTER_1;
-        addChild(this.groundText);
+        this.content.addChild(this.groundText);
 
         this.objectText = new SimpleText(13, 0xFFFFFF);
         this.objectText.setBold(true);
         this.objectText.filters = Constants.SHADOW_FILTER_1;
-        addChild(this.objectText);
+        this.content.addChild(this.objectText);
 
         this.regionText = new SimpleText(13, 0xFFFFFF);
         this.regionText.setBold(true);
         this.regionText.filters = Constants.SHADOW_FILTER_1;
-        addChild(this.regionText);
+        this.content.addChild(this.regionText);
 
         filters = Constants.SHADOW_FILTER_1;
     }
@@ -75,11 +84,11 @@ public class TileInfoPanel extends Sprite {
             this.groundText.setText(groundId == null ? "" : groundId);
             this.groundText.useTextDimensions();
 
-            if (!contains(this.groundText)){
-                addChild(this.groundText);
+            if (!this.content.contains(this.groundText)){
+                this.content.addChild(this.groundText);
             }
-        } else if (contains(this.groundText)) {
-            removeChild(this.groundText);
+        } else if (this.content.contains(this.groundText)) {
+            this.content.removeChild(this.groundText);
         }
 
         if (tileData.objType > 0) {
@@ -87,11 +96,11 @@ public class TileInfoPanel extends Sprite {
             this.objectText.setText(objectId == null ? "" : objectId);
             this.objectText.useTextDimensions();
 
-            if (!contains(this.objectText)){
-                addChild(this.objectText);
+            if (!this.content.contains(this.objectText)){
+                this.content.addChild(this.objectText);
             }
-        } else if (contains(this.objectText)) {
-            removeChild(this.objectText);
+        } else if (this.content.contains(this.objectText)) {
+            this.content.removeChild(this.objectText);
         }
 
         if (tileData.regType > 0) {
@@ -99,11 +108,11 @@ public class TileInfoPanel extends Sprite {
             this.regionText.setText(regionId == null ? "" : regionId);
             this.regionText.useTextDimensions();
 
-            if (!contains(this.regionText)){
-                addChild(this.regionText);
+            if (!this.content.contains(this.regionText)){
+                this.content.addChild(this.regionText);
             }
-        } else if (contains(this.regionText)) {
-            removeChild(this.regionText);
+        } else if (this.content.contains(this.regionText)) {
+            this.content.removeChild(this.regionText);
         }
 
         this.drawTextures(tileData);
@@ -116,19 +125,19 @@ public class TileInfoPanel extends Sprite {
     private function drawTextures(tileData:MapTileData):void {
         if (this.groundImage) {
             this.groundTexture.dispose();
-            removeChild(this.groundImage);
+            this.content.removeChild(this.groundImage);
 
             this.groundImage = null;
         }
         if (this.objectImage) {
             this.objectTexture.dispose();
-            removeChild(this.objectImage);
+            this.content.removeChild(this.objectImage);
 
             this.objectImage = null;
         }
         if (this.regionImage) {
             this.regionTexture.dispose();
-            removeChild(this.regionImage);
+            this.content.removeChild(this.regionImage);
 
             this.regionImage = null;
         }
@@ -140,7 +149,7 @@ public class TileInfoPanel extends Sprite {
             this.groundTexture = new BitmapData(IMAGE_SIZE, IMAGE_SIZE, true, 0);
             this.groundTexture.draw(groundText, groundMatrix);
             this.groundImage = new Bitmap(this.groundTexture);
-            addChild(this.groundImage);
+            this.content.addChild(this.groundImage);
         }
 
         if (tileData.objType > 0) {
@@ -150,7 +159,7 @@ public class TileInfoPanel extends Sprite {
             this.objectTexture = new BitmapData(IMAGE_SIZE, IMAGE_SIZE, true, 0);
             this.objectTexture.draw(objectText, objectMatrix);
             this.objectImage = new Bitmap(this.objectTexture);
-            addChild(this.objectImage);
+            this.content.addChild(this.objectImage);
         }
 
         if (tileData.regType > 0) {
@@ -158,7 +167,7 @@ public class TileInfoPanel extends Sprite {
             this.regionTexture = new BitmapData(IMAGE_SIZE, IMAGE_SIZE, true, 0);
             this.regionTexture.fillRect(new Rectangle(0, 0, IMAGE_SIZE, IMAGE_SIZE), 1593835520 | regColor);
             this.regionImage = new Bitmap(this.regionTexture);
-            addChild(this.regionImage);
+            this.content.addChild(this.regionImage);
         }
     }
 
@@ -202,11 +211,8 @@ public class TileInfoPanel extends Sprite {
     }
 
     private function drawBackground():void {
-        var g:Graphics = this.background.graphics;
-        g.clear();
-        g.beginFill(Constants.BACK_COLOR_2, 0.8);
-        g.drawRoundRect(-4, -4, width + 8, height + 8, 10, 10);
-        g.endFill();
+        this.background.width = this.content.width + 8;
+        this.background.height = this.content.height + 8;
     }
 }
 }

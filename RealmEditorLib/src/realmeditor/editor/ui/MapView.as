@@ -342,6 +342,10 @@ public class MapView extends Sprite {
         var diameter:int = 1 + (brush.size * 2); // Times 2 because we have tiles on the front and on the back
         var radius:int = diameter / 2;
         var bitmapSize:int = diameter * TileMapView.TILE_SIZE;
+        if (bitmapSize <= 0) {
+            return;
+        }
+
         var brushTexture:BitmapData = new BitmapData(bitmapSize, bitmapSize, true, 0);
 
         for (var yi:int = 0; yi <= diameter; yi++) {
