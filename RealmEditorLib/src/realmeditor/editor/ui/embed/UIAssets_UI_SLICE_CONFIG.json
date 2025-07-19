@@ -1,10 +1,10 @@
 {
   "slices": {
     "drawelementselector_selection.png": {
-      "type": "3grid",
+      "type": "9grid",
       "rectangle": {
-        "y": 0,
-        "h": 11,
+        "y": 5.5,
+        "h": 1,
         "x": 29.5,
         "w": 1
       }
@@ -253,10 +253,10 @@
       }
     },
     "drawelementselector_background.png": {
-      "type": "3grid",
+      "type": "9grid",
       "rectangle": {
-        "y": 0,
-        "h": 41,
+        "y": 20.5,
+        "h": 1,
         "x": 31.5,
         "w": 1
       }
