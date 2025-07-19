@@ -10,7 +10,7 @@ public class BrushChancePanel extends BrushOptionPanel {
 
     public function BrushChancePanel(main:MainView) {
         super("Chance: ", main);
-        this.input = new SimpleText(12, 0xEAEAEA, true, 22, 18, false, true);
+        this.input = new SimpleText(12, 0xB2B2B2, true, 22, 18, false, true);
         this.input.restrict = "0-9";
         this.input.maxChars = 2;
         this.input.addEventListener(Event.CHANGE, onChange);

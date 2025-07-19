@@ -8,27 +8,36 @@ import flash.geom.Matrix;
 
 import realmeditor.assets.AssetLibrary;
 import realmeditor.editor.ui.elements.SimpleText;
+import realmeditor.editor.ui.embed.SliceScalingBitmap;
+import realmeditor.editor.ui.embed.TextureParser;
 
 public class MapInfoPanel extends Sprite {
 
     private static const IMAGE_SIZE:int = 20;
 
-    private var background:Shape;
+    private var background:SliceScalingBitmap;
+    private var content:Sprite;
 
     private var dimensionText:SimpleText;
     private var pencilButton:Bitmap;
     private var pencilTexture:BitmapData;
 
     public function MapInfoPanel() {
-        this.background = new Shape();
+        this.background = TextureParser.instance.getSliceScalingBitmap("UI", "tooltip_header_background");
+        this.background.alpha = 0.8;
+        this.background.x = -4;
+        this.background.y = -4;
         addChild(this.background);
 
-        this.dimensionText = new SimpleText(12, 0xFFFFFF);
+        this.content = new Sprite();
+        addChild(this.content);
+
+        this.dimensionText = new SimpleText(12, 0xB2B2B2);
         this.dimensionText.filters = Constants.SHADOW_FILTER_1;
-        addChild(this.dimensionText);
+        this.content.addChild(this.dimensionText);
 
         this.pencilButton = new Bitmap(null);
-        addChild(this.pencilButton);
+        this.content.addChild(this.pencilButton);
 
         filters = Constants.SHADOW_FILTER_1;
     }
@@ -59,11 +68,8 @@ public class MapInfoPanel extends Sprite {
     }
 
     private function drawBackground():void {
-        var g:Graphics = this.background.graphics;
-        g.clear();
-        g.beginFill(Constants.BACK_COLOR_2, 0.8);
-        g.drawRoundRect(-4, -4, width + 8, height + 8, 10, 10);
-        g.endFill();
+        this.background.width = this.content.width + 8;
+        this.background.height = this.content.height + 8;
     }
 }
 }

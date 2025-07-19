@@ -11,9 +11,8 @@ public class SimpleOkButton extends Sprite {
     private var okText:SimpleText;
 
     public function SimpleOkButton() {
-        this.okText = new SimpleText(20, 0xFFFFFF);
+        this.okText = new SimpleText(14, 0xB2B2B2);
         this.okText.setText("Ok");
-        this.okText.setBold(true);
         this.okText.updateMetrics();
         this.okText.x = 3;
         this.okText.y = 3;

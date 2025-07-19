@@ -41,9 +41,9 @@ public class TextTooltip extends Tooltip {
         this.subTextField = new SimpleText(size, color);
         var sheet:StyleSheet = new StyleSheet();
         sheet.parseCSS(CSS_TEXT);
-        this.textField.styleSheet = sheet;
-        this.textField.htmlText = text;
-        this.textField.useTextDimensions();
+        this.subTextField.styleSheet = sheet;
+        this.subTextField.htmlText = text;
+        this.subTextField.useTextDimensions();
 
         this.updateChildren();
     }

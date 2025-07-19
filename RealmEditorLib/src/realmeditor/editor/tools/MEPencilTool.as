@@ -1,5 +1,6 @@
 package realmeditor.editor.tools {
 import realmeditor.editor.MEBrush;
+import realmeditor.editor.MEDrawType;
 import realmeditor.editor.MapHistory;
 import realmeditor.editor.actions.MapActionSet;
 import realmeditor.editor.actions.MapReplaceTileAction;

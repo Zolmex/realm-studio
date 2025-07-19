@@ -7,29 +7,38 @@ import flash.events.MouseEvent;
 
 import realmeditor.editor.MEEvent;
 import realmeditor.editor.ui.Constants;
+import realmeditor.editor.ui.embed.SliceScalingBitmap;
+import realmeditor.editor.ui.embed.TextureParser;
 import realmeditor.util.FilterUtil;
 
 public class MultiOptionalSwitch extends Sprite {
 
-    private var background:Shape;
+    private var background:SliceScalingBitmap;
     private var options:Vector.<SwitchOption>;
     private var nextOptionY:Number;
     public var selected:int;
+    private var content:Sprite;
 
     public function MultiOptionalSwitch() {
         this.options = new Vector.<SwitchOption>();
+        this.nextOptionY = 6;
 
-        this.background = new Shape();
+        this.background = TextureParser.instance.getSliceScalingBitmap("UI", "drawelementselector_background");
+        this.background.alpha = 0.9;
         addChild(this.background);
+
+        this.content = new Sprite();
+        addChild(this.content);
     }
 
     public function addOption(title:String):void {
         var option:SwitchOption = new SwitchOption(title);
-        option.x = 2;
+        option.x = 3;
         option.y = this.nextOptionY;
         option.filters = this.options.length == 0 ? null : FilterUtil.GREY_COLOR_FILTER_2;
+        option.showBackground(this.options.length == 0);
         option.addEventListener(MouseEvent.CLICK, this.onOptionClick);
-        addChild(option);
+        this.content.addChild(option);
 
         this.nextOptionY = option.y + option.height;
         this.options.push(option);
@@ -38,11 +47,8 @@ public class MultiOptionalSwitch extends Sprite {
     }
 
     private function drawBackground():void {
-        var g:Graphics = this.background.graphics;
-        g.clear();
-        g.beginFill(Constants.BACK_COLOR_1, 0.9);
-        g.drawRoundRect(0, 0, width + 4, height + 4, 5, 5);
-        g.endFill();
+        this.background.width = this.content.width + 6;
+        this.background.height = this.content.height + 8;
     }
 
     private function onOptionClick(e:Event):void {
@@ -50,10 +56,12 @@ public class MultiOptionalSwitch extends Sprite {
 
         for (var i:int = 0; i < this.options.length; i++){
             this.options[i].filters = FilterUtil.GREY_COLOR_FILTER_2;
+            this.options[i].showBackground(false);
         }
 
         var option:SwitchOption = e.target as SwitchOption;
         option.filters = null;
+        option.showBackground(true);
 
         this.selected = this.options.indexOf(option);
 
@@ -63,6 +71,7 @@ public class MultiOptionalSwitch extends Sprite {
     public function selectNext():void {
         for (var i:int = 0; i < this.options.length; i++){
             this.options[i].filters = FilterUtil.GREY_COLOR_FILTER_2;
+            this.options[i].showBackground(false);
         }
 
         var next:int = this.selected + 1;
@@ -70,8 +79,9 @@ public class MultiOptionalSwitch extends Sprite {
             next = 0;
         }
 
-        var nextOption:SwitchOption = this.options[next];
-        nextOption.filters = null;
+        var option:SwitchOption = this.options[next];
+        option.filters = null;
+        option.showBackground(true);
 
         this.selected = next;
 
@@ -84,10 +94,12 @@ public class MultiOptionalSwitch extends Sprite {
 
         for (var i:int = 0; i < this.options.length; i++){
             this.options[i].filters = FilterUtil.GREY_COLOR_FILTER_2;
+            this.options[i].showBackground(false);
         }
 
-        var nextOption:SwitchOption = this.options[id];
-        nextOption.filters = null;
+        var option:SwitchOption = this.options[id];
+        option.filters = null;
+        option.showBackground(true);
 
         this.selected = id;
 
@@ -100,14 +112,35 @@ import flash.display.Sprite;
 
 import realmeditor.editor.ui.Constants;
 import realmeditor.editor.ui.elements.SimpleText;
+import realmeditor.editor.ui.embed.SliceScalingBitmap;
+import realmeditor.editor.ui.embed.TextureParser;
 
 class SwitchOption extends Sprite {
 
+    private static const WIDTH:int = 92;
+
+    private var background:SliceScalingBitmap;
+    private var text:SimpleText;
+
     public function SwitchOption(title:String){
-        var text:SimpleText = new SimpleText(16, 0xFFFFFF);
-        text.setText(title);
-        text.updateMetrics();
-        text.filters = Constants.SHADOW_FILTER_1;
-        addChild(text);
+        this.background = TextureParser.instance.getSliceScalingBitmap("UI", "drawelementselector_selection");
+        this.background.visible = false;
+        addChild(this.background);
+
+        this.text = new SimpleText(13, 0xB2B2B2);
+        this.text.setText(title);
+        this.text.updateMetrics();
+        this.text.x = (WIDTH - this.text.width) / 2;
+        this.text.filters = Constants.SHADOW_FILTER_1;
+        addChild(this.text);
+
+        this.background.width = WIDTH;
+        this.background.height = text.height + 4;
+        this.background.y = -2;
+    }
+
+    public function showBackground(val:Boolean):void {
+        this.text.setColor(val ? 0xB9A960 : 0xB2B2B2);
+        this.background.visible = val;
     }
 }

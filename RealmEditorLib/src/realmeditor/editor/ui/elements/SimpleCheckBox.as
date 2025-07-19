@@ -1,4 +1,5 @@
 package realmeditor.editor.ui.elements {
+import flash.display.Bitmap;
 import flash.display.Graphics;
 import flash.display.Shape;
 import flash.display.Sprite;
@@ -7,64 +8,94 @@ import flash.events.MouseEvent;
 import flash.text.TextFieldAutoSize;
 
 import realmeditor.editor.ui.Constants;
+import realmeditor.editor.ui.embed.SliceScalingBitmap;
+import realmeditor.editor.ui.embed.TextureParser;
 
 public class SimpleCheckBox extends Sprite {
 
     private static const WIDTH:int = 95;
-    private static const HEIGHT:int = CHECKBOX_SIZE + 8;
-    private static const CHECKBOX_SIZE:int = 15;
-    private static const CHECKCROSS_SIZE:int = 10;
+    private static const HEIGHT:int = CHECKBOX_HEIGHT + 8;
+    private static const CHECKBOX_WIDTH:int = 23;
+    private static const CHECKBOX_HEIGHT:int = 15;
 
     public var value:Boolean;
-    private var background:Shape;
+    private var background:SliceScalingBitmap;
     private var title:SimpleText;
-    private var checkBox:Sprite;
-    private var checkCross:Shape;
+    private var enabledIcon:Sprite;
+    private var disabledIcon:Sprite;
+    private var content:Sprite;
 
     public function SimpleCheckBox(title:String, defaultValue:Boolean = false) {
         this.value = defaultValue;
 
-        this.background = new Shape();
+        this.background = TextureParser.instance.getSliceScalingBitmap("UI", "switch_button_background");
+        this.background.alpha = 0.9;
         addChild(this.background);
 
-        this.title = new SimpleText(18, 0xFFFFFF, false, WIDTH - CHECKBOX_SIZE - 7);
+        this.content = new Sprite();
+        addChild(this.content);
+
+        this.title = new SimpleText(14, 0xB9A960, false, WIDTH - CHECKBOX_WIDTH - 7);
         this.title.setAutoSize(TextFieldAutoSize.LEFT);
         this.title.setText(title);
         this.title.filters = Constants.SHADOW_FILTER_1;
         this.title.updateMetrics();
-        addChild(this.title);
+        this.content.addChild(this.title);
 
-        this.checkBox = new Sprite();
-        var g:Graphics = this.checkBox.graphics;
-        g.beginFill(Constants.BACK_COLOR_2);
-        g.drawRoundRect(0, 0, CHECKBOX_SIZE, CHECKBOX_SIZE, 5, 5);
-        g.endFill();
-        addChild(this.checkBox);
+        var enabled:Bitmap = TextureParser.instance.getTexture("UI", "enabled_icon");
+        this.enabledIcon = new Sprite();
+        this.enabledIcon.addChild(enabled);
+        this.enabledIcon.scaleX = CHECKBOX_WIDTH / this.enabledIcon.width;
+        this.enabledIcon.scaleY = CHECKBOX_HEIGHT / this.enabledIcon.height;
+        this.enabledIcon.visible = defaultValue;
+        this.content.addChild(this.enabledIcon);
 
-        this.checkCross = new Shape();
-        this.checkCross.visible = defaultValue;
-        g = this.checkCross.graphics;
-        g.lineStyle(3, 0xFFFFFF);
-        g.lineTo(CHECKCROSS_SIZE, CHECKCROSS_SIZE);
-        g.moveTo(CHECKCROSS_SIZE, 0);
-        g.lineTo(0, CHECKCROSS_SIZE);
-        g.lineStyle();
-        addChild(this.checkCross);
+        var disabled:Bitmap = TextureParser.instance.getTexture("UI", "disabled_icon");
+        this.disabledIcon = new Sprite();
+        this.disabledIcon.addChild(disabled);
+        this.disabledIcon.scaleX = this.enabledIcon.scaleX;
+        this.disabledIcon.scaleY = this.enabledIcon.scaleY;
+        this.disabledIcon.visible = !defaultValue;
+        this.content.addChild(this.disabledIcon);
 
         this.positionChildren();
         this.drawBackground();
 
-        this.checkBox.addEventListener(MouseEvent.CLICK, this.onClick);
+        if (!defaultValue) {
+            this.disabledIcon.addEventListener(MouseEvent.CLICK, this.onClick);
+        }
+        else {
+            this.enabledIcon.addEventListener(MouseEvent.CLICK, this.onClick);
+        }
     }
 
     public function setValue(value:Boolean):void {
         this.value = value;
-        this.checkCross.visible = value;
+        this.enabledIcon.visible = value;
+        this.disabledIcon.visible = !value;
+        if (this.enabledIcon.visible){
+            this.disabledIcon.removeEventListener(MouseEvent.CLICK, this.onClick);
+            this.enabledIcon.addEventListener(MouseEvent.CLICK, this.onClick);
+        }
+        else{
+            this.enabledIcon.removeEventListener(MouseEvent.CLICK, this.onClick);
+            this.disabledIcon.addEventListener(MouseEvent.CLICK, this.onClick);
+        }
     }
 
     private function onClick(e:Event):void {
         this.value = !this.value;
-        this.checkCross.visible = this.value;
+        this.enabledIcon.visible = this.value;
+        this.disabledIcon.visible = !this.value;
+        if (this.enabledIcon.visible){
+            this.disabledIcon.removeEventListener(MouseEvent.CLICK, this.onClick);
+            this.enabledIcon.addEventListener(MouseEvent.CLICK, this.onClick);
+        }
+        else{
+            this.enabledIcon.removeEventListener(MouseEvent.CLICK, this.onClick);
+            this.disabledIcon.addEventListener(MouseEvent.CLICK, this.onClick);
+        }
+
         this.dispatchEvent(new Event(Event.CHANGE));
     }
 
@@ -72,18 +103,15 @@ public class SimpleCheckBox extends Sprite {
         this.title.x = 2;
         this.title.y = (HEIGHT - this.title.actualHeight_) / 2;
 
-        this.checkBox.x = this.title.x + this.title.actualWidth_ + 5;
-        this.checkBox.y = (HEIGHT - this.checkBox.height) / 2;
-
-        this.checkCross.x = this.checkBox.x + (CHECKBOX_SIZE - CHECKCROSS_SIZE) / 2;
-        this.checkCross.y = this.checkBox.y + (CHECKBOX_SIZE - CHECKCROSS_SIZE) / 2;
+        this.enabledIcon.x = this.title.x + this.title.actualWidth_ + 5;
+        this.enabledIcon.y = (HEIGHT - this.enabledIcon.height) / 2;
+        this.disabledIcon.x = this.enabledIcon.x;
+        this.disabledIcon.y = this.enabledIcon.y;
     }
 
     private function drawBackground():void {
-        var g:Graphics = this.background.graphics;
-        g.beginFill(Constants.BACK_COLOR_1);
-        g.drawRoundRect(0, 0, width + 6, HEIGHT, 10, 10);
-        g.endFill();
+        this.background.width = this.content.width + 6;
+        this.background.height = HEIGHT;
     }
 }
 }

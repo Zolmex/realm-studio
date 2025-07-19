@@ -114,9 +114,6 @@ public class MapInputHandler extends EventDispatcher {
         if (e.shiftKey) {
             this.dispatchEvent(new Event(MEEvent.SHIFT_MOUSE_DRAG));
         }
-        else if (e.ctrlKey) {
-            this.dispatchEvent(new Event(MEEvent.CTRL_MOUSE_DRAG));
-        }
         else {
             this.dispatchEvent(new Event(MEEvent.MOUSE_DRAG));
         }

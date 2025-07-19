@@ -70,7 +70,7 @@ public class TileHotkeys  extends Sprite {
             if (element == null)
                 continue;
 
-            var tileElement:TileHotkeyElement = new TileHotkeyElement(index, element.elementType, element.drawType, element.texture);
+            var tileElement:TileHotkeyElement = new TileHotkeyElement(index, element.elementType, element.drawType, element.texture.bitmapData);
             tileElement.addEventListener(MouseEvent.CLICK, this.onElementClick);
             this.hotkeyElements[index] = tileElement;
             tileElement.x = x;

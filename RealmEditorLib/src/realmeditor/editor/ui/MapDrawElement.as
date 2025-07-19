@@ -10,19 +10,30 @@ import realmeditor.assets.ObjectLibrary;
 import realmeditor.assets.RegionLibrary;
 import realmeditor.editor.MEDrawType;
 import realmeditor.editor.ui.elements.DrawListTooltip;
+import realmeditor.editor.ui.embed.TextureParser;
 
 public class MapDrawElement extends Sprite {
 
+    private static const TEXTURE_SIZE:int = 32;
+
     public var elementType:int;
-    public var texture:BitmapData;
+    public var texture:Bitmap;
     public var drawType:int;
     private var tooltip:DrawListTooltip;
+    private var background:Bitmap;
 
     public function MapDrawElement(elementType:int, texture:BitmapData, drawType:int) {
         this.elementType = elementType;
         this.drawType = drawType;
-        this.texture = texture;
-        addChild(new Bitmap(texture));
+
+        this.background = TextureParser.instance.getTexture("UI", "drawelement_background");
+        addChild(this.background);
+        this.texture = new Bitmap(texture);
+        this.texture.scaleX = TEXTURE_SIZE / this.texture.width;
+        this.texture.scaleY = TEXTURE_SIZE / this.texture.height;
+        this.texture.x = (this.background.width - this.texture.width) / 2;
+        this.texture.y = (this.background.height - this.texture.height) / 2;
+        addChild(this.texture);
 
         this.addEventListener(MouseEvent.ROLL_OVER, this.onRollOver);
     }
@@ -47,7 +58,7 @@ public class MapDrawElement extends Sprite {
             return;
         }
 
-        this.tooltip = new DrawListTooltip(this, this.texture, xml, this.drawType);
+        this.tooltip = new DrawListTooltip(this, this.texture.bitmapData, xml, this.drawType);
         MainView.Main.stage.addChild(this.tooltip);
     }
 }

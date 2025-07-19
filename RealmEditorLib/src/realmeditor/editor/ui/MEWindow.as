@@ -8,32 +8,40 @@ import flash.events.MouseEvent;
 import realmeditor.editor.ui.elements.SimpleCloseButton;
 import realmeditor.editor.ui.elements.SimpleOkButton;
 import realmeditor.editor.ui.elements.SimpleText;
+import realmeditor.editor.ui.embed.SliceScalingBitmap;
+import realmeditor.editor.ui.embed.TextureParser;
 
 public class MEWindow extends Sprite {
 
-    protected var background:Shape;
+    protected var background:SliceScalingBitmap;
     protected var title:SimpleText;
     protected var okButton:SimpleOkButton;
     protected var closeButton:SimpleCloseButton;
+    protected var content:Sprite;
 
     public function MEWindow(title:String) {
-        this.background = new Shape();
+        this.background = TextureParser.instance.getSliceScalingBitmap("UI", "maplist_background");
+        this.background.x = -4;
+        this.background.y = -4;
         addChild(this.background);
 
-        this.title = new SimpleText(20, 0xFFFFFF);
+        this.content = new Sprite();
+        addChild(this.content);
+
+        this.title = new SimpleText(10, 0xB9A960);
         this.title.setText(title);
-        this.title.setBold(true);
         this.title.updateMetrics();
+        this.title.y = -2;
         this.title.filters = Constants.SHADOW_FILTER_1;
-        addChild(this.title);
+        this.content.addChild(this.title);
 
         this.okButton = new SimpleOkButton();
         this.okButton.addEventListener(MouseEvent.CLICK, this.onOkClick);
-        addChild(this.okButton);
+        this.content.addChild(this.okButton);
 
         this.closeButton = new SimpleCloseButton();
         this.closeButton.addEventListener(MouseEvent.CLICK, this.onCloseClick);
-        addChild(this.closeButton);
+        this.content.addChild(this.closeButton);
 
         this.addEventListener(Event.ADDED_TO_STAGE, this.onAddedToStage);
 
@@ -46,16 +54,13 @@ public class MEWindow extends Sprite {
     }
 
     protected virtual function drawBackground():void{
-        var g:Graphics = this.background.graphics;
-        g.clear();
-        g.beginFill(Constants.BACK_COLOR_2);
-        g.drawRoundRect(0, -2, width + 15, height + 7, 10, 10);
-        g.endFill();
+        this.background.width = this.content.width + 15;
+        this.background.height = this.content.height + 7;
     }
 
     protected virtual function updatePositions():void {
-        this.title.x = 5;
-        this.okButton.x = 5;
+        this.title.x = 0;
+        this.okButton.x = 0;
         this.okButton.y = this.title.y + this.title.height + 5;
         this.closeButton.x = this.okButton.x + this.okButton.width + 10;
         this.closeButton.y = this.okButton.y;

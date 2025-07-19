@@ -8,15 +8,17 @@ import flash.events.MouseEvent;
 
 import realmeditor.editor.ui.Constants;
 import realmeditor.editor.ui.MainView;
+import realmeditor.editor.ui.embed.SliceScalingBitmap;
+import realmeditor.editor.ui.embed.TextureParser;
 
 public class Tooltip extends Sprite {
 
     private var target:DisplayObject;
-    private var background:Shape;
+    private var background:SliceScalingBitmap;
 
     // Tooltips should always be instantiated on roll over
     public function Tooltip(target:DisplayObject) {
-        this.background = new Shape();
+        this.background = TextureParser.instance.getSliceScalingBitmap("UI", "maplist_element_background");
         addChild(this.background);
 
         this.target = target;
@@ -28,6 +30,8 @@ public class Tooltip extends Sprite {
         this.positionChildren();
         this.drawBackground();
         this.fixPosition();
+
+        filters = Constants.SHADOW_FILTER_1;
     }
 
     private function onTargetOver(e:Event):void {
@@ -54,11 +58,9 @@ public class Tooltip extends Sprite {
     }
 
     protected virtual function drawBackground():void {
-        var g:Graphics = this.background.graphics;
-        g.clear();
-        g.beginFill(Constants.BACK_COLOR_2, 0.8);
-        g.drawRoundRect(0, 0, width + 10, height + 10, 15, 15);
-        g.endFill();
+        this.background.width = width + 10;
+        this.background.height = height + 10;
+        this.background.alpha = 0.8;
     }
 
     protected function updateChildren():void {
@@ -73,49 +75,51 @@ public class Tooltip extends Sprite {
     }
 
     private function getXPos():Number {
+        var limitWidth:Number = width + 1;
         var mouseX:Number = MainView.Main.stage.mouseX;
         if (mouseX < MainView.StageWidth / 2) { // Center orientation: right
             if (mouseX < 0) { // Left limit
                 return 0;
             }
-            if (mouseX + width > MainView.StageWidth) { // When tooltip touches screen right
-                return MainView.StageWidth - width;
+            if (mouseX + limitWidth > MainView.StageWidth) { // When tooltip touches screen right
+                return MainView.StageWidth - limitWidth;
             }
             return mouseX;
         }
 
         if (mouseX >= MainView.StageWidth / 2) { // Center orientation: left
             if (mouseX > MainView.StageWidth) { // Right limit
-                return MainView.StageWidth - width;
+                return MainView.StageWidth - limitWidth;
             }
-            if (mouseX - width < 0) { // When tooltip touches screen left
+            if (mouseX - limitWidth < 0) { // When tooltip touches screen left
                 return 0;
             }
-            return mouseX - width;
+            return mouseX - limitWidth;
         }
         return mouseX;
     }
 
     private function getYPos():Number {
+        var limitHeight:Number = height + 1;
         var mouseY:Number = MainView.Main.stage.mouseY;
         if (mouseY < MainView.StageHeight / 2) { // Center orientation: up
             if (mouseY < 0) { // Top limit
                 return 0;
             }
-            if (mouseY + height > MainView.StageHeight) { // When tooltip touches screen bottom
-                return MainView.StageHeight - height;
+            if (mouseY + limitHeight > MainView.StageHeight) { // When tooltip touches screen bottom
+                return MainView.StageHeight - limitHeight;
             }
             return mouseY;
         }
 
         if (mouseY >= MainView.StageHeight / 2) { // Center orientation: left
             if (mouseY > MainView.StageHeight) { // Right limit
-                return MainView.StageHeight - height;
+                return MainView.StageHeight - limitHeight;
             }
-            if (mouseY - height < 0) { // When tooltip touches screen top
+            if (mouseY - limitHeight < 0) { // When tooltip touches screen top
                 return 0;
             }
-            return mouseY - height;
+            return mouseY - limitHeight;
         }
         return mouseY;
     }

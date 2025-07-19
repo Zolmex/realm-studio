@@ -11,9 +11,8 @@ public class SimpleCloseButton extends Sprite {
     private var closeText:SimpleText;
 
     public function SimpleCloseButton() {
-        this.closeText = new SimpleText(20, 0xFFFFFF);
+        this.closeText = new SimpleText(14, 0xB2B2B2);
         this.closeText.setText("Close");
-        this.closeText.setBold(true);
         this.closeText.updateMetrics();
         this.closeText.x = 3;
         this.closeText.y = 3;

@@ -1,13 +1,10 @@
 package realmeditor {
 import flash.display.BitmapData;
-
 import flash.display.Sprite;
 import flash.utils.Dictionary;
 
 import realmeditor.assets.AnimatedChars;
-
 import realmeditor.assets.AssetLibrary;
-
 import realmeditor.assets.GroundLibrary;
 import realmeditor.assets.ObjectLibrary;
 import realmeditor.assets.RegionLibrary;
@@ -16,6 +13,7 @@ import realmeditor.editor.ui.Keybinds;
 import realmeditor.editor.ui.MainView;
 import realmeditor.editor.ui.embed.Cursors;
 import realmeditor.editor.ui.embed.EditorTools;
+import realmeditor.editor.ui.embed.TextureParser;
 
 public class EditorLoader {
 
@@ -50,10 +48,11 @@ public class EditorLoader {
     }
 
     public static function load(main:Sprite, embedded:Boolean = true):Sprite {
-        if (readyCount < 4){
-            throw new Error("RealmEditor: " + readyCount + " out of 4 asset libraries weren't loaded.");
+        if (readyCount < 5){
+            throw new Error("RealmEditor: " + readyCount + " out of 5 asset libraries weren't loaded.");
         }
 
+        TextureParser.load();
         Parameters.load();
         Keybinds.loadKeys();
 

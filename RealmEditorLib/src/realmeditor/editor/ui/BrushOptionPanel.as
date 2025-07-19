@@ -11,7 +11,7 @@ public class BrushOptionPanel extends Sprite {
 
     public function BrushOptionPanel(title:String, main:MainView) {
         this.mainView = main;
-        this.titleText = new SimpleText(12, 0xEAEAEA);
+        this.titleText = new SimpleText(12, 0xB2B2B2);
         this.titleText.setText(title);
         this.titleText.updateMetrics();
         addChild(this.titleText);

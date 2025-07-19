@@ -8,15 +8,20 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 
 import realmeditor.editor.ui.elements.SimpleText;
+import realmeditor.editor.ui.embed.SliceScalingBitmap;
+import realmeditor.editor.ui.embed.TextureParser;
 
 public class NotificationView extends Sprite {
 
-    private var background:Shape;
+    private var background:SliceScalingBitmap;
     private var text:SimpleText;
     private var tween:GTween;
 
     public function NotificationView() {
-        this.background = new Shape();
+        this.background = TextureParser.instance.getSliceScalingBitmap("UI", "tooltip_header_background");
+        this.background.alpha = 0.8;
+        this.background.x = -4;
+        this.background.y = -4;
         addChild(this.background);
 
         this.text = new SimpleText(18, 0xFFFFFF, false, 400);
@@ -36,11 +41,8 @@ public class NotificationView extends Sprite {
         this.text.wordWrap = true;
         this.text.updateMetrics();
 
-        var g:Graphics = this.background.graphics;
-        g.clear();
-        g.beginFill(Constants.BACK_COLOR_1, 0.8);
-        g.drawRoundRect(-2, 0, this.text.actualWidth_ + 6, this.text.actualHeight_ + 4, 5, 5);
-        g.endFill();
+        this.background.width = this.text.actualWidth_ + 6;
+        this.background.height = this.text.actualHeight_ + 4;
 
         this.updatePosition();
 

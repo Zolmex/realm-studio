@@ -1,9 +1,11 @@
 package realmeditor.editor.ui {
+import flash.display.Bitmap;
 import flash.display.Graphics;
 import flash.display.Shape;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
+import flash.text.AntiAliasType;
 import flash.utils.Dictionary;
 
 import realmeditor.assets.GroundLibrary;
@@ -11,23 +13,30 @@ import realmeditor.assets.ObjectLibrary;
 import realmeditor.assets.RegionLibrary;
 import realmeditor.editor.MEDrawType;
 import realmeditor.editor.ui.elements.IDrawElementFilter;
+import realmeditor.editor.ui.elements.SearchInputBox;
 import realmeditor.editor.ui.elements.SimpleInputBox;
+import realmeditor.editor.ui.elements.SimpleScrollbar;
+import realmeditor.editor.ui.elements.SimpleText;
+import realmeditor.editor.ui.embed.SliceScalingBitmap;
+import realmeditor.editor.ui.embed.TextureParser;
 
 public class MapDrawElementListView extends Sprite {
 
-    public static const WIDTH:int = 130;
-    private static const ELEMENT_SIZE:int = 35;
+    public static const WIDTH:int = 182;
+    private static const ELEMENT_SIZE:int = 38;
 
-    private var background:Shape;
+    private var title:SimpleText;
+    private var background:SliceScalingBitmap;
     private var listMask:Shape;
     private var listContainer:Sprite;
-    private var selectionSquare:Shape;
+    private var selectionSquare:Bitmap;
     public var selectedElement:MapDrawElement;
     public var totalHeight:int;
-    private var searchInputBox:SimpleInputBox;
+    private var searchInputBox:SearchInputBox;
     private var listYLimit:Number;
     private var drawType:int;
     private var elementTypes:Dictionary;
+    private var scrollbar:SimpleScrollbar;
 
     private var elementFilters:Vector.<IDrawElementFilter>;
     private var searchFilter:DrawListSearchFilter;
@@ -41,16 +50,24 @@ public class MapDrawElementListView extends Sprite {
         this.objectFilter = new DrawListObjectFilter();
         this.loadElementFilters();
 
-        this.background = new Shape();
-        this.drawBackground();
+        var parser:TextureParser = TextureParser.instance;
+        this.background = parser.getSliceScalingBitmap("UI", "drawelementsview_background");
+        this.resizeBackground();
         addChild(this.background);
+
+        this.title = new SimpleText(9, 0xB9A960);
+        this.title.text = "Preview";
+        this.title.updateMetrics();
+        this.title.x = (this.background.width - this.title.width) / 2;
+        this.title.y = 2;
+        addChild(this.title);
 
         this.listContainer = new Sprite();
         addChild(this.listContainer);
 
-        this.searchInputBox = new SimpleInputBox(WIDTH - 10, 25, "", 18, 0xFFFFFF, true);
+        this.searchInputBox = new SearchInputBox(154, 15, 9, "Enter name to find...", 0x414141);
         this.searchInputBox.x = 5;
-        this.searchInputBox.y = 7.5;
+        this.searchInputBox.y = 19;
         this.searchInputBox.inputText.addEventListener(Event.CHANGE, this.onInputChange);
         addChild(this.searchInputBox);
         this.listYLimit = this.searchInputBox.y + this.searchInputBox.height + 2.5;
@@ -60,16 +77,16 @@ public class MapDrawElementListView extends Sprite {
         this.listContainer.mask = this.listMask;
         addChild(this.listMask);
 
-        this.selectionSquare = new Shape();
-        var squareSize:int = ELEMENT_SIZE + 5;
-        var g:Graphics = this.selectionSquare.graphics;
-        g.lineStyle(1, 0xFFFFFF);
-        g.lineTo(squareSize, 0);
-        g.lineTo(squareSize, squareSize);
-        g.lineTo(0, squareSize);
-        g.lineTo(0, 0);
-        g.lineStyle();
+        this.scrollbar = new SimpleScrollbar();
+        this.scrollbar.setup(this.totalHeight - this.searchInputBox.y - 2, 0, 0);
+        this.scrollbar.x = WIDTH - this.scrollbar.width - 4;
+        this.scrollbar.y = this.searchInputBox.y;
+        this.scrollbar.addEventListener(Event.CHANGE, this.onScrollbarChange);
+        addChild(this.scrollbar);
+
+        this.selectionSquare = parser.getTexture("UI", "drawelement_selection_decor");
         this.selectionSquare.visible = false;
+        addChild(this.selectionSquare);
 
         this.addEventListener(MouseEvent.MOUSE_WHEEL, this.onScroll);
 
@@ -147,6 +164,7 @@ public class MapDrawElementListView extends Sprite {
 
         this.selectionSquare.visible = false;
         this.listContainer.addChild(this.selectionSquare);
+        this.scrollbar.setup(this.totalHeight - this.searchInputBox.y - 2, this.listContainer.y - this.listYLimit, this.listContainer.height - this.totalHeight + this.listYLimit);
     }
 
     private function onElementClick(e:Event):void {
@@ -158,8 +176,8 @@ public class MapDrawElementListView extends Sprite {
         }
 
         this.selectedElement = targetElement;
-        this.selectionSquare.x = this.selectedElement.x - 2.5;
-        this.selectionSquare.y = this.selectedElement.y - 2.5;
+        this.selectionSquare.x = this.selectedElement.x;
+        this.selectionSquare.y = this.selectedElement.y;
         this.selectionSquare.visible = true;
 
         this.dispatchEvent(new Event(Event.SELECT));
@@ -172,11 +190,16 @@ public class MapDrawElementListView extends Sprite {
         }
 
         this.selectedElement = element;
-        this.selectionSquare.x = this.selectedElement.x - 2.5;
-        this.selectionSquare.y = this.selectedElement.y - 2.5;
+        this.selectionSquare.x = this.selectedElement.x;
+        this.selectionSquare.y = this.selectedElement.y;
         this.selectionSquare.visible = true;
 
-        this.listContainer.y = this.listYLimit - this.selectionSquare.y + 2.5;
+        this.listContainer.y = this.listYLimit - this.selectionSquare.y;
+        this.fixListPosition();
+    }
+
+    private function onScrollbarChange(e:Event):void {
+        this.listContainer.y = -this.scrollbar.cursorPos + this.listYLimit;
         this.fixListPosition();
     }
 
@@ -185,6 +208,7 @@ public class MapDrawElementListView extends Sprite {
         var scroll:Number = e.delta * 10;
         this.listContainer.y += scroll;
         this.fixListPosition();
+        this.scrollbar.update(this.listContainer.y - this.listYLimit);
     }
 
     private function fixListPosition():void {
@@ -198,28 +222,26 @@ public class MapDrawElementListView extends Sprite {
         }
     }
 
-    private function drawBackground():void {
-        var g:Graphics = this.background.graphics;
-        g.clear();
-        g.beginFill(Constants.BACK_COLOR_2, 0.8);
-        g.drawRoundRect(0, 0, WIDTH, this.totalHeight, 15, 15);
-        g.endFill();
+    private function resizeBackground():void {
+        this.background.height = this.totalHeight + 4;
     }
 
     private function drawListMask():void {
-        var yPos:Number = this.searchInputBox.y + this.searchInputBox.height + 5;
+        var yPos:Number = this.searchInputBox.y + this.searchInputBox.height + 2;
         var g:Graphics = this.listMask.graphics;
         g.clear();
         g.beginFill(0);
-        g.drawRect(2.5, yPos, WIDTH - 5, this.totalHeight - yPos - 2.5);
+        g.drawRect(5, yPos, WIDTH - 5, this.totalHeight - yPos - 2.5);
         g.endFill();
     }
 
     public function onScreenResize():void {
         this.totalHeight = MainView.StageHeight - 80;
 
-        this.drawBackground();
+        this.resizeBackground();
+        this.fixListPosition();
         this.drawListMask();
+        this.scrollbar.setup(this.totalHeight - this.searchInputBox.y - 2, this.listContainer.y - this.listYLimit, this.listContainer.height - this.totalHeight + this.listYLimit);
     }
 
     private function drawElement(id:int, element:MapDrawElement):void {
@@ -228,10 +250,8 @@ public class MapDrawElementListView extends Sprite {
             return;
         }
 
-        element.scaleX = ELEMENT_SIZE / element.texture.width;
-        element.scaleY = ELEMENT_SIZE / element.texture.height;
-        element.x = 6.5 + int(id % 3) * (ELEMENT_SIZE + 6.5);
-        element.y = 6.5 + int(id / 3) * (ELEMENT_SIZE + 6.5);
+        element.x = 5 + int(id % 4) * (ELEMENT_SIZE + 2);
+        element.y = int(id / 4) * (ELEMENT_SIZE + 2);
         this.listContainer.addChild(element);
     }
 }

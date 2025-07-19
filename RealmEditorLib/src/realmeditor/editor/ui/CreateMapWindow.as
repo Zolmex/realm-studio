@@ -17,18 +17,18 @@ public class CreateMapWindow extends MEWindow {
     public function CreateMapWindow() {
         super("New Map");
 
-        this.inputName = new SimpleTextInput("Name:", true, "", 18, 0xFFFFFF, 15, 0xEAEAEA, true);
+        this.inputName = new SimpleTextInput("Name:", true, "", 13, 0xB2B2B2, 13, 0x777777, true);
         this.inputName.setWidth(110);
         this.inputName.inputText.restrict = "a-z A-Z 0-9"; // lowercase, uppercase, and numbers allowed
-        addChild(this.inputName);
+        this.content.addChild(this.inputName);
 
-        this.inputWidth = new SimpleTextInput("Width:", true, "", 18, 0xFFFFFF, 15, 0xEAEAEA, true);
+        this.inputWidth = new SimpleTextInput("Width:", true, "", 13, 0xB2B2B2, 13, 0x777777, true);
         this.inputWidth.inputText.restrict = "0-9";
-        addChild(this.inputWidth);
+        this.content.addChild(this.inputWidth);
 
-        this.inputHeight = new SimpleTextInput("Height:", true, "", 18, 0xFFFFFF, 15, 0xEAEAEA, true);
+        this.inputHeight = new SimpleTextInput("Height:", true, "", 13, 0xB2B2B2, 13, 0x777777, true);
         this.inputHeight.inputText.restrict = "0-9";
-        addChild(this.inputHeight);
+        this.content.addChild(this.inputHeight);
     }
 
     protected override function updatePositions():void {
