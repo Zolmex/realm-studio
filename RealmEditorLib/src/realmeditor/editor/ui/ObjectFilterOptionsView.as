@@ -29,7 +29,7 @@ public class ObjectFilterOptionsView extends Sprite {
         this.listView = listView;
         this.options = new Dictionary();
 
-        this.background = TextureParser.instance.getSliceScalingBitmap("UI", "tooltip_header_background");
+        this.background = TextureParser.instance.getSliceScalingBitmap("UI", "settings_background");
         this.background.alpha = 0.8;
         this.background.visible = false;
         addChild(this.background);
@@ -55,7 +55,7 @@ public class ObjectFilterOptionsView extends Sprite {
         this.propInput = new SimpleTextInput("Property:", true, "", 13, 0xB2B2B2, 13, 0x777777, true);
         this.propInput.inputText.restrict = "a-z A-Z 0-9";
         this.propInput.x = this.arrowText.x - this.propInput.width - 5;
-        this.propInput.y = 5;
+        this.propInput.y = 20;
         this.propInput.filters = Constants.SHADOW_FILTER_1;
 
         this.valueInput = new SimpleTextInput("Value:", true, "", 13, 0xB2B2B2, 13, 0x777777, true);
@@ -74,7 +74,7 @@ public class ObjectFilterOptionsView extends Sprite {
 
     private function drawBackground():void {
         this.background.width = this.content.width + 5;
-        this.background.height = this.content.height + 5;
+        this.background.height = this.content.height + 6;
         this.background.x = -(this.content.width - this.arrowText.width) - 5;
     }
 
@@ -180,22 +180,30 @@ import flash.events.MouseEvent;
 import realmeditor.editor.ui.Constants;
 import realmeditor.editor.ui.ObjectFilterOptionsView;
 import realmeditor.editor.ui.elements.SimpleText;
+import realmeditor.editor.ui.embed.SliceScalingBitmap;
+import realmeditor.editor.ui.embed.TextureParser;
 
 class FilterOption extends Sprite {
 
-    public static const HEIGHT:int = 30;
+    public static const HEIGHT:int = 20;
 
     public var propName:String;
     private var propText:SimpleText;
     private var valText:SimpleText;
+    private var propBackground:SliceScalingBitmap;
+    private var crossBackground:SliceScalingBitmap;
     private var cross:Sprite;
 
     public function FilterOption(propName:String, val:*) {
         this.propName = propName;
 
+        this.propBackground = TextureParser.instance.getSliceScalingBitmap("UI", "checkbox_title_background");
+        addChild(this.propBackground);
+
         this.propText = new SimpleText(13, 0xB2B2B2);
         this.propText.setText(propName + ":");
         this.propText.useTextDimensions();
+        this.propText.y = (HEIGHT - this.propText.height) / 2;
         this.propText.filters = Constants.SHADOW_FILTER_1;
         addChild(this.propText);
 
@@ -203,23 +211,36 @@ class FilterOption extends Sprite {
         this.valText.setText(val.toString());
         this.valText.useTextDimensions();
         this.valText.x = this.propText.x + this.propText.width + 3;
+        this.valText.y = (HEIGHT - this.valText.height) / 2;
         this.valText.filters = Constants.SHADOW_FILTER_1;
         addChild(this.valText);
+
+        this.propBackground.width = this.propText.x + this.propText.width + this.valText.width + 3;
+        this.propBackground.height = this.propText.height + 3;
+        this.propBackground.y = (HEIGHT - this.propBackground.height) / 2;
+
+        this.crossBackground = TextureParser.instance.getSliceScalingBitmap("UI", "checkbox_background");
+        addChild(this.crossBackground);
 
         this.cross = new Sprite();
         this.cross.addEventListener(MouseEvent.CLICK, this.onCrossClick);
         addChild(this.cross);
 
-        var crossSize:int = HEIGHT - 20;
+        var crossSize:int = 10;
+        this.crossBackground.width = crossSize + 8;
+        this.crossBackground.height = crossSize + 8;
+
         var g:Graphics = this.cross.graphics;
-        g.lineStyle(4, 0xFFFFFF);
+        g.lineStyle(3, 0xFFFFFF);
         g.lineTo(crossSize, crossSize);
         g.moveTo(crossSize, 0);
         g.lineTo(0, crossSize);
         g.lineStyle();
 
         this.cross.x = width + 3;
-        this.cross.y = (height - crossSize) / 2;
+        this.cross.y = (HEIGHT - this.cross.height) / 2 + 1;
+        this.crossBackground.x = this.cross.x - 4;
+        this.crossBackground.y = this.cross.y - 4;
     }
 
     private function onCrossClick(e:Event):void {

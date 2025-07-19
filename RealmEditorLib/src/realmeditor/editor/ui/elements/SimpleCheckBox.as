@@ -84,7 +84,6 @@ public class SimpleCheckBox extends Sprite {
     }
 
     private function onClick(e:Event):void {
-        trace("H");
         this.value = !this.value;
         this.enabledIcon.visible = this.value;
         this.disabledIcon.visible = !this.value;
