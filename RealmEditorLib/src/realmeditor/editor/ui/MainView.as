@@ -69,7 +69,7 @@ public class MainView extends Sprite {
     public var inputHandler:MapInputHandler;
     public var notifications:NotificationView;
     private var zoomInput:SimpleTextInput;
-    private var toolBoxBackground:Shape;
+    private var settingsView:MapSettingsView;
     private var tileInfoPanel:TileInfoPanel;
     private var gridCheckbox:SimpleCheckBox;
     private var autoSaveCheckbox:SimpleCheckBox;
@@ -125,46 +125,34 @@ public class MainView extends Sprite {
 
         this.setupInput();
 
-        this.toolBoxBackground = new Shape();
-        this.toolBoxBackground.filters = Constants.SHADOW_FILTER_1;
-        addChild(this.toolBoxBackground);
+        this.settingsView = new MapSettingsView(this);
+        this.settingsView.filters = Constants.SHADOW_FILTER_1;
+        addChild(this.settingsView);
 
-        this.zoomInput = new SimpleTextInput("Zoom", false, "100", 18, 0xFFFFFF, 15, 0xEAEAEA, true);
+        this.zoomInput = new SimpleTextInput("Zoom", false, "100", 13, 0xB9A960, 13, 0x777777, true);
         this.zoomInput.inputText.restrict = "0-9";
         this.zoomInput.inputText.maxChars = 3;
         this.zoomInput.inputText.addEventListener(Event.CHANGE, this.onZoomInputChange);
-        addChild(this.zoomInput);
 
         this.gridCheckbox = new SimpleCheckBox("Grid", false);
         this.gridCheckbox.addEventListener(Event.CHANGE, this.onGridClick);
-        addChild(this.gridCheckbox);
 
         this.autoSaveCheckbox = new SimpleCheckBox("Autosave", true);
         this.autoSaveCheckbox.addEventListener(Event.CHANGE, this.onAutoSaveClick);
-        addChild(this.autoSaveCheckbox);
 
         this.qualityTilesCheckbox = new SimpleCheckBox("Quality Tiles", false);
         this.qualityTilesCheckbox.addEventListener(Event.CHANGE, this.onQualityTilesClick);
-        addChild(this.qualityTilesCheckbox);
 
         this.qualityObjectsCheckbox = new SimpleCheckBox("Quality Objects", true);
         this.qualityObjectsCheckbox.addEventListener(Event.CHANGE, this.onQualityObjectsClick);
-        addChild(this.qualityObjectsCheckbox);
 
         this.drawTypeSwitch = new MultiOptionalSwitch();
         this.drawTypeSwitch.addOption("Ground");
         this.drawTypeSwitch.addOption("Objects");
         this.drawTypeSwitch.addOption("Regions");
         this.drawTypeSwitch.addEventListener(MEEvent.OPTION_SWITCH, this.onDrawTypeSwitch);
-        addChild(this.drawTypeSwitch);
 
-        var g:Graphics = this.toolBoxBackground.graphics;
-        g.beginFill(Constants.BACK_COLOR_2, 0.8);
-        g.drawRoundRect(0, 0,
-                this.autoSaveCheckbox.width + 10, // Add here all of the things that are supposed to go inside of the toolbox
-                this.zoomInput.height + this.gridCheckbox.height + this.autoSaveCheckbox.height + this.drawTypeSwitch.height + this.qualityTilesCheckbox.height + this.qualityObjectsCheckbox.height + 44,
-                10, 10);
-        g.endFill();
+        this.settingsView.addSettings(this.zoomInput, this.gridCheckbox, this.autoSaveCheckbox, this.qualityTilesCheckbox, this.qualityObjectsCheckbox, this.drawTypeSwitch);
 
         this.tileInfoPanel = new TileInfoPanel();
         this.tileInfoPanel.visible = false;
@@ -306,29 +294,11 @@ public class MainView extends Sprite {
         this.mapInfoPanel.x = 19;
         this.mapInfoPanel.y = StageHeight - this.mapInfoPanel.height - 15;
 
-        this.toolBoxBackground.x = 15;
-        this.toolBoxBackground.y = (StageHeight - this.toolBoxBackground.height) / 2;
-        if (this.toolBoxBackground.y < this.mapSelector.y + this.mapSelector.height){ // Make sure the lef side toolbox doesn't overlap with the map selector
-            this.toolBoxBackground.y = this.mapSelector.y + this.mapSelector.height + 15;
+        this.settingsView.x = 15;
+        this.settingsView.y = (StageHeight - this.settingsView.height) / 2;
+        if (this.settingsView.y < this.mapSelector.y + this.mapSelector.height){ // Make sure the lef side toolbox doesn't overlap with the map selector
+            this.settingsView.y = this.mapSelector.y + this.mapSelector.height + 15;
         }
-
-        this.zoomInput.x = this.toolBoxBackground.x + 5;
-        this.zoomInput.y = this.toolBoxBackground.y + 7.5;
-
-        this.gridCheckbox.x = this.zoomInput.x;
-        this.gridCheckbox.y = this.zoomInput.y + this.zoomInput.height + 6;
-
-        this.autoSaveCheckbox.x = this.zoomInput.x;
-        this.autoSaveCheckbox.y = this.gridCheckbox.y + this.gridCheckbox.height + 6;
-
-        this.qualityTilesCheckbox.x = this.zoomInput.x;
-        this.qualityTilesCheckbox.y = this.autoSaveCheckbox.y + this.autoSaveCheckbox.height + 6;
-
-        this.qualityObjectsCheckbox.x = this.zoomInput.x;
-        this.qualityObjectsCheckbox.y = this.qualityTilesCheckbox.y + this.qualityTilesCheckbox.height + 6;
-
-        this.drawTypeSwitch.x = this.zoomInput.x;
-        this.drawTypeSwitch.y = this.qualityObjectsCheckbox.y + this.qualityObjectsCheckbox.height + 6;
 
         this.drawElementsList.x = StageWidth - MapDrawElementListView.WIDTH - 15;
         if (this.backButton != null) {
@@ -728,7 +698,7 @@ public class MainView extends Sprite {
 
     private function onZoomInputChange(e:Event):void {
         var zoomLevel:int = int(this.zoomInput.inputText.text);
-        if (this.mapView.zoomLevel == zoomLevel) {
+        if (this.mapView == null || this.mapView.zoomLevel == zoomLevel) {
             return;
         }
 

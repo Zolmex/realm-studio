@@ -19,10 +19,10 @@
       }
     },
     "settings_background.png": {
-      "type": "3grid",
+      "type": "9grid",
       "rectangle": {
-        "y": 0,
-        "h": 124,
+        "y": 62,
+        "h": 1,
         "x": 36.5,
         "w": 1
       }
