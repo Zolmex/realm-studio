@@ -52,7 +52,7 @@ IMPORTANT: when changing the map size, it will always cut/add tiles on **all sid
 Map testing is only available by implementing the RealmEditorLib into your pserver's client, and making the necessary changes, there's not an easy way to do this right now so... if you know, you know. You can give it a try and follow these changes I made to the betterSkillys client to implement the map editor, it's an older version but the changes required are almost identical, only need to replace Event.CONNECT with RealmEditorTestEvent.TEST_CONNECT. 🫡
 
 ### Property filter
-Click the arrow to the right of the right-side panel (elements panel) to open the property filter list.
+Click the arrow to the left of the right-side panel (elements panel) to open the property filter list.
 
 Write the name of the property and the desired value for it (leave blank for *true*).
 Press "Add" to add it to the list.
