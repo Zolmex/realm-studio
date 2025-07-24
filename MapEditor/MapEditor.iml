@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="Flex" version="4">
-  <component name="FlexBuildConfigurationManager" active="RealmStudio">
+  <component name="FlexBuildConfigurationManager" active="MapEditor">
     <configurations>
-      <configuration name="RealmStudio" target-platform="Desktop" pure-as="true" main-class="Main" output-file="RealmStudio.swf" output-folder="$MODULE_DIR$/out/production/RealmStudio">
+      <configuration name="MapEditor" target-platform="Desktop" pure-as="true" output-type="Library" output-file="MapEditor.swc" output-folder="$MODULE_DIR$/out/production/MapEditor">
         <dependencies target-player="32.0">
           <entries>
-            <entry module-name="MapEditor" build-configuration-name="MapEditor">
+            <entry library-id="b271f8d5-45e2-47a2-8675-d64292271758">
               <dependency linkage="Merged" />
             </entry>
           </entries>
           <sdk name="AIRSDK_51.2.1" />
         </dependencies>
         <compiler-options />
-        <packaging-air-desktop use-generated-descriptor="false" custom-descriptor-path="$MODULE_DIR$/RealmStudio-descriptor.xml" package-file-name="RealmStudio" />
+        <packaging-air-desktop />
         <packaging-android />
         <packaging-ios />
       </configuration>
@@ -26,6 +26,16 @@
     </content>
     <orderEntry type="jdk" jdkName="AIRSDK_51.2.1" jdkType="Flex SDK Type (new)" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="MapEditor" exported="" />
+    <orderEntry type="module-library" exported="">
+      <library type="flex">
+        <properties id="b271f8d5-45e2-47a2-8675-d64292271758" />
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/libs" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/libs" recursive="false" />
+      </library>
+    </orderEntry>
   </component>
 </module>

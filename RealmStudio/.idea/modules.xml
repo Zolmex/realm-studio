@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../RealmEditorLib/RealmEditorLib.iml" filepath="$PROJECT_DIR$/../RealmEditorLib/RealmEditorLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../MapEditor/MapEditor.iml" filepath="$PROJECT_DIR$/../MapEditor/MapEditor.iml" />
       <module fileurl="file://$PROJECT_DIR$/RealmStudio.iml" filepath="$PROJECT_DIR$/RealmStudio.iml" />
     </modules>
   </component>
