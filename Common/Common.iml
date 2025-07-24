@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="Flex" version="4">
-  <component name="FlexBuildConfigurationManager" active="MapEditor">
+  <component name="FlexBuildConfigurationManager" active="Common">
     <configurations>
-      <configuration name="MapEditor" target-platform="Desktop" pure-as="true" output-type="Library" output-file="MapEditor.swc" output-folder="$MODULE_DIR$/out/production/MapEditor">
+      <configuration name="Common" target-platform="Desktop" pure-as="true" output-type="Library" output-file="Common.swc" output-folder="$MODULE_DIR$/out/production/Common">
         <dependencies target-player="32.0">
           <entries>
-            <entry library-id="b271f8d5-45e2-47a2-8675-d64292271758">
-              <dependency linkage="Merged" />
-            </entry>
-            <entry module-name="Common" build-configuration-name="Common">
+            <entry library-id="17153a87-f0da-4d65-8541-68cbe56d9e14">
               <dependency linkage="Merged" />
             </entry>
           </entries>
@@ -31,7 +28,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library" exported="">
       <library type="flex">
-        <properties id="b271f8d5-45e2-47a2-8675-d64292271758" />
+        <properties id="17153a87-f0da-4d65-8541-68cbe56d9e14" />
         <CLASSES>
           <root url="file://$MODULE_DIR$/libs" />
         </CLASSES>
@@ -40,6 +37,5 @@
         <jarDirectory url="file://$MODULE_DIR$/libs" recursive="false" />
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="Common" exported="" />
   </component>
 </module>
