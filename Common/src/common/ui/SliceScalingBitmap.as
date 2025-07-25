@@ -1,4 +1,4 @@
-package mapeditor.editor.ui.embed
+package common.ui
 {
 import flash.display.Bitmap;
 import flash.display.BitmapData;

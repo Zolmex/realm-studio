@@ -1,4 +1,7 @@
 package mapeditor.editor.ui {
+import common.ui.SliceScalingBitmap;
+import common.ui.TextureParser;
+
 import flash.display.Graphics;
 import flash.display.Shape;
 import flash.display.Sprite;
@@ -9,8 +12,6 @@ import flash.utils.Dictionary;
 import mapeditor.editor.MEEvent;
 import mapeditor.editor.ui.elements.SimpleScrollbar;
 import mapeditor.editor.ui.elements.SimpleText;
-import mapeditor.editor.ui.embed.SliceScalingBitmap;
-import mapeditor.editor.ui.embed.TextureParser;
 
 public class MapSelectorView extends Sprite {
 
@@ -171,6 +172,9 @@ public class MapSelectorView extends Sprite {
 }
 }
 
+import common.ui.SliceScalingBitmap;
+import common.ui.TextureParser;
+
 import flash.display.Bitmap;
 import flash.display.Sprite;
 import flash.events.Event;
@@ -183,8 +187,6 @@ import mapeditor.editor.ui.MapSelectorView;
 import mapeditor.editor.ui.MapView;
 import mapeditor.editor.ui.elements.SimpleText;
 import mapeditor.editor.ui.elements.TextTooltip;
-import mapeditor.editor.ui.embed.SliceScalingBitmap;
-import mapeditor.editor.ui.embed.TextureParser;
 
 class MapSelectorSlot extends Sprite {
 

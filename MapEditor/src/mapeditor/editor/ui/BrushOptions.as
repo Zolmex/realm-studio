@@ -1,11 +1,12 @@
 package mapeditor.editor.ui {
+import common.ui.SliceScalingBitmap;
+import common.ui.TextureParser;
+
 import flash.display.Sprite;
 import flash.events.Event;
 
 import mapeditor.editor.MEBrush;
 import mapeditor.editor.tools.METool;
-import mapeditor.editor.ui.embed.SliceScalingBitmap;
-import mapeditor.editor.ui.embed.TextureParser;
 
 public class BrushOptions extends Sprite {
 

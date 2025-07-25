@@ -1,4 +1,7 @@
 package mapeditor.editor.ui {
+import common.ui.SliceScalingBitmap;
+import common.ui.TextureParser;
+
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
@@ -7,8 +10,6 @@ import flash.utils.Dictionary;
 import mapeditor.editor.ui.elements.SimpleText;
 import mapeditor.editor.ui.elements.SimpleTextButton;
 import mapeditor.editor.ui.elements.SimpleTextInput;
-import mapeditor.editor.ui.embed.SliceScalingBitmap;
-import mapeditor.editor.ui.embed.TextureParser;
 
 public class ObjectFilterOptionsView extends Sprite {
 
@@ -170,6 +171,9 @@ public class ObjectFilterOptionsView extends Sprite {
 }
 }
 
+import common.ui.SliceScalingBitmap;
+import common.ui.TextureParser;
+
 import flash.display.Graphics;
 import flash.display.Sprite;
 import flash.events.Event;
@@ -178,8 +182,6 @@ import flash.events.MouseEvent;
 import mapeditor.editor.ui.Constants;
 import mapeditor.editor.ui.ObjectFilterOptionsView;
 import mapeditor.editor.ui.elements.SimpleText;
-import mapeditor.editor.ui.embed.SliceScalingBitmap;
-import mapeditor.editor.ui.embed.TextureParser;
 
 class FilterOption extends Sprite {
 

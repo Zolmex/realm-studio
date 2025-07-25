@@ -4,8 +4,8 @@ import common.assets.AssetLibrary;
 import common.assets.GroundLibrary;
 import common.assets.ObjectLibrary;
 import common.assets.RegionLibrary;
+import common.ui.TextureParser;
 
-import flash.display.BitmapData;
 import flash.display.Sprite;
 import flash.utils.Dictionary;
 
@@ -14,7 +14,7 @@ import mapeditor.editor.ui.Keybinds;
 import mapeditor.editor.ui.MainView;
 import mapeditor.editor.ui.embed.Cursors;
 import mapeditor.editor.ui.embed.EditorTools;
-import mapeditor.editor.ui.embed.TextureParser;
+import mapeditor.editor.ui.embed.UIAssets;
 
 public class EditorLoader {
 
@@ -57,7 +57,7 @@ public class EditorLoader {
             AssetLibrary.addImageSet("editorTools", new EditorTools().bitmapData, 16, 16);
         }
 
-        TextureParser.load();
+        TextureParser.load(new UIAssets.UI(), new UIAssets.UI_CONFIG(), new UIAssets.UI_SLICE_CONFIG(), "UI");
         Parameters.load();
         Keybinds.loadKeys();
 

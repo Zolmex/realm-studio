@@ -2,6 +2,7 @@ package mapeditor.editor.ui {
 import common.assets.GroundLibrary;
 import common.assets.ObjectLibrary;
 import common.assets.RegionLibrary;
+import common.ui.TextureParser;
 
 import flash.display.Bitmap;
 import flash.display.BitmapData;
@@ -11,7 +12,6 @@ import flash.events.MouseEvent;
 
 import mapeditor.editor.MEDrawType;
 import mapeditor.editor.ui.elements.DrawListTooltip;
-import mapeditor.editor.ui.embed.TextureParser;
 
 public class MapDrawElement extends Sprite {
 

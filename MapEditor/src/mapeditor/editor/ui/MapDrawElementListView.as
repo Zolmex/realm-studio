@@ -2,6 +2,8 @@ package mapeditor.editor.ui {
 import common.assets.GroundLibrary;
 import common.assets.ObjectLibrary;
 import common.assets.RegionLibrary;
+import common.ui.SliceScalingBitmap;
+import common.ui.TextureParser;
 
 import flash.display.Bitmap;
 import flash.display.Graphics;
@@ -16,8 +18,6 @@ import mapeditor.editor.ui.elements.IDrawElementFilter;
 import mapeditor.editor.ui.elements.SearchInputBox;
 import mapeditor.editor.ui.elements.SimpleScrollbar;
 import mapeditor.editor.ui.elements.SimpleText;
-import mapeditor.editor.ui.embed.SliceScalingBitmap;
-import mapeditor.editor.ui.embed.TextureParser;
 
 public class MapDrawElementListView extends Sprite {
 

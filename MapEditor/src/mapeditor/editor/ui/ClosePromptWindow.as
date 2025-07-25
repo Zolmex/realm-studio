@@ -1,4 +1,7 @@
 package mapeditor.editor.ui {
+import common.ui.SliceScalingBitmap;
+import common.ui.TextureParser;
+
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
@@ -6,8 +9,6 @@ import flash.events.MouseEvent;
 import mapeditor.editor.MEEvent;
 import mapeditor.editor.ui.elements.SimpleText;
 import mapeditor.editor.ui.elements.SimpleTextButton;
-import mapeditor.editor.ui.embed.SliceScalingBitmap;
-import mapeditor.editor.ui.embed.TextureParser;
 
 public class ClosePromptWindow extends Sprite {
 

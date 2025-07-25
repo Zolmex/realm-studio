@@ -1,4 +1,6 @@
 package mapeditor.editor.ui.elements {
+import common.ui.SliceScalingBitmap;
+import common.ui.TextureParser;
 import common.util.MoreColorUtil;
 
 import flash.display.Sprite;
@@ -7,8 +9,6 @@ import flash.events.MouseEvent;
 import flash.geom.ColorTransform;
 
 import mapeditor.editor.ui.Constants;
-import mapeditor.editor.ui.embed.SliceScalingBitmap;
-import mapeditor.editor.ui.embed.TextureParser;
 
 public class SimpleTextButton extends Sprite {
 

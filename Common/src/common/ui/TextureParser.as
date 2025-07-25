@@ -1,4 +1,4 @@
-package mapeditor.editor.ui.embed {
+package common.ui {
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.filesystem.File;
@@ -16,12 +16,12 @@ public class TextureParser {
 
     function TextureParser() {
         this.textures = new Dictionary();
-        this.registerTexture(new UIAssets.UI(), new UIAssets.UI_CONFIG(), new UIAssets.UI_SLICE_CONFIG(), "UI");
     }
 
-    public static function load():void {
+    public static function load(atlas:Bitmap, config:String, sliceRects:String, atlasName:String):void {
         if (instance == null) {
             instance = new TextureParser();
+            instance.registerTexture(atlas, config, sliceRects, atlasName);
         }
     }
 

@@ -1,13 +1,14 @@
 package mapeditor.editor.ui {
 import com.gskinner.motion.GTween;
 
+import common.ui.SliceScalingBitmap;
+import common.ui.TextureParser;
+
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
 
 import mapeditor.editor.ui.elements.SimpleText;
-import mapeditor.editor.ui.embed.SliceScalingBitmap;
-import mapeditor.editor.ui.embed.TextureParser;
 
 public class NotificationView extends Sprite {
 

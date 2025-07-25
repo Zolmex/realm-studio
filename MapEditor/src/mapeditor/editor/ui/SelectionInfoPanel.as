@@ -1,10 +1,11 @@
 package mapeditor.editor.ui {
+import common.ui.SliceScalingBitmap;
+import common.ui.TextureParser;
+
 import flash.display.Sprite;
 
 import mapeditor.editor.actions.data.MapSelectData;
 import mapeditor.editor.ui.elements.SimpleText;
-import mapeditor.editor.ui.embed.SliceScalingBitmap;
-import mapeditor.editor.ui.embed.TextureParser;
 
 public class SelectionInfoPanel extends Sprite {
 
