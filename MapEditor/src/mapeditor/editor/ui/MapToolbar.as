@@ -1,4 +1,6 @@
 package mapeditor.editor.ui {
+import common.util.MoreColorUtil;
+
 import flash.display.Bitmap;
 import flash.display.Sprite;
 import flash.events.Event;
@@ -8,7 +10,6 @@ import mapeditor.editor.ToolSwitchEvent;
 import mapeditor.editor.tools.METool;
 import mapeditor.editor.ui.elements.SimpleText;
 import mapeditor.editor.ui.embed.TextureParser;
-import mapeditor.util.MoreColorUtil;
 
 public class MapToolbar extends Sprite {
 

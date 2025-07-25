@@ -1,4 +1,6 @@
 package mapeditor.editor.tools {
+import common.util.IntPoint;
+
 import flash.utils.Dictionary;
 
 import mapeditor.editor.MEBrush;
@@ -9,7 +11,6 @@ import mapeditor.editor.MapTileData;
 import mapeditor.editor.actions.MapReplaceTileAction;
 import mapeditor.editor.ui.MainView;
 import mapeditor.editor.ui.TileMapView;
-import mapeditor.util.IntPoint;
 
 public class METool {
 

@@ -1,11 +1,12 @@
 package {
 
-import assets.AnimatedChars;
-import assets.AssetLibrary;
 import assets.AssetLoader;
-import assets.ground.GroundLibrary;
-import assets.objects.ObjectLibrary;
-import assets.regions.RegionLibrary;
+
+import common.assets.AnimatedChars;
+import common.assets.AssetLibrary;
+import common.assets.GroundLibrary;
+import common.assets.ObjectLibrary;
+import common.assets.RegionLibrary;
 
 import flash.desktop.NativeApplication;
 import flash.display.Sprite;
@@ -44,24 +45,23 @@ public class Main extends Sprite {
         stage.scaleMode = StageScaleMode.NO_SCALE;
         stage.align = StageAlign.TOP_LEFT;
 
-        Parameters.load();
-        Keybinds.loadKeys();
         AssetLoader.load();
 
         this.loadRealmEditor();
     }
 
     private function loadRealmEditor():void {
-        EditorLoader.loadAssets(
-                AssetLibrary.images_,
-                AssetLibrary.imageSets_,
-                AssetLibrary.imageLookup_
-        );
-        EditorLoader.loadAnimChars(AnimatedChars.nameMap_);
-        EditorLoader.loadGround(GroundLibrary.xmlLibrary_);
-        EditorLoader.loadObjects(ObjectLibrary.xmlLibrary_);
-        EditorLoader.loadRegions(RegionLibrary.xmlLibrary_);
-        this.editorView = EditorLoader.load(this);
+        // These methods are only required to use with a game client, AssetLibrary is shared in this standalone version
+//        EditorLoader.loadAssets(
+//                AssetLibrary.images_,
+//                AssetLibrary.imageSets_,
+//                AssetLibrary.imageLookup_
+//        );
+//        EditorLoader.loadAnimChars(AnimatedChars.nameMap_);
+//        EditorLoader.loadGround(GroundLibrary.xmlLibrary_);
+//        EditorLoader.loadObjects(ObjectLibrary.xmlLibrary_);
+//        EditorLoader.loadRegions(RegionLibrary.xmlLibrary_);
+        this.editorView = EditorLoader.load(this, true);
         this.editorView.addEventListener(Event.REMOVED_FROM_STAGE, onEditorExit);
         this.editorView.addEventListener(Event.CONNECT, onMapTest);
     }

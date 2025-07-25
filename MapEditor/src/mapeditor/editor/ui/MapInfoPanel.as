@@ -1,10 +1,11 @@
 package mapeditor.editor.ui {
+import common.assets.AssetLibrary;
+
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Sprite;
 import flash.geom.Matrix;
 
-import mapeditor.assets.AssetLibrary;
 import mapeditor.editor.ui.elements.SimpleText;
 import mapeditor.editor.ui.embed.SliceScalingBitmap;
 import mapeditor.editor.ui.embed.TextureParser;

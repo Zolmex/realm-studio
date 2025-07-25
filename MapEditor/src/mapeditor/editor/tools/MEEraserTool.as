@@ -1,4 +1,6 @@
 package mapeditor.editor.tools {
+import common.util.IntPoint;
+
 import mapeditor.editor.MEBrush;
 import mapeditor.editor.MEDrawType;
 import mapeditor.editor.MapHistory;
@@ -8,7 +10,6 @@ import mapeditor.editor.actions.MapReplaceTileAction;
 import mapeditor.editor.actions.data.MapSelectData;
 import mapeditor.editor.ui.MainView;
 import mapeditor.editor.ui.TileMapView;
-import mapeditor.util.IntPoint;
 
 public class MEEraserTool extends METool {
 

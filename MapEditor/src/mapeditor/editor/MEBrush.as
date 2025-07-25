@@ -1,8 +1,9 @@
 package mapeditor.editor {
+import common.util.IntPoint;
+
 import flash.events.Event;
 
 import mapeditor.editor.ui.MainView;
-import mapeditor.util.IntPoint;
 
 public class MEBrush {
 

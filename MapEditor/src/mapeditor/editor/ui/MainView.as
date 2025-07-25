@@ -1,4 +1,7 @@
 package mapeditor.editor.ui {
+import common.util.IntPoint;
+import common.util.TimedAction;
+
 import flash.desktop.NativeApplication;
 import flash.display.DisplayObject;
 import flash.display.NativeWindow;
@@ -30,8 +33,6 @@ import mapeditor.editor.ui.elements.SimpleCheckBox;
 import mapeditor.editor.ui.elements.SimpleTextButton;
 import mapeditor.editor.ui.elements.SimpleTextInput;
 import mapeditor.editor.ui.embed.Background;
-import mapeditor.util.IntPoint;
-import mapeditor.util.TimedAction;
 
 public class MainView extends Sprite {
 
@@ -98,7 +99,7 @@ public class MainView extends Sprite {
     public var qualityTiles:Boolean;
     public var qualityObjects:Boolean = true;
 
-    public function MainView(main:Sprite, embedded:Boolean) {
+    public function MainView(main:Sprite, standalone:Boolean) {
         Instance = this;
         Main = main;
         Main.stage.addEventListener(Event.RESIZE, this.onStageResize);
@@ -176,7 +177,7 @@ public class MainView extends Sprite {
         this.saveButton.addEventListener(MouseEvent.CLICK, this.onSaveClick);
         addChild(this.saveButton);
 
-        if (embedded) {
+        if (standalone) {
             this.backButton = new SimpleTextButton("Back");
             this.backButton.addEventListener(MouseEvent.CLICK, this.onBackClick);
             addChild(this.backButton);

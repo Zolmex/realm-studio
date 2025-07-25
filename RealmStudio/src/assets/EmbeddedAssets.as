@@ -1,6 +1,5 @@
 package assets
 {
-import assets.embed.EditorTools;
 import assets.embed.EmbeddedAssets_bigcubeEmbed_;
 import assets.embed.EmbeddedAssets_brokenPillarEmbed_;
 import assets.embed.EmbeddedAssets_candyColBrokenEmbed_;
@@ -34,7 +33,6 @@ import assets.embed.EmbeddedAssets_chars8x8rPetsKaratePenguin_;
 import assets.embed.EmbeddedAssets_cloningVatEmbed_;
 import assets.embed.EmbeddedAssets_crateEmbed_;
 import assets.embed.EmbeddedAssets_cubeEmbed_;
-import assets.embed.EmbeddedAssets_cursorsEmbed_;
 import assets.embed.EmbeddedAssets_dodecahedronEmbed_;
 import assets.embed.EmbeddedAssets_gasEmitter_;
 import assets.embed.EmbeddedAssets_icosahedronEmbed_;
@@ -164,8 +162,6 @@ public class EmbeddedAssets
       public static var outerMaskEmbed_:Class = EmbeddedAssets_outerMaskEmbed_;
       public static var innerP1MaskEmbed_:Class = EmbeddedAssets_innerP1MaskEmbed_;
       public static var innerP2MaskEmbed_:Class = EmbeddedAssets_innerP2MaskEmbed_;
-      public static var cursorsEmbed_:Class = EmbeddedAssets_cursorsEmbed_;
-      public static var editorToolsEmbed_:Class = EditorTools;
       private static var monsterTank1Embed_:Class = EmbeddedAssets_monsterTank1Embed_;
       private static var monsterTank2Embed_:Class = EmbeddedAssets_monsterTank2Embed_;
       private static var monsterTank3Embed_:Class = EmbeddedAssets_monsterTank3Embed_;

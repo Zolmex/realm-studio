@@ -1,8 +1,8 @@
 package engine3d {
+import common.util.ConversionUtil;
+
 import flash.display3D.Context3D;
 import flash.utils.ByteArray;
-
-import util.ConversionUtil;
 
 public class Model3D {
 

@@ -1,4 +1,6 @@
 package mapeditor.editor.ui.elements {
+import common.util.TextureRedrawer;
+
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.DisplayObject;
@@ -6,7 +8,6 @@ import flash.text.StyleSheet;
 
 import mapeditor.editor.MEDrawType;
 import mapeditor.editor.ui.Constants;
-import mapeditor.util.TextureRedrawer;
 
 public class DrawListTooltip extends Tooltip {
 

@@ -1,9 +1,10 @@
 package mapeditor.editor.tools {
+import common.util.IntPoint;
+
 import mapeditor.editor.MEBrush;
 import mapeditor.editor.MapHistory;
 import mapeditor.editor.MapTileData;
 import mapeditor.editor.ui.MainView;
-import mapeditor.util.IntPoint;
 
 public class MEPickerTool extends METool {
 

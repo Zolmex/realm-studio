@@ -1,4 +1,6 @@
 package mapeditor.editor.ui.elements {
+import common.assets.AssetLibrary;
+
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Graphics;
@@ -7,7 +9,6 @@ import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
 
-import mapeditor.assets.AssetLibrary;
 import mapeditor.editor.ui.Constants;
 import mapeditor.util.FilterUtil;
 

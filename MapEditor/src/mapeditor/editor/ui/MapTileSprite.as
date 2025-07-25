@@ -1,9 +1,10 @@
 package mapeditor.editor.ui {
+import common.assets.GroundLibrary;
+import common.assets.ObjectLibrary;
+import common.assets.RegionLibrary;
+
 import flash.display.BitmapData;
 
-import mapeditor.assets.GroundLibrary;
-import mapeditor.assets.ObjectLibrary;
-import mapeditor.assets.RegionLibrary;
 import mapeditor.editor.MapTileData;
 
 public class MapTileSprite { // Contains the texture information for each tile sprite

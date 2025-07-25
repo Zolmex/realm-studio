@@ -1,4 +1,6 @@
 package mapeditor.util {
+import common.util.MoreColorUtil;
+
 import flash.filters.ColorMatrixFilter;
 
 public class FilterUtil {

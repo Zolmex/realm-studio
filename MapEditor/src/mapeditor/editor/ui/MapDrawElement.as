@@ -1,13 +1,14 @@
 package mapeditor.editor.ui {
+import common.assets.GroundLibrary;
+import common.assets.ObjectLibrary;
+import common.assets.RegionLibrary;
+
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
 
-import mapeditor.assets.GroundLibrary;
-import mapeditor.assets.ObjectLibrary;
-import mapeditor.assets.RegionLibrary;
 import mapeditor.editor.MEDrawType;
 import mapeditor.editor.ui.elements.DrawListTooltip;
 import mapeditor.editor.ui.embed.TextureParser;

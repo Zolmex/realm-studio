@@ -1,4 +1,6 @@
 package mapeditor.editor.tools {
+import common.util.IntPoint;
+
 import flash.utils.Dictionary;
 
 import mapeditor.editor.MEBrush;
@@ -6,7 +8,6 @@ import mapeditor.editor.MapHistory;
 import mapeditor.editor.actions.MapActionSet;
 import mapeditor.editor.actions.MapReplaceTileAction;
 import mapeditor.editor.ui.MainView;
-import mapeditor.util.IntPoint;
 
 public class MEShapeTool extends METool {
 

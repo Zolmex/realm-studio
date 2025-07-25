@@ -1,10 +1,11 @@
 package mapeditor.editor.tools {
+import common.util.IntPoint;
+
 import mapeditor.editor.MapHistory;
 import mapeditor.editor.actions.MapDragAction;
 import mapeditor.editor.actions.MapSelectAction;
 import mapeditor.editor.actions.data.MapSelectData;
 import mapeditor.editor.ui.MainView;
-import mapeditor.util.IntPoint;
 
 public class MESelectTool extends METool {
 

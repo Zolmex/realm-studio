@@ -1,4 +1,6 @@
 package mapeditor.editor.tools {
+import common.util.IntPoint;
+
 import mapeditor.editor.MEBrush;
 import mapeditor.editor.MEDrawType;
 import mapeditor.editor.MapData;
@@ -8,7 +10,6 @@ import mapeditor.editor.actions.MapActionSet;
 import mapeditor.editor.actions.MapReplaceTileAction;
 import mapeditor.editor.ui.MainView;
 import mapeditor.editor.ui.TileMapView;
-import mapeditor.util.IntPoint;
 
 public class MEBucketTool extends METool {
 

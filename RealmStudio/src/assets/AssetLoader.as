@@ -1,7 +1,10 @@
 package assets {
-import assets.ground.GroundLibrary;
-import assets.objects.ObjectLibrary;
-import assets.regions.RegionLibrary;
+import common.assets.AnimatedChar;
+import common.assets.AnimatedChars;
+import common.assets.AssetLibrary;
+import common.assets.GroundLibrary;
+import common.assets.ObjectLibrary;
+import common.assets.RegionLibrary;
 
 import engine3d.Model3D;
 
@@ -58,8 +61,6 @@ public class AssetLoader {
         AssetLibrary.addImageSet("innerP1_mask", new EmbeddedAssets.innerP1MaskEmbed_().bitmapData, 4, 4);
         AssetLibrary.addImageSet("innerP2_mask", new EmbeddedAssets.innerP2MaskEmbed_().bitmapData, 4, 4);
         AssetLibrary.addImageSet("invisible", new BitmapData(8, 8, true, 0), 8, 8);
-        AssetLibrary.addImageSet("cursorsEmbed", new EmbeddedAssets.cursorsEmbed_().bitmapData, 32, 32);
-        AssetLibrary.addImageSet("editorTools", new EmbeddedAssets.editorToolsEmbed_().bitmapData, 16, 16);
     }
 
     private static function addAnimatedCharacters():void {

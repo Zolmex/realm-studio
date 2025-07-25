@@ -1,7 +1,8 @@
 package mapeditor.editor.tools {
+import common.util.IntPoint;
+
 import mapeditor.editor.MapHistory;
 import mapeditor.editor.ui.MainView;
-import mapeditor.util.IntPoint;
 
 public class MELineTool extends METool {
 

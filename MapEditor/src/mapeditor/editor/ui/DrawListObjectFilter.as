@@ -1,5 +1,6 @@
 package mapeditor.editor.ui {
-import mapeditor.assets.ObjectLibrary;
+import common.assets.ObjectLibrary;
+
 import mapeditor.editor.MEDrawType;
 import mapeditor.editor.ui.elements.IDrawElementFilter;
 

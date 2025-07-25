@@ -1,13 +1,14 @@
 package mapeditor {
+import common.assets.AnimatedChars;
+import common.assets.AssetLibrary;
+import common.assets.GroundLibrary;
+import common.assets.ObjectLibrary;
+import common.assets.RegionLibrary;
+
 import flash.display.BitmapData;
 import flash.display.Sprite;
 import flash.utils.Dictionary;
 
-import mapeditor.assets.AnimatedChars;
-import mapeditor.assets.AssetLibrary;
-import mapeditor.assets.GroundLibrary;
-import mapeditor.assets.ObjectLibrary;
-import mapeditor.assets.RegionLibrary;
 import mapeditor.editor.Parameters;
 import mapeditor.editor.ui.Keybinds;
 import mapeditor.editor.ui.MainView;
@@ -36,7 +37,6 @@ public class EditorLoader {
 
     public static function loadAssets(images:Dictionary, imageSets:Dictionary, imageLookup:Dictionary):void {
         AssetLibrary.load(images, imageSets, imageLookup);
-        AssetLibrary.addImageSet("invisible", new BitmapData(8, 8, true, 0), 8, 8);
         AssetLibrary.addImageSet("cursorsEmbed", new Cursors().bitmapData, 32, 32); // Editor assets
         AssetLibrary.addImageSet("editorTools", new EditorTools().bitmapData, 16, 16);
         readyCount++;
@@ -47,16 +47,21 @@ public class EditorLoader {
         readyCount++;
     }
 
-    public static function load(main:Sprite, embedded:Boolean = true):Sprite {
-        if (readyCount < 5){
+    public static function load(main:Sprite, standalone:Boolean):Sprite {
+        if (!standalone && readyCount < 5){
             throw new Error("RealmEditor: " + readyCount + " out of 5 asset libraries weren't loaded.");
+        }
+
+        if (standalone) { // Needed assets
+            AssetLibrary.addImageSet("cursorsEmbed", new Cursors().bitmapData, 32, 32); // Editor assets
+            AssetLibrary.addImageSet("editorTools", new EditorTools().bitmapData, 16, 16);
         }
 
         TextureParser.load();
         Parameters.load();
         Keybinds.loadKeys();
 
-        var view:MainView = new MainView(main, embedded);
+        var view:MainView = new MainView(main, standalone);
         main.addChild(view);
         return view;
     }

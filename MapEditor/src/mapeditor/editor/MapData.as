@@ -3,6 +3,11 @@ import com.brokenfunction.json.decodeJson;
 import com.brokenfunction.json.encodeJson;
 import com.hurlant.util.Base64;
 
+import common.assets.GroundLibrary;
+import common.assets.ObjectLibrary;
+import common.assets.RegionLibrary;
+import common.util.TimedAction;
+
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IOErrorEvent;
@@ -16,14 +21,10 @@ import flash.utils.ByteArray;
 import flash.utils.Dictionary;
 import flash.utils.Endian;
 
-import mapeditor.assets.GroundLibrary;
-import mapeditor.assets.ObjectLibrary;
-import mapeditor.assets.RegionLibrary;
 import mapeditor.editor.ui.MainView;
 import mapeditor.editor.ui.MapView;
 import mapeditor.editor.ui.TileMapView;
 import mapeditor.util.BinaryUtils;
-import mapeditor.util.TimedAction;
 
 public class MapData extends EventDispatcher {
 

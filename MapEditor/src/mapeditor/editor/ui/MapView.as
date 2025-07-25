@@ -1,4 +1,9 @@
 package mapeditor.editor.ui {
+import common.assets.GroundLibrary;
+import common.assets.ObjectLibrary;
+import common.assets.RegionLibrary;
+import common.util.IntPoint;
+
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Graphics;
@@ -8,9 +13,6 @@ import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
-import mapeditor.assets.GroundLibrary;
-import mapeditor.assets.ObjectLibrary;
-import mapeditor.assets.RegionLibrary;
 import mapeditor.editor.MEBrush;
 import mapeditor.editor.MEClipboard;
 import mapeditor.editor.MEDrawType;
@@ -23,7 +25,6 @@ import mapeditor.editor.actions.MapDragAction;
 import mapeditor.editor.actions.MapReplaceTileAction;
 import mapeditor.editor.actions.MapSelectAction;
 import mapeditor.editor.actions.data.MapSelectData;
-import mapeditor.util.IntPoint;
 
 public class MapView extends Sprite {
 
@@ -309,7 +310,7 @@ public class MapView extends Sprite {
 
                     if (texture != null) {
                         if (texture.width > size || texture.height > size) {
-                            var matrix:Matrix = new Matrix();
+                            matrix = new Matrix();
                             matrix.scale(size / texture.width, size / texture.height);
                             matrix.translate(xi * size, yi * size);
                             brushTexture.draw(texture, matrix);

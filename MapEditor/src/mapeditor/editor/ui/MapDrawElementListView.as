@@ -1,4 +1,8 @@
 package mapeditor.editor.ui {
+import common.assets.GroundLibrary;
+import common.assets.ObjectLibrary;
+import common.assets.RegionLibrary;
+
 import flash.display.Bitmap;
 import flash.display.Graphics;
 import flash.display.Shape;
@@ -7,9 +11,6 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.utils.Dictionary;
 
-import mapeditor.assets.GroundLibrary;
-import mapeditor.assets.ObjectLibrary;
-import mapeditor.assets.RegionLibrary;
 import mapeditor.editor.MEDrawType;
 import mapeditor.editor.ui.elements.IDrawElementFilter;
 import mapeditor.editor.ui.elements.SearchInputBox;

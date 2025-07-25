@@ -1,10 +1,11 @@
 package mapeditor.editor.ui.elements {
+import common.util.MoreColorUtil;
+
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
 
 import mapeditor.editor.ui.Constants;
-import mapeditor.util.MoreColorUtil;
 
 public class SimpleOkButton extends Sprite {
 

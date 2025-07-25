@@ -1,13 +1,14 @@
 package mapeditor.editor.ui {
+import common.assets.GroundLibrary;
+import common.assets.ObjectLibrary;
+import common.assets.RegionLibrary;
+
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Sprite;
 import flash.geom.Matrix;
 import flash.geom.Rectangle;
 
-import mapeditor.assets.GroundLibrary;
-import mapeditor.assets.ObjectLibrary;
-import mapeditor.assets.RegionLibrary;
 import mapeditor.editor.MapTileData;
 import mapeditor.editor.ui.elements.SimpleText;
 import mapeditor.editor.ui.embed.SliceScalingBitmap;
