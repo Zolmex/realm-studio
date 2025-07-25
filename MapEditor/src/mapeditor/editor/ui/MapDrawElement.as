@@ -1,4 +1,5 @@
 package mapeditor.editor.ui {
+import common.Global;
 import common.assets.GroundLibrary;
 import common.assets.ObjectLibrary;
 import common.assets.RegionLibrary;
@@ -60,7 +61,7 @@ public class MapDrawElement extends Sprite {
         }
 
         this.tooltip = new DrawListTooltip(this, this.texture.bitmapData, xml, this.drawType);
-        MainView.Main.stage.addChild(this.tooltip);
+        Global.Main.stage.addChild(this.tooltip);
     }
 }
 }

@@ -1,14 +1,15 @@
 package mapeditor.editor.ui {
 import com.gskinner.motion.GTween;
 
+import common.Global;
 import common.ui.SliceScalingBitmap;
 import common.ui.TextureParser;
+import common.ui.text.SimpleText;
+import common.util.Constants;
 
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
-
-import mapeditor.editor.ui.elements.SimpleText;
 
 public class NotificationView extends Sprite {
 
@@ -49,7 +50,7 @@ public class NotificationView extends Sprite {
     }
 
     public function updatePosition():void {
-        this.x = (MainView.StageWidth - this.background.width) / 2;
+        this.x = (Global.StageWidth - this.background.width) / 2;
         this.y = 60;
     }
 

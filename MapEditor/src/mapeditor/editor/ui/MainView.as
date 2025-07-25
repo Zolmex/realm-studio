@@ -1,4 +1,11 @@
 package mapeditor.editor.ui {
+import common.Global;
+import common.ui.elements.MultiOptionalSwitch;
+import common.ui.elements.SimpleCheckBox;
+import common.ui.elements.SimpleTextButton;
+import common.ui.elements.SimpleTextInput;
+import common.ui.embed.Background;
+import common.util.Constants;
 import common.util.IntPoint;
 import common.util.TimedAction;
 
@@ -28,21 +35,11 @@ import mapeditor.editor.actions.data.MapSelectData;
 import mapeditor.editor.tools.MEEraserTool;
 import mapeditor.editor.tools.MESelectTool;
 import mapeditor.editor.tools.METool;
-import mapeditor.editor.ui.elements.MultiOptionalSwitch;
-import mapeditor.editor.ui.elements.SimpleCheckBox;
-import mapeditor.editor.ui.elements.SimpleTextButton;
-import mapeditor.editor.ui.elements.SimpleTextInput;
-import mapeditor.editor.ui.embed.Background;
 
 public class MainView extends Sprite {
 
     private static const MAX_ZOOM:Number = 1000.0;
     public static var Instance:MainView;
-    public static var Main:Sprite;
-    public static var StageWidth:int = 800;
-    public static var StageHeight:int = 600;
-    public static var ScaleX:Number;
-    public static var ScaleY:Number;
 
     private var mapSelector:MapSelectorView;
     public var mapViewContainer:MapViewContainer;
@@ -101,12 +98,8 @@ public class MainView extends Sprite {
 
     public function MainView(main:Sprite, standalone:Boolean) {
         Instance = this;
-        Main = main;
-        Main.stage.addEventListener(Event.RESIZE, this.onStageResize);
-        StageWidth = Main.stage.stageWidth;
-        StageHeight = Main.stage.stageHeight;
-        ScaleX = Main.stage.stageWidth / 800;
-        ScaleY = Main.stage.stageHeight / 600;
+        Global.Setup(main);
+        Global.Main.stage.addEventListener(Event.RESIZE, this.onStageResize);
 
         this.userBrush = new MEBrush(this, MEDrawType.GROUND, 0);
         this.clipBoard = new MEClipboard();
@@ -220,10 +213,10 @@ public class MainView extends Sprite {
         this.tileHotkeys.addEventListener(MEEvent.TILE_HOTKEY_SWITCH, this.onTileHotkey);
         addChild(this.tileHotkeys);
 
-        Main.stage.addEventListener(Event.ENTER_FRAME, this.update);
-        Main.stage.addEventListener(MouseEvent.MOUSE_WHEEL, this.onMouseWheel);
-        Main.stage.addEventListener(Event.RESIZE, this.onStageResize);
-        Main.stage.addEventListener(Event.REMOVED_FROM_STAGE, this.onRemovedFromStage);
+        Global.Main.stage.addEventListener(Event.ENTER_FRAME, this.update);
+        Global.Main.stage.addEventListener(MouseEvent.MOUSE_WHEEL, this.onMouseWheel);
+        Global.Main.stage.addEventListener(Event.RESIZE, this.onStageResize);
+        Global.Main.stage.addEventListener(Event.REMOVED_FROM_STAGE, this.onRemovedFromStage);
         this.addEventListener(MEEvent.EXIT_EDITOR, this.onRemovedFromStage);
         this.window.addEventListener(Event.CLOSING, this.onExiting); // Closing the window
 
@@ -260,8 +253,8 @@ public class MainView extends Sprite {
     }
 
     private function updateScale():void {
-        this.background.scaleX = ScaleX;
-        this.background.scaleY = ScaleY;
+        this.background.scaleX = Global.ScaleX;
+        this.background.scaleY = Global.ScaleY;
     }
 
     public function updatePositions():void {
@@ -277,7 +270,7 @@ public class MainView extends Sprite {
         this.saveButton.y = this.loadButton.y;
 
         if (this.backButton != null) {
-            this.backButton.x = StageWidth - this.backButton.width - 10;
+            this.backButton.x = Global.StageWidth - this.backButton.width - 10;
             this.backButton.y = this.loadButton.y;
         }
 
@@ -291,15 +284,15 @@ public class MainView extends Sprite {
         this.mapSelector.y = this.loadButton.y + this.loadButton.height + 10;
 
         this.mapInfoPanel.x = 19;
-        this.mapInfoPanel.y = StageHeight - this.mapInfoPanel.height - 15;
+        this.mapInfoPanel.y = Global.StageHeight - this.mapInfoPanel.height - 15;
 
         this.settingsView.x = 15;
-        this.settingsView.y = (StageHeight - this.settingsView.height) / 2;
+        this.settingsView.y = (Global.StageHeight - this.settingsView.height) / 2;
         if (this.settingsView.y < this.mapSelector.y + this.mapSelector.height){ // Make sure the lef side toolbox doesn't overlap with the map selector
             this.settingsView.y = this.mapSelector.y + this.mapSelector.height + 15;
         }
 
-        this.drawElementsList.x = StageWidth - MapDrawElementListView.WIDTH - 15;
+        this.drawElementsList.x = Global.StageWidth - MapDrawElementListView.WIDTH - 15;
         if (this.backButton != null) {
             this.drawElementsList.y = this.backButton.y + this.backButton.height + 15;
         } else {
@@ -307,13 +300,13 @@ public class MainView extends Sprite {
         }
 
         this.tileInfoPanel.x = this.drawElementsList.x - this.tileInfoPanel.width - 15;
-        this.tileInfoPanel.y = StageHeight - this.tileInfoPanel.height - 15;
+        this.tileInfoPanel.y = Global.StageHeight - this.tileInfoPanel.height - 15;
 
         this.selectionInfoPanel.x = this.tileInfoPanel.x - this.selectionInfoPanel.width - 5;
-        this.selectionInfoPanel.y = StageHeight - this.selectionInfoPanel.height - 15;
+        this.selectionInfoPanel.y = Global.StageHeight - this.selectionInfoPanel.height - 15;
 
         this.toolBar.x = this.drawElementsList.x - this.toolBar.width + 1;
-        this.toolBar.y = (StageHeight - this.toolBar.height) / 2;
+        this.toolBar.y = (Global.StageHeight - this.toolBar.height) / 2;
 
         this.objectFilterView.x = this.drawElementsList.x - 20;
         this.objectFilterView.y = this.drawElementsList.y;
@@ -324,35 +317,35 @@ public class MainView extends Sprite {
         this.tileHotkeys.y = this.toolBar.y - this.tileHotkeys.height - 8;
 
         if (this.mapView) {
-            this.mapView.x = (StageWidth - (this.mapData.mapWidth * TileMapView.TILE_SIZE) * this.mapView.scaleX) / 2;
-            this.mapView.y = (StageHeight - (this.mapData.mapHeight * TileMapView.TILE_SIZE) * this.mapView.scaleY) / 2;
+            this.mapView.x = (Global.StageWidth - (this.mapData.mapWidth * TileMapView.TILE_SIZE) * this.mapView.scaleX) / 2;
+            this.mapView.y = (Global.StageHeight - (this.mapData.mapHeight * TileMapView.TILE_SIZE) * this.mapView.scaleY) / 2;
             this.mapView.x += this.mapView.mapOffset.x_ * this.mapView.zoomLevel / MAX_ZOOM;
             this.mapView.y += this.mapView.mapOffset.y_ * this.mapView.zoomLevel / MAX_ZOOM;
         }
 
         if (this.mapCreateWindow != null && this.mapCreateWindow.visible) {
-            this.mapCreateWindow.x = (StageWidth - this.mapCreateWindow.width) / 2;
-            this.mapCreateWindow.y = (StageHeight - this.mapCreateWindow.height) / 2;
+            this.mapCreateWindow.x = (Global.StageWidth - this.mapCreateWindow.width) / 2;
+            this.mapCreateWindow.y = (Global.StageHeight - this.mapCreateWindow.height) / 2;
         }
 
         if (this.editNameView != null && this.editNameView.visible) {
-            this.editNameView.x = (StageWidth - this.editNameView.width) / 2;
-            this.editNameView.y = (StageHeight - this.editNameView.height) / 2;
+            this.editNameView.x = (Global.StageWidth - this.editNameView.width) / 2;
+            this.editNameView.y = (Global.StageHeight - this.editNameView.height) / 2;
         }
 
         if (this.debugView != null && this.debugView.visible) {
             this.debugView.x = 10;
-            this.debugView.y = StageHeight - this.debugView.height - 10;
+            this.debugView.y = Global.StageHeight - this.debugView.height - 10;
         }
 
         if (this.closePrompt != null && this.closePrompt.visible) {
-            this.closePrompt.x = (StageWidth - this.closePrompt.width) / 2;
-            this.closePrompt.y = (StageHeight - this.closePrompt.height) / 2;
+            this.closePrompt.x = (Global.StageWidth - this.closePrompt.width) / 2;
+            this.closePrompt.y = (Global.StageHeight - this.closePrompt.height) / 2;
         }
 
         if (this.mapDimensionsWindow != null && this.mapDimensionsWindow.visible) {
-            this.mapDimensionsWindow.x = (StageWidth - this.mapDimensionsWindow.width) / 2;
-            this.mapDimensionsWindow.y = (StageHeight - this.mapDimensionsWindow.height) / 2;
+            this.mapDimensionsWindow.x = (Global.StageWidth - this.mapDimensionsWindow.width) / 2;
+            this.mapDimensionsWindow.y = (Global.StageHeight - this.mapDimensionsWindow.height) / 2;
         }
     }
 
@@ -377,8 +370,8 @@ public class MainView extends Sprite {
 
         if (this.mapView.zoomLevel != zoomLevel) {
             this.mapView.zoomLevel = zoomLevel;
-            var deltaX:Number = StageWidth / 2 - Main.stage.mouseX; // Figure out how far from the middle the mouse is
-            var deltaY:Number = StageHeight / 2 - Main.stage.mouseY;
+            var deltaX:Number = Global.StageWidth / 2 - Global.Main.stage.mouseX; // Figure out how far from the middle the mouse is
+            var deltaY:Number = Global.StageHeight / 2 - Global.Main.stage.mouseY;
             if (e.delta < 0) { // Invert the order if we're zooming out
                 deltaX *= -1;
                 deltaY *= -1;
@@ -393,11 +386,6 @@ public class MainView extends Sprite {
     }
 
     private function onStageResize(e:Event):void {
-        StageWidth = Main.stage.stageWidth;
-        StageHeight = Main.stage.stageHeight;
-        ScaleX = Main.stage.stageWidth / 800;
-        ScaleY = Main.stage.stageHeight / 600;
-
         this.updateScale();
         this.updatePositions();
 
@@ -406,10 +394,10 @@ public class MainView extends Sprite {
 
     private function onRemovedFromStage(e:Event):void {
         this.inputHandler.clear();
-        Main.stage.removeEventListener(Event.ENTER_FRAME, this.update);
-        Main.stage.removeEventListener(MouseEvent.MOUSE_WHEEL, this.onMouseWheel);
-        Main.stage.removeEventListener(Event.RESIZE, this.onStageResize);
-        Main.stage.removeEventListener(Event.REMOVED_FROM_STAGE, this.onRemovedFromStage);
+        Global.Main.stage.removeEventListener(Event.ENTER_FRAME, this.update);
+        Global.Main.stage.removeEventListener(MouseEvent.MOUSE_WHEEL, this.onMouseWheel);
+        Global.Main.stage.removeEventListener(Event.RESIZE, this.onStageResize);
+        Global.Main.stage.removeEventListener(Event.REMOVED_FROM_STAGE, this.onRemovedFromStage);
         this.window.removeEventListener(Event.CLOSING, this.onExiting);
     }
 
@@ -468,8 +456,8 @@ public class MainView extends Sprite {
 
         if (this.closePrompt == null) {
             this.closePrompt = new ClosePromptWindow();
-            this.closePrompt.x = (StageWidth - this.closePrompt.width) / 2;
-            this.closePrompt.y = (StageHeight - this.closePrompt.height) / 2;
+            this.closePrompt.x = (Global.StageWidth - this.closePrompt.width) / 2;
+            this.closePrompt.y = (Global.StageHeight - this.closePrompt.height) / 2;
             this.closePrompt.addEventListener(MEEvent.CLOSE_NO_SAVE, onExit);
             addChild(this.closePrompt);
         } else {
@@ -498,8 +486,8 @@ public class MainView extends Sprite {
     private function onNewClick(e:Event):void {
         if (this.mapCreateWindow == null) {
             this.mapCreateWindow = new CreateMapWindow(); // Window where user inputs name, width and height of the map
-            this.mapCreateWindow.x = (StageWidth - this.mapCreateWindow.width) / 2;
-            this.mapCreateWindow.y = (StageHeight - this.mapCreateWindow.height) / 2;
+            this.mapCreateWindow.x = (Global.StageWidth - this.mapCreateWindow.width) / 2;
+            this.mapCreateWindow.y = (Global.StageHeight - this.mapCreateWindow.height) / 2;
             this.mapCreateWindow.addEventListener(MEEvent.MAP_CREATE, this.onMapCreate); // Dispatched when user clicks OK
             addChild(this.mapCreateWindow);
         } else {
@@ -753,20 +741,20 @@ public class MainView extends Sprite {
         }
 
         if (this.lastMousePos == null) {
-            this.lastMousePos = new Point(Main.stage.mouseX, Main.stage.mouseY);
+            this.lastMousePos = new Point(Global.Main.stage.mouseX, Global.Main.stage.mouseY);
         }
 
         this.dragMap();
     }
 
     private function dragMap():void {
-        var deltaX:Number = Main.stage.mouseX - this.lastMousePos.x;
-        var deltaY:Number = Main.stage.mouseY - this.lastMousePos.y;
+        var deltaX:Number = Global.Main.stage.mouseX - this.lastMousePos.x;
+        var deltaY:Number = Global.Main.stage.mouseY - this.lastMousePos.y;
         var zoom:Number = Math.max(1, Math.min(MAX_ZOOM, MAX_ZOOM / this.mapView.zoomLevel));
         this.mapView.mapOffset.x_ += deltaX * zoom;
         this.mapView.mapOffset.y_ += deltaY * zoom;
-        this.lastMousePos.x = Main.stage.mouseX;
-        this.lastMousePos.y = Main.stage.mouseY;
+        this.lastMousePos.x = Global.Main.stage.mouseX;
+        this.lastMousePos.y = Global.Main.stage.mouseY;
         this.updatePositions();
     }
 
@@ -817,8 +805,8 @@ public class MainView extends Sprite {
     public function showEditNameView(x:int, y:int, objName:String):void {
         if (this.editNameView == null) {
             this.editNameView = new EditTileNameView(x, y, objName);
-            this.editNameView.x = (StageWidth - this.editNameView.width) / 2;
-            this.editNameView.y = (StageHeight - this.editNameView.height) / 2;
+            this.editNameView.x = (Global.StageWidth - this.editNameView.width) / 2;
+            this.editNameView.y = (Global.StageHeight - this.editNameView.height) / 2;
             this.editNameView.addEventListener(MEEvent.EDIT_OBJ_NAME, this.onEditName);
             addChild(this.editNameView);
         } else {
@@ -894,8 +882,8 @@ public class MainView extends Sprite {
             return null;
         }
 
-        var mouseX:Number = Main.stage.mouseX;
-        var mouseY:Number = Main.stage.mouseY;
+        var mouseX:Number = Global.Main.stage.mouseX;
+        var mouseY:Number = Global.Main.stage.mouseY;
         var x:int = (mouseX - this.mapView.x) / (TileMapView.TILE_SIZE * this.mapView.scaleX);
         var y:int = (mouseY - this.mapView.y) / (TileMapView.TILE_SIZE * this.mapView.scaleY);
         if (x < 0 || y < 0 || x >= this.mapData.mapWidth || y >= this.mapData.mapHeight) {
@@ -1144,8 +1132,8 @@ public class MainView extends Sprite {
 
         if (this.mapDimensionsWindow == null) {
             this.mapDimensionsWindow = new MapDimensionsWindow();
-            this.mapDimensionsWindow.x = (StageWidth - this.mapDimensionsWindow.width) / 2;
-            this.mapDimensionsWindow.y = (StageHeight - this.mapDimensionsWindow.height) / 2;
+            this.mapDimensionsWindow.x = (Global.StageWidth - this.mapDimensionsWindow.width) / 2;
+            this.mapDimensionsWindow.y = (Global.StageHeight - this.mapDimensionsWindow.height) / 2;
             this.mapDimensionsWindow.addEventListener(MEEvent.MAP_DIMENSIONS_CHANGE, this.onMapDimensionsChange);
             addChild(this.mapDimensionsWindow);
         } else {

@@ -1,10 +1,11 @@
 package mapeditor.editor.ui {
 
+import common.ui.elements.ChoiceBox;
+import common.ui.elements.ChoiceElement;
+
 import flash.events.Event;
 
 import mapeditor.editor.MEBrush;
-import mapeditor.editor.ui.elements.ChoiceBox;
-import mapeditor.editor.ui.elements.ChoiceElement;
 
 public class BrushShapePanel extends BrushOptionPanel {
 

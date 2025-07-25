@@ -1,8 +1,9 @@
 package mapeditor.editor.ui {
+import common.ui.elements.SimplestCheckBox;
+
 import flash.events.Event;
 
 import mapeditor.editor.MEBrush;
-import mapeditor.editor.ui.elements.SimplestCheckBox;
 
 public class BrushReplacePanel extends BrushOptionPanel {
 

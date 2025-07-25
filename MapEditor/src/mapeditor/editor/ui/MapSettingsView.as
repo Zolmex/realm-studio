@@ -1,10 +1,9 @@
 package mapeditor.editor.ui {
 import common.ui.SliceScalingBitmap;
 import common.ui.TextureParser;
+import common.ui.text.SimpleText;
 
 import flash.display.Sprite;
-
-import mapeditor.editor.ui.elements.SimpleText;
 
 public class MapSettingsView extends Sprite {
 

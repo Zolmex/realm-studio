@@ -11,6 +11,9 @@
             <entry module-name="Common" build-configuration-name="Common">
               <dependency linkage="Merged" />
             </entry>
+            <entry module-name="AssetLab" build-configuration-name="AssetLab">
+              <dependency linkage="Merged" />
+            </entry>
           </entries>
           <sdk name="AIRSDK_51.2.1" />
         </dependencies>
@@ -31,5 +34,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="MapEditor" exported="" />
     <orderEntry type="module" module-name="Common" exported="" />
+    <orderEntry type="module" module-name="AssetLab" exported="" />
   </component>
 </module>

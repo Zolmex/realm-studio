@@ -1,4 +1,6 @@
 package mapeditor.editor.ui {
+import common.util.Constants;
+
 import flash.display.Graphics;
 import flash.display.Shape;
 import flash.display.Sprite;

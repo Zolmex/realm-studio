@@ -1,20 +1,20 @@
 package mapeditor {
+import common.Parameters;
 import common.assets.AnimatedChars;
 import common.assets.AssetLibrary;
 import common.assets.GroundLibrary;
 import common.assets.ObjectLibrary;
 import common.assets.RegionLibrary;
 import common.ui.TextureParser;
+import common.ui.embed.UIAssets;
 
 import flash.display.Sprite;
 import flash.utils.Dictionary;
 
-import mapeditor.editor.Parameters;
 import mapeditor.editor.ui.Keybinds;
 import mapeditor.editor.ui.MainView;
 import mapeditor.editor.ui.embed.Cursors;
 import mapeditor.editor.ui.embed.EditorTools;
-import mapeditor.editor.ui.embed.UIAssets;
 
 public class EditorLoader {
 

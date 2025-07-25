@@ -1,15 +1,15 @@
 package mapeditor.editor.ui {
 import common.ui.SliceScalingBitmap;
 import common.ui.TextureParser;
+import common.ui.elements.SimpleTextButton;
+import common.ui.elements.SimpleTextInput;
+import common.ui.text.SimpleText;
+import common.util.Constants;
 
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.utils.Dictionary;
-
-import mapeditor.editor.ui.elements.SimpleText;
-import mapeditor.editor.ui.elements.SimpleTextButton;
-import mapeditor.editor.ui.elements.SimpleTextInput;
 
 public class ObjectFilterOptionsView extends Sprite {
 
@@ -173,15 +173,15 @@ public class ObjectFilterOptionsView extends Sprite {
 
 import common.ui.SliceScalingBitmap;
 import common.ui.TextureParser;
+import common.ui.text.SimpleText;
+import common.util.Constants;
 
 import flash.display.Graphics;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
 
-import mapeditor.editor.ui.Constants;
 import mapeditor.editor.ui.ObjectFilterOptionsView;
-import mapeditor.editor.ui.elements.SimpleText;
 
 class FilterOption extends Sprite {
 

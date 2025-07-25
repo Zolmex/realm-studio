@@ -1,8 +1,9 @@
 package mapeditor.editor.ui {
+import common.ui.text.SimpleText;
+
 import flash.events.Event;
 
 import mapeditor.editor.MEBrush;
-import mapeditor.editor.ui.elements.SimpleText;
 
 public class BrushChancePanel extends BrushOptionPanel {
 

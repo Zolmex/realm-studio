@@ -1,14 +1,14 @@
 package mapeditor.editor.ui {
 import common.ui.SliceScalingBitmap;
 import common.ui.TextureParser;
+import common.ui.elements.SimpleCloseButton;
+import common.ui.elements.SimpleOkButton;
+import common.ui.text.SimpleText;
+import common.util.Constants;
 
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
-
-import mapeditor.editor.ui.elements.SimpleCloseButton;
-import mapeditor.editor.ui.elements.SimpleOkButton;
-import mapeditor.editor.ui.elements.SimpleText;
 
 public class MEWindow extends Sprite {
 

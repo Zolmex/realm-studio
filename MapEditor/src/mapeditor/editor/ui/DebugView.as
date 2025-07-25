@@ -1,10 +1,10 @@
 package mapeditor.editor.ui {
+import common.ui.text.SimpleText;
+
 import flash.display.Graphics;
 import flash.display.Shape;
 import flash.display.Sprite;
 import flash.system.System;
-
-import mapeditor.editor.ui.elements.SimpleText;
 
 public class DebugView extends Sprite {
 

@@ -1,4 +1,6 @@
 package mapeditor.editor.ui {
+import common.Global;
+
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.KeyboardEvent;
@@ -21,14 +23,14 @@ public class MapInputHandler extends EventDispatcher {
 
     public function MapInputHandler(view:MainView) {
         this.view = view;
-        MainView.Main.stage.addEventListener(KeyboardEvent.KEY_UP, this.onKeyUp); // Keyboard events should be caught on the stage
-        MainView.Main.stage.addEventListener(KeyboardEvent.KEY_DOWN, this.onKeyDown);
+        Global.Main.stage.addEventListener(KeyboardEvent.KEY_UP, this.onKeyUp); // Keyboard events should be caught on the stage
+        Global.Main.stage.addEventListener(KeyboardEvent.KEY_DOWN, this.onKeyDown);
         view.mapViewContainer.addEventListener(MouseEvent.ROLL_OVER, this.onRollOver);
     }
 
     public function clear():void{
-        MainView.Main.stage.removeEventListener(KeyboardEvent.KEY_UP, this.onKeyUp);
-        MainView.Main.stage.removeEventListener(KeyboardEvent.KEY_DOWN, this.onKeyDown);
+        Global.Main.stage.removeEventListener(KeyboardEvent.KEY_UP, this.onKeyUp);
+        Global.Main.stage.removeEventListener(KeyboardEvent.KEY_DOWN, this.onKeyDown);
         this.onRollOut(null);
     }
 

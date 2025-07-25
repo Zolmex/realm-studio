@@ -4,6 +4,8 @@ import common.assets.ObjectLibrary;
 import common.assets.RegionLibrary;
 import common.ui.SliceScalingBitmap;
 import common.ui.TextureParser;
+import common.ui.text.SimpleText;
+import common.util.Constants;
 
 import flash.display.Bitmap;
 import flash.display.BitmapData;
@@ -12,7 +14,6 @@ import flash.geom.Matrix;
 import flash.geom.Rectangle;
 
 import mapeditor.editor.MapTileData;
-import mapeditor.editor.ui.elements.SimpleText;
 
 public class TileInfoPanel extends Sprite {
 

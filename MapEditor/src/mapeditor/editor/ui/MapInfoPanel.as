@@ -2,13 +2,13 @@ package mapeditor.editor.ui {
 import common.assets.AssetLibrary;
 import common.ui.SliceScalingBitmap;
 import common.ui.TextureParser;
+import common.ui.text.SimpleText;
+import common.util.Constants;
 
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Sprite;
 import flash.geom.Matrix;
-
-import mapeditor.editor.ui.elements.SimpleText;
 
 public class MapInfoPanel extends Sprite {
 

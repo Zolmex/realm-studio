@@ -1,4 +1,10 @@
 package mapeditor.editor.ui {
+import common.ui.elements.SimpleCloseButton;
+import common.ui.elements.SimpleInputBox;
+import common.ui.elements.SimpleOkButton;
+import common.ui.text.SimpleText;
+import common.util.Constants;
+
 import flash.display.Graphics;
 import flash.display.Shape;
 import flash.display.Sprite;
@@ -6,10 +12,6 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 
 import mapeditor.editor.MEEvent;
-import mapeditor.editor.ui.elements.SimpleCloseButton;
-import mapeditor.editor.ui.elements.SimpleInputBox;
-import mapeditor.editor.ui.elements.SimpleOkButton;
-import mapeditor.editor.ui.elements.SimpleText;
 
 public class EditTileNameView extends Sprite {
 

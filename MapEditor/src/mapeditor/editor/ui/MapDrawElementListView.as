@@ -1,9 +1,14 @@
 package mapeditor.editor.ui {
+import common.Global;
 import common.assets.GroundLibrary;
 import common.assets.ObjectLibrary;
 import common.assets.RegionLibrary;
 import common.ui.SliceScalingBitmap;
 import common.ui.TextureParser;
+import common.ui.elements.SearchInputBox;
+import common.ui.elements.SimpleScrollbar;
+import common.ui.text.SimpleText;
+import common.util.Constants;
 
 import flash.display.Bitmap;
 import flash.display.Graphics;
@@ -15,9 +20,6 @@ import flash.utils.Dictionary;
 
 import mapeditor.editor.MEDrawType;
 import mapeditor.editor.ui.elements.IDrawElementFilter;
-import mapeditor.editor.ui.elements.SearchInputBox;
-import mapeditor.editor.ui.elements.SimpleScrollbar;
-import mapeditor.editor.ui.elements.SimpleText;
 
 public class MapDrawElementListView extends Sprite {
 
@@ -42,7 +44,7 @@ public class MapDrawElementListView extends Sprite {
     private var objectFilter:DrawListObjectFilter;
 
     public function MapDrawElementListView() {
-        this.totalHeight = MainView.StageHeight - 80;
+        this.totalHeight = Global.StageHeight - 80;
 
         this.elementFilters = new Vector.<IDrawElementFilter>();
         this.searchFilter = new DrawListSearchFilter();
@@ -235,7 +237,7 @@ public class MapDrawElementListView extends Sprite {
     }
 
     public function onScreenResize():void {
-        this.totalHeight = MainView.StageHeight - 80;
+        this.totalHeight = Global.StageHeight - 80;
 
         this.resizeBackground();
         this.fixListPosition();

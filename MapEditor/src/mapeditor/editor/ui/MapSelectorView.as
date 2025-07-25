@@ -1,6 +1,9 @@
 package mapeditor.editor.ui {
 import common.ui.SliceScalingBitmap;
 import common.ui.TextureParser;
+import common.ui.elements.SimpleScrollbar;
+import common.ui.text.SimpleText;
+import common.util.Constants;
 
 import flash.display.Graphics;
 import flash.display.Shape;
@@ -10,8 +13,6 @@ import flash.events.MouseEvent;
 import flash.utils.Dictionary;
 
 import mapeditor.editor.MEEvent;
-import mapeditor.editor.ui.elements.SimpleScrollbar;
-import mapeditor.editor.ui.elements.SimpleText;
 
 public class MapSelectorView extends Sprite {
 
@@ -172,8 +173,11 @@ public class MapSelectorView extends Sprite {
 }
 }
 
+import common.Global;
 import common.ui.SliceScalingBitmap;
 import common.ui.TextureParser;
+import common.ui.elements.TextTooltip;
+import common.ui.text.SimpleText;
 
 import flash.display.Bitmap;
 import flash.display.Sprite;
@@ -185,8 +189,6 @@ import mapeditor.editor.MEEvent;
 import mapeditor.editor.ui.MainView;
 import mapeditor.editor.ui.MapSelectorView;
 import mapeditor.editor.ui.MapView;
-import mapeditor.editor.ui.elements.SimpleText;
-import mapeditor.editor.ui.elements.TextTooltip;
 
 class MapSelectorSlot extends Sprite {
 
@@ -262,7 +264,7 @@ class MapSelectorSlot extends Sprite {
         if (this.closeTooltip == null) {
             this.closeTooltip = new TextTooltip(this.cross, "<b>Close</b>", 16, 0xFFFFFF);
             this.closeTooltip.addSubText("<b>Save map before closing!</b>", 12, 0x888888);
-            MainView.Main.stage.addChild(this.closeTooltip);
+            Global.Main.stage.addChild(this.closeTooltip);
         }
     }
 

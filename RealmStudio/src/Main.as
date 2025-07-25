@@ -1,5 +1,7 @@
 package {
 
+import assetlab.AssetLabLoader;
+
 import assets.AssetLoader;
 
 import common.assets.AnimatedChars;
@@ -24,6 +26,7 @@ public class Main extends Sprite {
 
     public static var STAGE:Stage;
     private var editorView:Sprite;
+    private var assetLabView:Sprite;
 
     public function Main() {
         if (stage) {
@@ -47,7 +50,8 @@ public class Main extends Sprite {
 
         AssetLoader.load();
 
-        this.loadRealmEditor();
+//        this.loadRealmEditor();
+        this.loadAssetLab();
     }
 
     private function loadRealmEditor():void {
@@ -62,11 +66,16 @@ public class Main extends Sprite {
 //        EditorLoader.loadObjects(ObjectLibrary.xmlLibrary_);
 //        EditorLoader.loadRegions(RegionLibrary.xmlLibrary_);
         this.editorView = EditorLoader.load(this, true);
-        this.editorView.addEventListener(Event.REMOVED_FROM_STAGE, onEditorExit);
+        this.editorView.addEventListener(Event.REMOVED_FROM_STAGE, onAppExit);
         this.editorView.addEventListener(Event.CONNECT, onMapTest);
     }
 
-    private static function onEditorExit(e:Event):void {
+    private function loadAssetLab():void {
+        this.assetLabView = AssetLabLoader.load(this, true);
+        this.assetLabView.addEventListener(Event.REMOVED_FROM_STAGE, onAppExit);
+    }
+
+    private static function onAppExit(e:Event):void {
         NativeApplication.nativeApplication.exit();
     }
 

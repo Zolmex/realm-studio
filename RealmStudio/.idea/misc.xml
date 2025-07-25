@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/../AssetLab/src/assetlab/view/embed.as" />
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_15" project-jdk-name="AIRSDK_51.2.1" project-jdk-type="Flex SDK Type (new)">
     <output url="file://$PROJECT_DIR$/out" />
   </component>

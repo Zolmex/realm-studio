@@ -1,11 +1,11 @@
 package mapeditor.editor.ui {
+import common.ui.text.SimpleText;
 import common.util.BitmapUtil;
+import common.util.Constants;
 
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Sprite;
-
-import mapeditor.editor.ui.elements.SimpleText;
 
 public class TileHotkeyElement extends Sprite {
 

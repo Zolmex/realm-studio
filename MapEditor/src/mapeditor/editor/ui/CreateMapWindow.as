@@ -1,8 +1,9 @@
 package mapeditor.editor.ui {
+import common.ui.elements.SimpleTextInput;
+
 import flash.events.Event;
 
 import mapeditor.editor.MEEvent;
-import mapeditor.editor.ui.elements.SimpleTextInput;
 
 public class CreateMapWindow extends MEWindow {
 

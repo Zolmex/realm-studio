@@ -1,5 +1,7 @@
 package mapeditor.editor.ui {
 import common.ui.TextureParser;
+import common.ui.text.SimpleText;
+import common.util.Constants;
 import common.util.MoreColorUtil;
 
 import flash.display.Bitmap;
@@ -9,7 +11,6 @@ import flash.events.MouseEvent;
 
 import mapeditor.editor.ToolSwitchEvent;
 import mapeditor.editor.tools.METool;
-import mapeditor.editor.ui.elements.SimpleText;
 
 public class MapToolbar extends Sprite {
 
@@ -126,7 +127,9 @@ public class MapToolbar extends Sprite {
 }
 }
 
+import common.Global;
 import common.ui.TextureParser;
+import common.ui.elements.TextTooltip;
 
 import flash.display.Bitmap;
 import flash.display.PixelSnapping;
@@ -135,8 +138,6 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 
 import mapeditor.editor.tools.METool;
-import mapeditor.editor.ui.MainView;
-import mapeditor.editor.ui.elements.TextTooltip;
 
 class ToolIconContainer extends Sprite {
 
@@ -173,7 +174,7 @@ class ToolIconContainer extends Sprite {
         text += font(METool.GetToolDescription(name), "#b3b3b3", 14);
 
         this.tooltip = new TextTooltip(this, text, 16, 0xFFFFFF);
-        MainView.Main.stage.addChild(this.tooltip);
+        Global.Main.stage.addChild(this.tooltip);
     }
 
     public static function font(text:String, color:String, size:int):String {
