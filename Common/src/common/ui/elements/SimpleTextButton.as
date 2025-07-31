@@ -53,7 +53,7 @@ public class SimpleTextButton extends Sprite {
     }
 
     private function onMouseRollOver(e:Event):void {
-        transform.colorTransform = new ColorTransform(1, 1, 1, 1, 40, 40, 40, 0.5);
+        transform.colorTransform = MoreColorUtil.brightCT;
     }
 
     private function onMouseRollOut(e:Event):void {

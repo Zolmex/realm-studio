@@ -25,7 +25,6 @@ public class MEEvent {
     public static const PASTE:String = "Paste";
     public static const UNDO:String = "Undo";
     public static const REDO:String = "Redo";
-    public static const OPTION_SWITCH:String = "OptionSwitch";
     public static const MAP_CREATE:String = "MapCreate";
     public static const MAP_SELECT:String = "MapSelect";
     public static const DRAW_TYPE_SWITCH:String = "DrawTypeSwitch";

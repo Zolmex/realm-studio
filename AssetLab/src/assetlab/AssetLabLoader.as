@@ -8,6 +8,7 @@ import common.assets.GroundLibrary;
 import common.assets.ObjectLibrary;
 import common.assets.RegionLibrary;
 import common.ui.TextureParser;
+import common.ui.embed.UIAssets;
 
 import flash.display.Sprite;
 
@@ -52,7 +53,7 @@ public class AssetLabLoader {
             // Nothing yet
         }
 
-//        TextureParser.load(new UIAssets.UI(), new UIAssets.UI_CONFIG(), new UIAssets.UI_SLICE_CONFIG(), "UI");
+        TextureParser.load(new UIAssets.UI(), new UIAssets.UI_CONFIG(), new UIAssets.UI_SLICE_CONFIG(), "UI");
         Parameters.load();
 
         var view:MainView = new MainView(main, standalone);

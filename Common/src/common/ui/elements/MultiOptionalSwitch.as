@@ -22,7 +22,7 @@ public class MultiOptionalSwitch extends Sprite {
 
     public function MultiOptionalSwitch() {
         this.options = new Vector.<SwitchOption>();
-        this.nextOptionY = 6;
+        this.nextOptionY = 3;
 
         this.background = TextureParser.instance.getSliceScalingBitmap("UI", "drawelementselector_background");
         this.background.alpha = 0.9;
@@ -34,7 +34,6 @@ public class MultiOptionalSwitch extends Sprite {
 
     public function addOption(title:String):void {
         var option:SwitchOption = new SwitchOption(title);
-        option.x = 3;
         option.y = this.nextOptionY;
         option.filters = this.options.length == 0 ? null : FilterUtil.GREY_COLOR_FILTER_2;
         option.showBackground(this.options.length == 0);
@@ -50,6 +49,8 @@ public class MultiOptionalSwitch extends Sprite {
     private function drawBackground():void {
         this.background.width = this.content.width + 6;
         this.background.height = this.content.height + 8;
+        this.background.x = (this.content.width - this.background.width) / 2;
+        this.background.y = (this.content.height - this.background.height) / 2;
     }
 
     private function onOptionClick(e:Event):void {
@@ -115,6 +116,7 @@ import common.ui.text.SimpleText;
 import common.util.Constants;
 
 import flash.display.Sprite;
+import flash.text.TextFieldAutoSize;
 
 import mapeditor.editor.ui.Constants;
 import mapeditor.editor.ui.elements.SimpleText;
@@ -131,7 +133,8 @@ class SwitchOption extends Sprite {
         this.background.visible = false;
         addChild(this.background);
 
-        this.text = new SimpleText(13, 0xB2B2B2);
+        this.text = new SimpleText(13, 0xB2B2B2, false, WIDTH);
+        this.text.setAutoSize(TextFieldAutoSize.LEFT);
         this.text.setText(title);
         this.text.updateMetrics();
         this.text.x = (WIDTH - this.text.width) / 2;

@@ -1,4 +1,4 @@
-package mapeditor.editor.ui {
+package common.ui {
 import com.gskinner.motion.GTween;
 
 import common.Global;

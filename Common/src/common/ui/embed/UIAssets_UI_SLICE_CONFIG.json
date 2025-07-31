@@ -145,10 +145,10 @@
       }
     },
     "search_input_background.png": {
-      "type": "3grid",
+      "type": "9grid",
       "rectangle": {
-        "y": 0,
-        "h": 19,
+        "y": 9.5,
+        "h": 1,
         "x": 79,
         "w": 1
       }
@@ -181,10 +181,10 @@
       }
     },
     "drawelement_background.png": {
-      "type": "3grid",
+      "type": "9grid",
       "rectangle": {
-        "y": 0,
-        "h": 38,
+        "y": 19,
+        "h": 1,
         "x": 19,
         "w": 1
       }
@@ -219,9 +219,9 @@
     "tooltip_header_background.png": {
       "type": "9grid",
       "rectangle": {
-        "y": 2,
-        "h": 1,
-        "x": 2,
+        "y": 5,
+        "h": 4,
+        "x": 27,
         "w": 1
       }
     },

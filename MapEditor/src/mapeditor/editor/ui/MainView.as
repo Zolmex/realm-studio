@@ -1,5 +1,6 @@
 package mapeditor.editor.ui {
 import common.Global;
+import common.ui.NotificationView;
 import common.ui.elements.MultiOptionalSwitch;
 import common.ui.elements.SimpleCheckBox;
 import common.ui.elements.SimpleTextButton;
@@ -8,6 +9,7 @@ import common.ui.embed.Background;
 import common.util.Constants;
 import common.util.IntPoint;
 import common.util.TimedAction;
+import common.util.TimerRunner;
 
 import flash.desktop.NativeApplication;
 import flash.display.DisplayObject;
@@ -91,7 +93,7 @@ public class MainView extends Sprite {
     private var window:NativeWindow;
 
     public var testMode:Boolean;
-    public var timers:Vector.<TimedAction> = new Vector.<TimedAction>();
+    public var timers:TimerRunner = new TimerRunner();
 
     public var qualityTiles:Boolean;
     public var qualityObjects:Boolean = true;
@@ -142,7 +144,7 @@ public class MainView extends Sprite {
         this.drawTypeSwitch.addOption("Ground");
         this.drawTypeSwitch.addOption("Objects");
         this.drawTypeSwitch.addOption("Regions");
-        this.drawTypeSwitch.addEventListener(MEEvent.OPTION_SWITCH, this.onDrawTypeSwitch);
+        this.drawTypeSwitch.addEventListener(MultiOptionalSwitch.OPTION_SWITCH, this.onDrawTypeSwitch);
 
         this.settingsView.addSettings(this.zoomInput, this.gridCheckbox, this.autoSaveCheckbox, this.qualityTilesCheckbox, this.qualityObjectsCheckbox, this.drawTypeSwitch);
 
@@ -422,16 +424,7 @@ public class MainView extends Sprite {
             this.autoSaver.trySaveMap(this.mapData, deltaTime);
         }
 
-        for (var i:int = 0; i < this.timers.length; i++) {
-            var act:TimedAction = this.timers[i];
-            act.timeLeftMS -= deltaTime;
-            if (act.timeLeftMS > 0){
-                continue;
-            }
-
-            act.callback();
-            this.timers.removeAt(i);
-        }
+        this.timers.update(deltaTime);
     }
 
     private static function closeWindow():void {
