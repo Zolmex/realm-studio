@@ -131,6 +131,7 @@ class TabElement extends Sprite {
 
     public function setSelected(val:Boolean):void {
         this.content.visible = val;
-        transform.colorTransform = val ? MoreColorUtil.brightCT : MoreColorUtil.darkCT;
+        this.title.setColor(val ? Constants.TITLE_COLOR : Constants.TEXT_UI_COLOR);
+        transform.colorTransform = val ? MoreColorUtil.identity : MoreColorUtil.darkCT;
     }
 }

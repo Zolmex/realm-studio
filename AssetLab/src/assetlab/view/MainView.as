@@ -82,6 +82,7 @@ public class MainView extends Sprite {
     }
 
     public function onAssetsLoaded(path:String):void {
+        this.workspace.onAssetsLoaded();
         this.projectPathText.setText(path);
         this.projectPathText.updateMetrics();
         this.updateProjectPathPosition();

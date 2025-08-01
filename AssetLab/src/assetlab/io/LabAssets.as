@@ -10,9 +10,9 @@ public class LabAssets {
     // We keep track of the file names and their content to compare with embedded assets to
     // properly know which asset file we're dealing with. So that we can save the changes to disk later
 
-    private static const imageFiles:Dictionary = new Dictionary(); // Key: File, Value: Content (png bytes)
-    private static const xmlFiles:Dictionary = new Dictionary(); // Value: String content
-    private static const object3dFiles:Dictionary = new Dictionary(); // Value: String content
+    public static const imageFiles:Dictionary = new Dictionary(); // Key: File, Value: Content (png ByteArray)
+    public static const gameDataFiles:Dictionary = new Dictionary(); // Value: String content (UTF8 ByteArray)
+    public static const model3dFiles:Dictionary = new Dictionary(); // Value: String content (UTF8 ByteArray)
 
     public static function addImageFile(pngFile:File, content:ByteArray):void {
         if (pngFile in imageFiles){
@@ -24,21 +24,25 @@ public class LabAssets {
     }
 
     public static function addXMLFile(xmlFile:File, content:String):void {
-        if (xmlFile in xmlFiles){
+        if (xmlFile in gameDataFiles){
             trace("DUPLICATE XML ASSET FILE", xmlFile.name);
             return;
         }
 
-        xmlFiles[xmlFile] = content;
+        var bytes:ByteArray = new ByteArray();
+        bytes.writeUTFBytes(content);
+        gameDataFiles[xmlFile] = bytes;
     }
 
     public static function add3dObjectFile(object3D:File, content:String):void {
-        if (object3D in object3dFiles){
+        if (object3D in model3dFiles){
             trace("DUPLICATE XML ASSET FILE", object3D.name);
             return;
         }
 
-        object3dFiles[object3D] = content;
+        var bytes:ByteArray = new ByteArray();
+        bytes.writeUTFBytes(content);
+        model3dFiles[object3D] = bytes;
     }
 }
 }

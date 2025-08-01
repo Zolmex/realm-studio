@@ -1,16 +1,29 @@
 package assetlab.view {
+import assetlab.io.LabAssets;
+import assetlab.view.elements.FileBrowser;
+
+import common.Global;
+
 import flash.display.Sprite;
 
 public class ImageSetsView extends Sprite {
 
-    private var mainView:MainView;
+    private var workspace:WorkspaceView;
+    private var fileBrowser:FileBrowser;
 
-    public function ImageSetsView(mainView:MainView) {
-        this.mainView = mainView;
+    public function ImageSetsView(workspace:WorkspaceView) {
+        this.workspace = workspace;
 
-        graphics.beginFill(0xFF0000);
-        graphics.drawRect(0, 0, 1000, 1000);
-        graphics.endFill();
+        this.fileBrowser = new FileBrowser(LabAssets.imageFiles);
+        addChild(this.fileBrowser);
+    }
+
+    public function resize():void {
+        this.fileBrowser.resize(FileBrowser.WIDTH, FileBrowser.HEIGHT * Global.ScaleY);
+    }
+
+    public function onAssetsLoaded():void {
+        this.fileBrowser.repopulateFileList();
     }
 }
 }

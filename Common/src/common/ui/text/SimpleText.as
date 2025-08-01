@@ -13,6 +13,7 @@ import flash.text.TextField;
 import flash.text.TextFieldType;
 import flash.text.TextFormat;
 import flash.text.TextLineMetrics;
+import flash.utils.getTimer;
 
 import mapeditor.editor.ui.embed.fonts.AurusenthialClassic;
 import mapeditor.editor.ui.embed.fonts.AurusenthialClassicBold;
@@ -39,6 +40,11 @@ public class SimpleText extends TextField {
     public var actualWidth_:int;
     public var actualHeight_:int;
     public var autoResize:Boolean;
+    private var scrollingEnabled_:Boolean;
+    private var scrollSpeed_:int = 17; // 17 ms update is the default speed
+
+    private var nextTextUpdate:int;
+    private var scrollDirection:int = 1; // 1: scroll to the end; -1: scroll to the beginning
 
     public function SimpleText(textSize:int, color:uint, makeSelectable:Boolean = false, widthParam:int = 0, heightParam:int = 0, isLink:Boolean = false, stopKeyPropagation:Boolean = false) {
         if (!_FontRegistered) {
@@ -193,11 +199,62 @@ public class SimpleText extends TextField {
             this.autoResize = true;
     }
 
+    public function get scrollingEnabled():Boolean {
+        return this.scrollingEnabled_;
+    }
+
+    public function set scrollingEnabled(val:Boolean):void {
+        this.scrollingEnabled_ = val;
+
+        if (val){
+            addEventListener(Event.ENTER_FRAME, this.enterFrame);
+        }
+        else {
+            removeEventListener(Event.ENTER_FRAME, this.enterFrame);
+        }
+    }
+
+    public function get scrollSpeed():int {
+        return this.scrollSpeed_;
+    }
+
+    public function set scrollSpeed(val:int):void {
+        this.scrollSpeed_ = val;
+    }
+
     private function resize():void {
         while ((this.inputWidth_ > 0 && width > this.inputWidth_) || (this.inputHeight_ > 0 && height > this.inputHeight_)) {
             scaleX -= 0.05;
             scaleY -= 0.05;
         }
+    }
+
+    private function enterFrame(e:Event):void { // Scrolling effect
+        var time:int = getTimer();
+        if (this.nextTextUpdate == 0){
+            this.nextTextUpdate = time;
+        }
+
+        if (time < this.nextTextUpdate) {
+            return;
+        }
+
+        this.nextTextUpdate = time + scrollSpeed;
+        scrollH += 1 * this.scrollDirection;
+
+        if (scrollH <= 0) { // Reverse stop
+            scrollH = 0;
+            this.nextTextUpdate += 1000; // Wait 1 second to go forward
+            this.scrollDirection *= -1;
+        }
+
+        if (scrollH >= maxScrollH) { // Forward stop
+            scrollH = maxScrollH;
+            this.nextTextUpdate += 1000; // Wait 1 second to go backwards
+            this.scrollDirection *= -1;
+        }
+
+        updateMetrics();
     }
 }
 }
