@@ -19,6 +19,7 @@ public class FileBrowser extends Sprite {
 
     public static const WIDTH:int = 164;
     public static const HEIGHT:int = 492;
+    public static const FILE_SELECTED:String = "FileSelected";
 
     private var files:Dictionary; // Key: File; Value: File content (ByteArray)
     private var background:SliceScalingBitmap;
@@ -26,7 +27,7 @@ public class FileBrowser extends Sprite {
     private var fileContainerMask:Shape;
     private var fileSlots:Vector.<FileBrowserSlot> = new <FileBrowserSlot>[];
     private var scrollbar:SimpleScrollbar;
-    private var selectedSlot:FileBrowserSlot;
+    public var selectedSlot:FileBrowserSlot;
 
     private const listYLimit:int = 3;
     private var viewHeight:int = HEIGHT - 2;
@@ -93,6 +94,8 @@ public class FileBrowser extends Sprite {
         var fileSlot:FileBrowserSlot = e.target as FileBrowserSlot;
         fileSlot.setSelected(true);
         this.selectedSlot = fileSlot;
+
+        dispatchEvent(new Event(FILE_SELECTED));
     }
 
     public function repopulateFileList():void {
@@ -155,8 +158,8 @@ class FileBrowserSlot extends Sprite {
     public static const WIDTH:int = 144;
     public static const HEIGHT:int = 25;
 
-    private var file:File;
-    private var content:ByteArray;
+    public var file:File;
+    public var fileContent:ByteArray;
 
     private var background:SliceScalingBitmap;
     private var nameText:SimpleText;
@@ -164,7 +167,7 @@ class FileBrowserSlot extends Sprite {
 
     function FileBrowserSlot(file:File, content:ByteArray) {
         this.file = file;
-        this.content = content;
+        this.fileContent = content;
         var fileFullName:String = file.name;
 
         this.background = TextureParser.instance.getSliceScalingBitmap("UI", "drawelementselector_selection");

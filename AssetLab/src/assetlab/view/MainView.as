@@ -10,6 +10,8 @@ import common.util.Constants;
 import common.util.TimedAction;
 import common.util.TimerRunner;
 
+import flash.display.BlendMode;
+
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.IOErrorEvent;

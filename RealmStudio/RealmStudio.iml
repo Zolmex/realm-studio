@@ -14,6 +14,9 @@
             <entry module-name="AssetLab" build-configuration-name="AssetLab">
               <dependency linkage="Merged" />
             </entry>
+            <entry library-id="f2057d38-4300-4a37-9cb6-1013cbad5b1c">
+              <dependency linkage="Merged" />
+            </entry>
           </entries>
           <sdk name="AIRSDK_51.2.1" />
         </dependencies>
@@ -35,5 +38,15 @@
     <orderEntry type="module" module-name="MapEditor" exported="" />
     <orderEntry type="module" module-name="Common" exported="" />
     <orderEntry type="module" module-name="AssetLab" exported="" />
+    <orderEntry type="module-library" exported="">
+      <library type="flex">
+        <properties id="f2057d38-4300-4a37-9cb6-1013cbad5b1c" />
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/away3d-core-fp11_4_1_6.swc!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

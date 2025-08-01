@@ -11,6 +11,7 @@ import common.assets.ObjectLibrary;
 import common.assets.RegionLibrary;
 
 import flash.desktop.NativeApplication;
+import flash.display.BlendMode;
 import flash.display.Sprite;
 import flash.display.Stage;
 import flash.display.StageAlign;
@@ -29,6 +30,7 @@ public class Main extends Sprite {
     private var assetLabView:Sprite;
 
     public function Main() {
+        blendMode = BlendMode.LAYER;
         if (stage) {
             this.setup();
         }
