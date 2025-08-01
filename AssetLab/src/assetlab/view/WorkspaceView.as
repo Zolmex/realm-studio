@@ -8,8 +8,8 @@ import flash.display.Sprite;
 
 public class WorkspaceView extends Sprite {
 
-    private static const WINDOW_WIDTH_SCALE_X:Number = 700.0 / 800.0;
-    private static const WINDOW_HEIGHT_SCALE_Y:Number = 500.0 / 600.0;
+    private static const WIDTH:int = 700;
+    private static const HEIGHT:int = 500;
 
     private var mainView:MainView;
     private var imageSetsView:ImageSetsView;
@@ -24,7 +24,7 @@ public class WorkspaceView extends Sprite {
         this.model3DView = new Model3DView(this);
         this.gameDataView = new GameDataView(this);
 
-        this.window = new TabbedWindow(700, 500);
+        this.window = new TabbedWindow(WIDTH, HEIGHT);
         this.window.addTab("ImageSets", this.imageSetsView);
         this.window.addTab("3D Models", this.model3DView);
         this.window.addTab("GameData", this.gameDataView);
@@ -40,18 +40,18 @@ public class WorkspaceView extends Sprite {
     }
 
     public function onStageResize():void {
-        this.window.resize(Global.StageWidth * WINDOW_WIDTH_SCALE_X, Global.StageHeight * WINDOW_HEIGHT_SCALE_Y);
+        this.window.resize(width, height);
         this.imageSetsView.resize();
         this.model3DView.resize();
         this.gameDataView.resize();
     }
 
     override public function get width():Number { // I need these property overrides cus the tab contents may be bigger than what is actually visible
-        return Global.StageWidth * WINDOW_WIDTH_SCALE_X;
+        return WIDTH * Global.ScaleX;
     }
 
     override public function get height():Number {
-        return Global.StageHeight * WINDOW_HEIGHT_SCALE_Y + 30;
+        return HEIGHT * Global.ScaleY; // The 30 pixels are from tab height, which are not scaled
     }
 
     public function get contentWidth():Number {

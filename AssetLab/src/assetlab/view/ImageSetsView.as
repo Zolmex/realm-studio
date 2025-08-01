@@ -21,7 +21,7 @@ public class ImageSetsView extends Sprite {
         this.fileBrowser.addEventListener(FileBrowser.FILE_SELECTED, this.onFileSelected);
         addChild(this.fileBrowser);
 
-        this.contentView = new ContentView();
+        this.contentView = new ContentView(workspace);
         addChild(this.contentView);
 
         this.positionChildren();
@@ -39,6 +39,7 @@ public class ImageSetsView extends Sprite {
 
     public function resize():void {
         this.fileBrowser.resize(FileBrowser.WIDTH, FileBrowser.HEIGHT * Global.ScaleY);
+        this.contentView.resize();
         this.positionChildren();
     }
 
