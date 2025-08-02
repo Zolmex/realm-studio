@@ -36,9 +36,11 @@ public class LabAssets {
 
     public static function add3dObjectFile(object3D:File, content:String):void {
         if (object3D in model3dFiles){
-            trace("DUPLICATE XML ASSET FILE", object3D.name);
+            trace("DUPLICATE 3D MODEL ASSET FILE", object3D.name);
             return;
         }
+
+        content = content.replace("mtllib", "#") // mtllib is broken!!! and it's not used so just make lines that have this a comment ;)
 
         var bytes:ByteArray = new ByteArray();
         bytes.writeUTFBytes(content);
