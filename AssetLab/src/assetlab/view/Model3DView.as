@@ -1,6 +1,7 @@
 package assetlab.view {
 import assetlab.io.LabAssets;
 import assetlab.view.elements.ContentView;
+import assetlab.view.elements.ContentView3D;
 import assetlab.view.elements.FileBrowser;
 
 import common.Global;
@@ -12,7 +13,7 @@ public class Model3DView extends Sprite {
 
     private var workspace:WorkspaceView;
     private var fileBrowser:FileBrowser;
-    private var contentView:ContentView;
+    private var contentView:ContentView3D;
 
     public function Model3DView(workspace:WorkspaceView) {
         this.workspace = workspace;
@@ -21,7 +22,7 @@ public class Model3DView extends Sprite {
         this.fileBrowser.addEventListener(FileBrowser.FILE_SELECTED, this.onFileSelected);
         addChild(this.fileBrowser);
 
-        this.contentView = new ContentView(workspace);
+        this.contentView = new ContentView3D(workspace);
         addChild(this.contentView);
 
         this.positionChildren();
@@ -44,6 +45,11 @@ public class Model3DView extends Sprite {
 
     public function onAssetsLoaded():void {
         this.fileBrowser.repopulateFileList();
+    }
+
+    public override function set visible(val:Boolean):void {
+        super.visible = val;
+        this.contentView.visible = val;
     }
 }
 }
