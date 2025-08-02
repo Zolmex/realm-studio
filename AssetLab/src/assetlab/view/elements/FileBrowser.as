@@ -168,7 +168,7 @@ class FileBrowserSlot extends Sprite {
     function FileBrowserSlot(file:File, content:ByteArray) {
         this.file = file;
         this.fileContent = content;
-        var fileFullName:String = file.name;
+        var cleanFileName:String = getCleanFileName(file.name);
 
         this.background = TextureParser.instance.getSliceScalingBitmap("UI", "drawelementselector_selection");
         this.background.width = WIDTH;
@@ -176,7 +176,7 @@ class FileBrowserSlot extends Sprite {
         addChild(this.background);
 
         this.nameText = new SimpleText(14, Constants.TEXT_UI_COLOR, false, WIDTH - 4);
-        this.nameText.setText(fileFullName);
+        this.nameText.setText(cleanFileName);
         this.nameText.updateMetrics();
         this.nameText.x = (WIDTH - this.nameText.width) / 2;
         this.nameText.y = (HEIGHT - this.nameText.height) / 2;
@@ -184,6 +184,15 @@ class FileBrowserSlot extends Sprite {
 
         addEventListener(MouseEvent.ROLL_OVER, this.onRollOver);
         addEventListener(MouseEvent.ROLL_OUT, this.onRollOut);
+    }
+
+    private static function getCleanFileName(fullName:String):String {
+        var cleanName:String = fullName;
+        cleanName = cleanName.replace("EmbeddedData_", "");
+        cleanName = cleanName.replace("EmbeddedAssets_", "");
+        cleanName = cleanName.replace("CXML", "");
+        cleanName = cleanName.replace("Embed_", "");
+        return cleanName;
     }
 
     private function onRollOver(e:Event):void {
