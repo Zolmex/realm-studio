@@ -70,6 +70,7 @@ public class GameDataListView extends Sprite {
             i++;
         }
 
+        this.fixListPosition();
         this.scrollbar.setup(this.workspace.contentHeight, this.xmlList.y, this.xmlList.height - this.workspace.contentHeight);
     }
 

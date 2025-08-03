@@ -41,7 +41,7 @@ public class SimpleText extends TextField {
     public var actualHeight_:int;
     public var autoResize:Boolean;
     private var scrollingEnabled_:Boolean;
-    private var scrollSpeed_:int = 17; // 17 ms update is the default speed
+    private var scrollMs_:int = 17; // 17 ms update is the default speed
 
     private var nextTextUpdate:int;
     private var scrollDirection:int = 1; // 1: scroll to the end; -1: scroll to the beginning
@@ -214,12 +214,12 @@ public class SimpleText extends TextField {
         }
     }
 
-    public function get scrollSpeed():int {
-        return this.scrollSpeed_;
+    public function get scrollMs():int {
+        return this.scrollMs_;
     }
 
-    public function set scrollSpeed(val:int):void {
-        this.scrollSpeed_ = val;
+    public function set scrollMs(val:int):void {
+        this.scrollMs_ = val;
     }
 
     private function resize():void {
@@ -239,7 +239,7 @@ public class SimpleText extends TextField {
             return;
         }
 
-        this.nextTextUpdate = time + scrollSpeed;
+        this.nextTextUpdate = time + scrollMs;
         scrollH += 1 * this.scrollDirection;
 
         if (scrollH <= 0) { // Reverse stop
