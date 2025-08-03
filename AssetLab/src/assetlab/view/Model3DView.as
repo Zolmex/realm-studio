@@ -38,7 +38,7 @@ public class Model3DView extends Sprite {
     }
 
     public function resize():void {
-        this.fileBrowser.resize(FileBrowser.WIDTH, FileBrowser.HEIGHT * Global.ScaleY);
+        this.fileBrowser.resize(FileBrowser.WIDTH, this.workspace.contentHeight);
         this.contentView.resize();
         this.positionChildren();
     }

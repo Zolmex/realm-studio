@@ -51,7 +51,7 @@ public class WorkspaceView extends Sprite {
     }
 
     override public function get height():Number {
-        return HEIGHT * Global.ScaleY; // The 30 pixels are from tab height, which are not scaled
+        return HEIGHT * Global.ScaleY;
     }
 
     public function get contentWidth():Number {
@@ -59,7 +59,7 @@ public class WorkspaceView extends Sprite {
     }
 
     public function get contentHeight():Number {
-        return height - 38;
+        return height - 8;
     }
 }
 }

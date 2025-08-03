@@ -37,18 +37,13 @@ public class ImageSetsView extends Sprite {
     }
 
     public function resize():void {
-        this.fileBrowser.resize(FileBrowser.WIDTH, FileBrowser.HEIGHT * Global.ScaleY);
+        this.fileBrowser.resize(FileBrowser.WIDTH, this.workspace.contentHeight);
         this.contentView.resize();
         this.positionChildren();
     }
 
     public function onAssetsLoaded():void {
         this.fileBrowser.repopulateFileList();
-    }
-
-    public override function set visible(val:Boolean):void {
-        super.visible = val;
-        this.contentView.visible = val;
     }
 }
 }

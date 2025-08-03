@@ -1,4 +1,5 @@
 package assetlab.io {
+import common.assets.GroundLibrary;
 import common.util.TimedAction;
 
 import flash.filesystem.File;
@@ -13,6 +14,8 @@ public class LabAssets {
     public static const imageFiles:Dictionary = new Dictionary(); // Key: File, Value: Content (png ByteArray)
     public static const gameDataFiles:Dictionary = new Dictionary(); // Value: String content (UTF8 ByteArray)
     public static const model3dFiles:Dictionary = new Dictionary(); // Value: String content (UTF8 ByteArray)
+
+    public static const gameDataLinks:Dictionary = new Dictionary(); // Key: File, Value: XML c
 
     public static function addImageFile(pngFile:File, content:ByteArray):void {
         if (pngFile in imageFiles){
@@ -45,6 +48,37 @@ public class LabAssets {
         var bytes:ByteArray = new ByteArray();
         bytes.writeUTFBytes(content);
         model3dFiles[object3D] = bytes;
+    }
+
+    public static function constructGameData():void { // Creates a link between loaded game data files and the embedded xml content
+//        trace("Constructing GameData content...");
+
+        for (var file:File in gameDataFiles){
+//            trace("Constructing", file.name)
+            var contentXML:XML = XML(gameDataFiles[file]);
+            if (contentXML.hasOwnProperty("Ground")){
+                gameDataLinks[file.name] = contentXML.Ground;
+            }
+            else if (contentXML.hasOwnProperty("Object")){
+                gameDataLinks[file.name] = contentXML.Object;
+            }
+            else if (contentXML.hasOwnProperty("Region")){
+                gameDataLinks[file.name] = contentXML.Region;
+            }
+            else {
+                trace("Unknown XML type for:", file.name);
+            }
+        }
+
+//        trace("Finished constructing GameData content.")
+    }
+
+    public static function getGameData(fileName:String):XMLList {
+        if (!(fileName in gameDataLinks)){
+            return null;
+        }
+
+        return gameDataLinks[fileName] as XMLList;
     }
 }
 }

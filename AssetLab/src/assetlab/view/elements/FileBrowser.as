@@ -113,6 +113,7 @@ public class FileBrowser extends Sprite {
 
             if (fileSlot.selected) {
                 this.selectedSlot = fileSlot;
+                dispatchEvent(new Event(FILE_SELECTED));
             }
 
             this.fileContainer.addChild(fileSlot);

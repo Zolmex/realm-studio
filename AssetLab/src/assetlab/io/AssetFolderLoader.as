@@ -14,7 +14,7 @@ import flash.net.FileFilter;
 import flash.net.FileReference;
 import flash.utils.ByteArray;
 
-public class AssetFolderReader {
+public class AssetFolderLoader {
 
     private static const VALID_FILE_EXTENSIONS:Array = ["png", "dat", "xml"];
 
@@ -48,6 +48,11 @@ public class AssetFolderReader {
         for(var i:uint = 0; i < files.length; i++) {
             loadAssetFileOrDirectory(files[i]);
         }
+
+//        trace("Finished loading files.");
+
+        LabAssets.constructGameData();
+
         MainView.Instance.onAssetsLoaded(selectedDirectory.nativePath);
     }
 

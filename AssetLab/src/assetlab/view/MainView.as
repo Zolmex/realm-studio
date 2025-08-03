@@ -1,5 +1,5 @@
 package assetlab.view {
-import assetlab.io.AssetFolderReader;
+import assetlab.io.AssetFolderLoader;
 import assetlab.view.embed.Background;
 
 import common.Global;
@@ -104,7 +104,7 @@ public class MainView extends Sprite {
     }
 
     private static function onOpenClick(e:Event):void {
-        AssetFolderReader.open();
+        AssetFolderLoader.open();
     }
 }
 }
