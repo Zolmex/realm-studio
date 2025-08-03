@@ -58,13 +58,13 @@ public class GameDataListView extends Sprite {
             return;
         }
 
-        var rowSize:int = getCardRowSize(this.workspace.contentWidth - FileBrowser.WIDTH - this.scrollbar.width);
+        var rowSize:int = this.getCardRowSize();
 
         var i:int = 0;
         for each (var xml:XML in xmls){
             var gameDataObject:GameDataObjectCard = new GameDataObjectCard(xml);
-            gameDataObject.x = 4 + int(i % rowSize) * (GameDataObjectCard.WIDTH + 4);
-            gameDataObject.y = int(i / rowSize) * (GameDataObjectCard.HEIGHT + 4);
+            gameDataObject.x = int(i % rowSize) * (GameDataObjectCard.WIDTH + 8);
+            gameDataObject.y = int(i / rowSize) * (GameDataObjectCard.HEIGHT + 8);
             this.xmlList.addChild(gameDataObject);
             this.gameDataObjects.push(gameDataObject);
             i++;
@@ -79,12 +79,13 @@ public class GameDataListView extends Sprite {
         this.scrollbar.y = 0;
 
         var i:int = 0;
-        var rowSize:int = getCardRowSize(this.workspace.contentWidth - FileBrowser.WIDTH - this.scrollbar.width);
+        var rowSize:int = this.getCardRowSize();
         for each (var gameDataObject:GameDataObjectCard in this.gameDataObjects){
-            gameDataObject.x = 4 + int(i % rowSize) * (GameDataObjectCard.WIDTH + 4);
-            gameDataObject.y = int(i / rowSize) * (GameDataObjectCard.HEIGHT + 4);
+            gameDataObject.x = int(i % rowSize) * (GameDataObjectCard.WIDTH + 8);
+            gameDataObject.y = int(i / rowSize) * (GameDataObjectCard.HEIGHT + 8);
             i++;
         }
+        this.fixListPosition();
     }
 
     private function onScrollbarChange(e:Event):void {
@@ -101,6 +102,7 @@ public class GameDataListView extends Sprite {
     }
 
     private function fixListPosition():void {
+        this.xmlList.x = 4 + ((width - this.scrollbar.width) - (this.getCardRowSize() * (GameDataObjectCard.WIDTH + 8))) / 2;
         if (this.xmlList.y > 0) { // Top limit
             this.xmlList.y = 0;
         }
@@ -125,8 +127,9 @@ public class GameDataListView extends Sprite {
         return this.workspace.contentWidth - FileBrowser.WIDTH;
     }
 
-    private static function getCardRowSize(width:Number):int {
-        return Math.floor(width / (GameDataObjectCard.WIDTH + 4));
+    private function getCardRowSize():int {
+        var maxW:Number = this.width - this.scrollbar.width;
+        return Math.floor(maxW / (GameDataObjectCard.WIDTH + 8));
     }
 }
 }

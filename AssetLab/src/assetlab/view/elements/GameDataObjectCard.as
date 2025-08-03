@@ -12,7 +12,7 @@ import flash.text.TextFieldAutoSize;
 
 public class GameDataObjectCard extends Sprite {
 
-    public static const WIDTH:int = 98;
+    public static const WIDTH:int = 115;
     public static const HEIGHT:int = 100;
 
     private var xml:XML;

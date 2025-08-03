@@ -50,7 +50,7 @@ public class Main extends Sprite {
         stage.scaleMode = StageScaleMode.NO_SCALE;
         stage.align = StageAlign.TOP_LEFT;
 
-        AssetLoader.load();
+//        AssetLoader.load();
 
 //        this.loadRealmEditor();
         this.loadAssetLab();
