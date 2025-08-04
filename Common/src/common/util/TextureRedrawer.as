@@ -29,6 +29,7 @@ public class TextureRedrawer {
    private static var textureShaderData_:ByteArray = (new textureShaderEmbed_() as ByteArray);
    private static var colorTexture1:BitmapData = new BitmapData(1, 1, false);
    private static var colorTexture2:BitmapData = new BitmapData(1, 1, false);
+   private static var nonTransparentCache_:Dictionary = new Dictionary();
 
 
    public static function redraw(tex:BitmapData, size:int, padBottom:Boolean, glowColor:uint, useCache:Boolean = true, sMult:Number = 5):BitmapData {
@@ -219,5 +220,16 @@ public class TextureRedrawer {
    }
 
 
+   public static function removeTransparentPixels(tex:BitmapData):BitmapData { // Cache is forced with this function
+      if (tex in nonTransparentCache_){
+         return nonTransparentCache_[tex];
+      }
+
+      var region:Rectangle = BitmapUtil.nonTransparentRegion(tex); // Gets non transparent width/height
+      var regionBd:BitmapData = new BitmapData(region.width, region.height);
+      regionBd.copyPixels(tex, region, new Point(0, 0));
+      nonTransparentCache_[tex] = regionBd;
+      return regionBd;
+   }
 }
 }

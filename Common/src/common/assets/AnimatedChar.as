@@ -41,7 +41,7 @@ public class AnimatedChar
       
       public var firstDir_:int;
       
-      private var dict_:Dictionary;
+      public var dict_:Dictionary;
       
       public function AnimatedChar(image:MaskedImage, width:int, height:int, firstDir:int)
       {

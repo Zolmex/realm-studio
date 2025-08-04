@@ -1,5 +1,6 @@
 package assetlab.io {
 import common.assets.GroundLibrary;
+import common.assets.TextureData;
 import common.util.TimedAction;
 
 import flash.filesystem.File;
@@ -15,7 +16,9 @@ public class LabAssets {
     public static const gameDataFiles:Dictionary = new Dictionary(); // Value: String content (UTF8 ByteArray)
     public static const model3dFiles:Dictionary = new Dictionary(); // Value: String content (UTF8 ByteArray)
 
-    public static const gameDataLinks:Dictionary = new Dictionary(); // Key: File, Value: XML c
+    public static const gameDataLinks:Dictionary = new Dictionary(); // Key: File, Value: XMLList
+
+    private static const textureDataCache:Dictionary = new Dictionary();
 
     public static function addImageFile(pngFile:File, content:ByteArray):void {
         if (pngFile in imageFiles){
@@ -52,7 +55,6 @@ public class LabAssets {
 
     public static function constructGameData():void { // Creates a link between loaded game data files and the embedded xml content
 //        trace("Constructing GameData content...");
-
         for (var file:File in gameDataFiles){
 //            trace("Constructing", file.name)
             var contentXML:XML = XML(gameDataFiles[file]);
@@ -79,6 +81,30 @@ public class LabAssets {
         }
 
         return gameDataLinks[fileName] as XMLList;
+    }
+
+    public static function getTextureData(xml:XML):TextureData { // TextureData cache
+        var textureData:TextureData;
+        if (!(xml in textureDataCache)){
+            textureData = new TextureData(xml);
+            textureDataCache[xml] = textureData;
+        }
+        else {
+            textureData = textureDataCache[xml];
+        }
+        return textureData;
+    }
+
+    public static function reset():void {
+        var key:*;
+        for (key in textureDataCache){
+            delete textureDataCache[key];
+        }
+        for (key in gameDataLinks){
+            delete gameDataLinks[key];
+        }
+        textureDataCache.length = 0;
+        gameDataLinks.length = 0;
     }
 }
 }

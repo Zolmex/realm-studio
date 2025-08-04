@@ -44,6 +44,8 @@ public class AssetFolderLoader {
     }
 
     private static function finishLoadAssets():void {
+        LabAssets.reset(); // Reset cache and game data
+
         var files:Array = selectedDirectory.getDirectoryListing();
         for(var i:uint = 0; i < files.length; i++) {
             loadAssetFileOrDirectory(files[i]);

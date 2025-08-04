@@ -90,6 +90,7 @@ public class TextureData {
                     this.altTextures_ = new Dictionary();
                 }
                 this.altTextures_[int(xml.@id)] = new TextureData(xml);
+                break;
         }
     }
 }

@@ -208,6 +208,44 @@ public class BitmapUtil
          }
          return true;
       }
+
+      public static function nonTransparentRegion(bitmapData:BitmapData):Rectangle {
+         var rect:Rectangle = new Rectangle(0, 0, bitmapData.width, bitmapData.height);
+         var minX:int = int.MAX_VALUE; // First non-transparent pixel X axis
+         var maxX:int = -1; // Last non-transparent pixel X axis
+         var minY:int = int.MAX_VALUE; // First non-transparent pixel Y axis
+         var maxY:int = -1; // Last non-transparent pixel Y axis
+
+         for (var y:int = 0; y < bitmapData.height; y++) {
+            for (var x:int = 0; x < bitmapData.width; x++) {
+               var alphaValue:uint = bitmapData.getPixel32(x, y) >> 24 & 0xFF;
+               if (alphaValue == 0) {
+                  continue;
+               }
+
+               if (x < minX) {
+                  minX = x;
+               }
+               if (x > maxX) {
+                  maxX = x;
+               }
+
+               if (y < minY) {
+                  minY = y;
+               }
+               if (y > maxY) {
+                  maxY = y;
+               }
+            }
+         }
+
+         rect.x = minX;
+         rect.y = minY;
+         rect.width = maxX - minX + 1;
+         rect.height = maxY - minY + 1;
+
+         return rect;
+      }
    }
 }
 

@@ -1,4 +1,6 @@
 package assetlab.view.elements {
+import assetlab.io.LabAssets;
+
 import common.ui.SliceScalingBitmap;
 import common.ui.TextureParser;
 import common.ui.text.SimpleText;
@@ -19,6 +21,7 @@ public class GameDataObjectCard extends Sprite {
 
     private var background:SliceScalingBitmap;
     private var title:SimpleText;
+    private var textureDisplay:GameDataTextureDisplay;
 
     public function GameDataObjectCard(xml:XML) {
         this.xml = xml;
@@ -35,6 +38,9 @@ public class GameDataObjectCard extends Sprite {
         this.title.updateMetrics();
         addChild(this.title);
 
+        this.textureDisplay = new GameDataTextureDisplay(LabAssets.getTextureData(xml));
+        addChild(this.textureDisplay);
+
         addEventListener(MouseEvent.ROLL_OVER, this.onRollOver);
         addEventListener(MouseEvent.ROLL_OUT, this.onRollOut);
 
@@ -42,11 +48,13 @@ public class GameDataObjectCard extends Sprite {
     }
 
     private function onRollOver(e:Event):void {
+        this.textureDisplay.onRollOver();
         this.title.scrollingEnabled = true;
         transform.colorTransform = MoreColorUtil.brightCT;
     }
 
     private function onRollOut(e:Event):void {
+        this.textureDisplay.onRollOut();
         this.title.scrollingEnabled = false;
         transform.colorTransform = MoreColorUtil.identity;
     }
@@ -54,7 +62,10 @@ public class GameDataObjectCard extends Sprite {
     private function positionChildren():void {
         var textW:Number = Math.min(this.title.width, this.title.actualWidth_);
         this.title.x = (WIDTH - textW) / 2;
-        this.title.y = (20 - this.title.height) / 2;
+        this.title.y = (25 - this.title.height) / 2;
+
+        this.textureDisplay.x = (WIDTH - this.textureDisplay.width) / 2;
+        this.textureDisplay.y = this.textureDisplay.y + this.title.height + (HEIGHT - (this.textureDisplay.y + this.title.height) - this.textureDisplay.height) / 2;
     }
 }
 }
