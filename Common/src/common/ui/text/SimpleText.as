@@ -1,5 +1,6 @@
 package common.ui.text {
 
+import common.ui.SliceScalingBitmap;
 import common.ui.text.fonts.AurusenthialClassic;
 import common.ui.text.fonts.AurusenthialClassicBold;
 import common.ui.text.fonts.AurusenthialClassicBoldCFF;
@@ -45,6 +46,8 @@ public class SimpleText extends TextField {
 
     private var nextTextUpdate:int;
     private var scrollDirection:int = 1; // 1: scroll to the end; -1: scroll to the beginning
+
+    private var backgroundTexture:SliceScalingBitmap;
 
     public function SimpleText(textSize:int, color:uint, makeSelectable:Boolean = false, widthParam:int = 0, heightParam:int = 0, isLink:Boolean = false, stopKeyPropagation:Boolean = false) {
         if (!_FontRegistered) {
@@ -183,8 +186,26 @@ public class SimpleText extends TextField {
             this.actualWidth_ *= this.scaleX;
             this.actualHeight_ *= this.scaleY;
         }
+
+        if (parent != null){
+            this.updateBackground();
+        }
+
         return this;
     }
+
+    public function updateBackground():void { // Call this (once) after adding the text to a display object
+        if (this.backgroundTexture) {
+            this.backgroundTexture.width = width + 4;
+            this.backgroundTexture.height = height + 4;
+            this.positionBackground();
+
+            if (!parent.contains(this.backgroundTexture)) { // Add background to screen
+                parent.addChildAt(this.backgroundTexture, parent.getChildIndex(this) - 1);
+            }
+        }
+    }
+
 
     public function useTextDimensions():void {
         width = this.inputWidth_ == 0 ? (textWidth + 4) : (this.inputWidth_);
@@ -255,6 +276,31 @@ public class SimpleText extends TextField {
         }
 
         updateMetrics();
+    }
+
+    public function set backgroundImage(texture:SliceScalingBitmap):void {
+        this.backgroundTexture = texture;
+    }
+
+    public override function set x(val:Number):void {
+        super.x = val;
+
+        if (this.backgroundTexture){
+            this.positionBackground();
+        }
+    }
+
+    public override function set y(val:Number):void {
+        super.y = val;
+
+        if (this.backgroundTexture){
+            this.positionBackground();
+        }
+    }
+
+    private function positionBackground():void {
+        this.backgroundTexture.x = this.x - 2;
+        this.backgroundTexture.y = this.y - 2;
     }
 }
 }

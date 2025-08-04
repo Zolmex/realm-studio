@@ -14,7 +14,7 @@ import flash.utils.Dictionary;
 import mapeditor.editor.ui.Keybinds;
 import mapeditor.editor.ui.MainView;
 import mapeditor.editor.ui.embed.Cursors;
-import mapeditor.editor.ui.embed.EditorTools;
+import common.ui.embed.EditorTools;
 
 public class EditorLoader {
 
@@ -53,7 +53,7 @@ public class EditorLoader {
         }
 
         if (standalone) { // Needed assets
-            AssetLibrary.addImageSet("cursorsEmbed", new Cursors().bitmapData, 32, 32); // Editor assets
+            AssetLibrary.addImageSet("cursorsEmbed", new Cursors().bitmapData, 32, 32);
             AssetLibrary.addImageSet("editorTools", new EditorTools().bitmapData, 16, 16);
         }
 

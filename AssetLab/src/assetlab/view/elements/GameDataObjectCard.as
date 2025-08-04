@@ -17,7 +17,7 @@ public class GameDataObjectCard extends Sprite {
     public static const WIDTH:int = 115;
     public static const HEIGHT:int = 100;
 
-    private var xml:XML;
+    private var xml_:XML;
 
     private var background:SliceScalingBitmap;
     private var title:SimpleText;
@@ -25,7 +25,7 @@ public class GameDataObjectCard extends Sprite {
     private var textureDisplay:GameDataTextureDisplay;
 
     public function GameDataObjectCard(xml:XML) {
-        this.xml = xml;
+        this.xml_ = xml;
 
         this.background = TextureParser.instance.getSliceScalingBitmap("UI", "drawelement_background");
         this.background.width = WIDTH;
@@ -54,13 +54,13 @@ public class GameDataObjectCard extends Sprite {
     }
 
     private function onRollOver(e:Event):void {
-        this.textureDisplay.onRollOver();
+        this.textureDisplay.startAnimation();
         this.title.scrollingEnabled = true;
         transform.colorTransform = MoreColorUtil.brightCT;
     }
 
     private function onRollOut(e:Event):void {
-        this.textureDisplay.onRollOut();
+        this.textureDisplay.pauseAnimation();
         this.title.scrollingEnabled = false;
         transform.colorTransform = MoreColorUtil.identity;
     }
@@ -75,6 +75,10 @@ public class GameDataObjectCard extends Sprite {
 
         this.textureDisplay.x = (WIDTH - this.textureDisplay.width) / 2;
         this.textureDisplay.y = this.typeText.y + this.typeText.height + (HEIGHT - (this.typeText.y + this.typeText.height) - this.textureDisplay.height) / 2;
+    }
+
+    public function get xml():XML{
+        return this.xml_;
     }
 }
 }

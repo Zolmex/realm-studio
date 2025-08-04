@@ -1,5 +1,6 @@
 package assetlab.view {
 import assetlab.io.LabAssets;
+import assetlab.view.GameDataView;
 import assetlab.view.elements.FileBrowser;
 import assetlab.view.elements.GameDataObjectCard;
 import assetlab.view.elements.GameDataObjectCard;
@@ -14,6 +15,7 @@ import flash.utils.ByteArray;
 
 public class GameDataListView extends Sprite {
 
+    private var view:GameDataView;
     private var workspace:WorkspaceView;
 
     private var xmlList:Sprite;
@@ -21,7 +23,8 @@ public class GameDataListView extends Sprite {
     private var scrollbar:SimpleScrollbar;
     private var gameDataObjects:Vector.<GameDataObjectCard> = new Vector.<GameDataObjectCard>();
 
-    public function GameDataListView(workspace:WorkspaceView) {
+    public function GameDataListView(view:GameDataView, workspace:WorkspaceView) {
+        this.view = view;
         this.workspace = workspace;
 
         this.xmlList = new Sprite();
@@ -63,6 +66,7 @@ public class GameDataListView extends Sprite {
         var i:int = 0;
         for each (var xml:XML in xmls){
             var gameDataObject:GameDataObjectCard = new GameDataObjectCard(xml);
+            gameDataObject.addEventListener(MouseEvent.CLICK, this.onObjectCardClick);
             gameDataObject.x = int(i % rowSize) * (GameDataObjectCard.WIDTH + 8);
             gameDataObject.y = int(i / rowSize) * (GameDataObjectCard.HEIGHT + 8);
             this.xmlList.addChild(gameDataObject);
@@ -72,6 +76,11 @@ public class GameDataListView extends Sprite {
 
         this.fixListPosition();
         this.scrollbar.setup(this.workspace.contentHeight, this.xmlList.y, this.xmlList.height - this.workspace.contentHeight);
+    }
+
+    private function onObjectCardClick(e:MouseEvent):void {
+        var card:GameDataObjectCard = e.currentTarget as GameDataObjectCard;
+        this.view.onObjectSelected(card.xml);
     }
 
     private function positionChildren():void {

@@ -58,7 +58,9 @@ public class MoreColorUtil
       public static const makeWhiteCT:ColorTransform = new ColorTransform(1,1,1,1,255,255,255,0);
 
       public static const brightCT:ColorTransform = new ColorTransform(1, 1, 1, 1, 40, 40, 40, 0.5);
-       
+
+      public static const veryBrightCT:ColorTransform = new ColorTransform(1, 1, 1, 1, 80, 80, 80, 0.5);
+
       
       public function MoreColorUtil(se:StaticEnforcer)
       {

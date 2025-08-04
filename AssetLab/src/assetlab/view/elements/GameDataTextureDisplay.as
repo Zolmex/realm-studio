@@ -51,13 +51,13 @@ public class GameDataTextureDisplay extends Sprite {
         }
     }
 
-    public function onRollOver():void {
+    public function startAnimation():void {
         if (this.animationFrames != null) {
             addEventListener(Event.ENTER_FRAME, this.onEnterFrame);
         }
     }
 
-    public function onRollOut():void {
+    public function pauseAnimation():void {
         if (this.animationFrames != null){
             removeEventListener(Event.ENTER_FRAME, this.onEnterFrame);
         }

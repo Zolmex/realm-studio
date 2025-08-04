@@ -1,4 +1,6 @@
-package mapeditor.editor.ui.embed {
+package common.ui.embed {
+import mapeditor.editor.ui.embed.*;
+
 import mx.core.BitmapAsset;
 
 [Embed(source="EditorTools.png")]
