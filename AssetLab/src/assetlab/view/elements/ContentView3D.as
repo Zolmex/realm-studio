@@ -27,11 +27,11 @@ public class ContentView3D extends ContentView {
     private var lastMouseY:Number = 0;
 
     public function ContentView3D(workspace:WorkspaceView) {
-        super(workspace);
+        super(workspace, true);
 
         this.viewMask = new Shape();
         this.viewMask.graphics.beginFill(0);
-        this.viewMask.graphics.drawRect(0, 0, WIDTH, HEIGHT);
+        this.viewMask.graphics.drawRect(0, 0, workspace.contentWidth - FileBrowser.WIDTH - 1, workspace.contentHeight);
         this.viewMask.graphics.endFill();
         this.viewMask.blendMode = BlendMode.ERASE;
 
@@ -118,7 +118,7 @@ public class ContentView3D extends ContentView {
         this.updateMaskPosition();
         this.viewMask.graphics.clear();
         this.viewMask.graphics.beginFill(0);
-        this.viewMask.graphics.drawRect(0, 0, this.workspace.contentWidth - FileBrowser.WIDTH - 1, HEIGHT * Global.ScaleY);
+        this.viewMask.graphics.drawRect(0, 0, this.workspace.contentWidth - FileBrowser.WIDTH - 1, this.workspace.contentHeight);
         this.viewMask.graphics.endFill();
         this.view3D.width = this.viewMask.width;
         this.view3D.height = this.viewMask.height;
