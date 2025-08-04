@@ -21,6 +21,7 @@ public class GameDataObjectCard extends Sprite {
 
     private var background:SliceScalingBitmap;
     private var title:SimpleText;
+    private var typeText:SimpleText;
     private var textureDisplay:GameDataTextureDisplay;
 
     public function GameDataObjectCard(xml:XML) {
@@ -37,6 +38,11 @@ public class GameDataObjectCard extends Sprite {
         this.title.setBold(true);
         this.title.updateMetrics();
         addChild(this.title);
+
+        this.typeText = new SimpleText(10, Constants.TEXT_UI_COLOR);
+        this.typeText.setText("#" + int(xml.@type));
+        this.typeText.updateMetrics();
+        addChild(this.typeText);
 
         this.textureDisplay = new GameDataTextureDisplay(LabAssets.getTextureData(xml));
         addChild(this.textureDisplay);
@@ -64,8 +70,11 @@ public class GameDataObjectCard extends Sprite {
         this.title.x = (WIDTH - textW) / 2;
         this.title.y = (25 - this.title.height) / 2;
 
+        this.typeText.x = (WIDTH - this.typeText.width) / 2;
+        this.typeText.y = this.title.y + this.title.height + 2;
+
         this.textureDisplay.x = (WIDTH - this.textureDisplay.width) / 2;
-        this.textureDisplay.y = this.textureDisplay.y + this.title.height + (HEIGHT - (this.textureDisplay.y + this.title.height) - this.textureDisplay.height) / 2;
+        this.textureDisplay.y = this.typeText.y + this.typeText.height + (HEIGHT - (this.typeText.y + this.typeText.height) - this.textureDisplay.height) / 2;
     }
 }
 }
