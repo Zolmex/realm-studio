@@ -12,14 +12,16 @@ import common.Global;
 import flash.display.BlendMode;
 
 import flash.display.Shape;
+import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Vector3D;
 import flash.utils.ByteArray;
 
-public class ContentView3D extends ContentView {
+public class ContentView3D extends Sprite {
 
+    private var workspace:WorkspaceView;
     private var viewMask:Shape;
     private var view3D:View3D;
     private var loader:Loader3D;
@@ -27,7 +29,7 @@ public class ContentView3D extends ContentView {
     private var lastMouseY:Number = 0;
 
     public function ContentView3D(workspace:WorkspaceView) {
-        super(workspace, true);
+        this.workspace = workspace;
 
         this.viewMask = new Shape();
         this.viewMask.graphics.beginFill(0);
@@ -114,7 +116,7 @@ public class ContentView3D extends ContentView {
         this.view3D.scene.addChild(this.loader);
     }
 
-    public override function resize():void {
+    public function resize():void {
         this.updateMaskPosition();
         this.viewMask.graphics.clear();
         this.viewMask.graphics.beginFill(0);

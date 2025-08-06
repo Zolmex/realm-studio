@@ -1,4 +1,5 @@
 package assetlab.view.elements {
+import assetlab.io.LabAssets;
 import assetlab.view.MainView;
 import assetlab.view.WorkspaceView;
 
@@ -40,23 +41,21 @@ import flash.utils.Dictionary;
 
 public class ContentView extends Sprite { // Visualizer for .png images and 3D models
 
-    protected var workspace:WorkspaceView;
+    private var workspace:WorkspaceView;
     private var content:Sprite;
     private var contentMask:Shape;
     private var pngCache:Dictionary = new Dictionary();
     private var scrollbar:SimpleScrollbar;
     private var scaleInput:SimpleTextInput;
+    private var contentOutline:Shape;
 
-    public function ContentView(workspace:WorkspaceView, model3DContent:Boolean = false) {
+    public function ContentView(workspace:WorkspaceView) {
         this.workspace = workspace;
 
-        if (model3DContent){
-            return;
-        }
+        this.contentOutline = new Shape(); // Used for drawing lines at texture cuts
 
         this.content = new Sprite();
-        this.content.scaleX = 5;
-        this.content.scaleY = 5;
+        this.content.addChild(this.contentOutline);
         addChild(this.content);
 
         this.contentMask = new Shape();
@@ -71,7 +70,7 @@ public class ContentView extends Sprite { // Visualizer for .png images and 3D m
         this.scrollbar.addEventListener(Event.CHANGE, this.onScrollbarChange);
         addChild(this.scrollbar);
 
-        this.scaleInput = new SimpleTextInput("Scale", true, "5");
+        this.scaleInput = new SimpleTextInput("Scale", false, "5");
         this.scaleInput.inputText.restrict = "0-9";
         this.scaleInput.inputText.maxChars = 2;
         this.scaleInput.inputText.addEventListener(Event.CHANGE, this.onScaleChange);
@@ -124,7 +123,7 @@ public class ContentView extends Sprite { // Visualizer for .png images and 3D m
         }
     }
 
-    public virtual function resize():void {
+    public function resize():void {
         this.contentMask.graphics.clear();
         this.contentMask.graphics.beginFill(0);
         this.contentMask.graphics.drawRect(0, 0, this.workspace.contentWidth - FileBrowser.WIDTH - 1, this.workspace.contentHeight);
@@ -140,11 +139,18 @@ public class ContentView extends Sprite { // Visualizer for .png images and 3D m
         }
         else {
             pngImage = new Bitmap(BitmapData.decode(pngBytes));
+            pngImage.scaleX = 5;
+            pngImage.scaleY = 5;
             this.pngCache[fileName] = pngImage;
         }
 
-        this.content.removeChildren();
+        if (this.content.getChildIndex(this.contentOutline) != 0) { // Make sure the outline is at the top
+            this.content.removeChildAt(0);
+        }
+
         this.content.addChild(pngImage);
+        this.content.setChildIndex(pngImage, 0);
+        this.content.setChildIndex(this.contentOutline, 1);
 
         this.fixListPosition();
         this.scrollbar.setup(this.workspace.contentHeight, this.content.y, this.content.height - this.workspace.contentHeight);
