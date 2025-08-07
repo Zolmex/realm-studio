@@ -12,10 +12,10 @@ public class WorkspaceView extends Sprite {
     private static const HEIGHT:int = 500;
 
     private var mainView:MainView;
-    private var imageSetsView:ImageSetsView;
+    public var imageSetsView:ImageSetsView;
     private var model3DView:Model3DView;
     private var gameDataView:GameDataView;
-    private var window:TabbedWindow;
+    public var window:TabbedWindow;
 
     public function WorkspaceView(mainView:MainView) {
         this.mainView = mainView;

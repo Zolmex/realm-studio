@@ -47,10 +47,6 @@ public class Tooltip extends Sprite {
     }
 
     private function onTargetOut(e:Event):void {
-        if (this.hitTestPoint(Global.Main.stage.mouseX, Global.Main.stage.mouseY)){ // Ignore roll out if the mouse is over the tooltip
-            return;
-        }
-
         this.target.removeEventListener(MouseEvent.ROLL_OUT, this.onTargetOut);
         this.target.removeEventListener(Event.ENTER_FRAME, this.onEnterFrame);
         this.visible = false;

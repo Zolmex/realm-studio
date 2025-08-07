@@ -1,5 +1,6 @@
 package assetlab.view.elements {
 import assetlab.io.LabAssets;
+import assetlab.view.TextureSelectedEvent;
 
 import common.assets.AssetLibrary;
 
@@ -18,13 +19,16 @@ import flash.display.Bitmap;
 import flash.display.PixelSnapping;
 
 import flash.display.Sprite;
+import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.text.TextFieldAutoSize;
 
 public class TextureProperties extends Sprite {
 
+    public static const SELECT_TEXTURE:String = "SelectTexture";
     private static const TEXT_WIDTH:int = 120;
 
+    private var xml:XML;
     private var textureDisplay:GameDataTextureDisplay;
     private var fileText:SimpleText;
     private var indexText:SimpleText;
@@ -35,6 +39,8 @@ public class TextureProperties extends Sprite {
             removeChild(this.textureDisplay);
             this.textureDisplay = null;
         }
+
+        this.xml = xml;
 
         var textureData:TextureData = LabAssets.getTextureData(xml);
         this.textureDisplay = new GameDataTextureDisplay(textureData);
@@ -54,7 +60,7 @@ public class TextureProperties extends Sprite {
         this.editIcon.y = (this.textureDisplay.height - this.editIcon.height) / 2;
         addChild(this.editIcon);
 
-        var textureXML:XML = getTextureXML(xml);
+        var textureXML:Object = getTextureXML(xml);
         if (textureXML == null){
             return;
         }
@@ -101,18 +107,47 @@ public class TextureProperties extends Sprite {
     }
 
     private function onTextureClick(e:MouseEvent):void {
-        // TODO: Open sprite sheet view
+        this.textureDisplay.pauseAnimation();
+        this.textureDisplay.transform.colorTransform = MoreColorUtil.identity;
+        this.textureDisplay.removeEventListener(MouseEvent.ROLL_OVER, this.onTextureRollOver);
+        this.textureDisplay.removeEventListener(MouseEvent.ROLL_OUT, this.onTextureRollOut);
+        this.textureDisplay.alpha = 0.5;
+        dispatchEvent(new Event(SELECT_TEXTURE));
     }
 
-    private static function getTextureXML(xml:XML):XML {
+    private static function getTextureXML(xml:XML):Object {
         if (xml.hasOwnProperty("Texture")) {
-            return XML(xml.Texture);
+            return xml.Texture;
         } else if (xml.hasOwnProperty("AnimatedTexture")) {
-            return XML(xml.AnimatedTexture);
+            return xml.AnimatedTexture;
         } else if (xml.hasOwnProperty("RandomTexture")) {
-            return XML(xml.RandomTexture);
+            return xml.RandomTexture;
         }
         return null;
+    }
+
+    public function onTextureSelected(e:TextureSelectedEvent):void {
+        delete this.xml.Texture;
+        delete this.xml.AnimatedTexture;
+        delete this.xml.RandomTexture;
+
+        if (e.Animated){
+            this.xml.AnimatedTexture = new XML();
+            this.xml.AnimatedTexture.File = e.File;
+            this.xml.AnimatedTexture.Index = e.Index;
+        }
+        else{
+            this.xml.Texture = new XML();
+            this.xml.Texture.File = e.File;
+            this.xml.Texture.Index = e.Index;
+        }
+
+        this.textureDisplay.setTexture(new TextureData(this.xml));
+
+        this.textureDisplay.addEventListener(MouseEvent.ROLL_OVER, this.onTextureRollOver);
+        this.textureDisplay.addEventListener(MouseEvent.ROLL_OUT, this.onTextureRollOut);
+        this.textureDisplay.alpha = 1;
+        this.editIcon.visible = false;
     }
 }
 }

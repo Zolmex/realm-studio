@@ -1,5 +1,6 @@
 package assetlab.view.elements {
 import assetlab.io.LabAssets;
+import assetlab.view.ImageSetsView;
 import assetlab.view.WorkspaceView;
 
 import common.ui.SliceScalingBitmap;
@@ -8,6 +9,7 @@ import common.ui.text.SimpleText;
 import common.util.Constants;
 
 import flash.display.Sprite;
+import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.text.TextFieldAutoSize;
 
@@ -36,9 +38,16 @@ public class GameDataEditView extends Sprite {
         addChild(this.title);
 
         this.textureProperties = new TextureProperties(xml);
+        this.textureProperties.addEventListener(TextureProperties.SELECT_TEXTURE, this.onSelectTexture);
         addChild(this.textureProperties);
 
         this.positionChildren();
+    }
+
+    private function onSelectTexture(e:Event):void {
+        this.workspace.window.selectTab("ImageSets"); // Go to image sets tab
+        this.workspace.imageSetsView.contentView.addEventListener(ContentView.TEXTURE_SELECTED, this.textureProperties.onTextureSelected);
+        this.workspace.imageSetsView.contentView.listenToTextureSelection();
     }
 
     private function positionChildren():void {

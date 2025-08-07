@@ -1,6 +1,7 @@
 package assetlab.view.elements {
 import assetlab.io.LabAssets;
 import assetlab.view.MainView;
+import assetlab.view.TextureSelectedEvent;
 import assetlab.view.WorkspaceView;
 
 import away3d.containers.ObjectContainer3D;
@@ -49,6 +50,7 @@ import flash.utils.Dictionary;
 
 public class ContentView extends Sprite { // Visualizer for .png images and 3D models
 
+    public static const TEXTURE_SELECTED:String = "TextureSelected";
     private static const ROW_SIZE:int = 16;
 
     private var workspace:WorkspaceView;
@@ -62,6 +64,8 @@ public class ContentView extends Sprite { // Visualizer for .png images and 3D m
     private var mouseTriggerArea:Shape;
     private var assetTitle:String;
     private var animated:Boolean;
+    private var textureSample:Bitmap;
+    private var selectingTexture:Boolean;
 
     private const contentCache:Dictionary = new Dictionary(); // Save loaded image sets here
 
@@ -75,11 +79,12 @@ public class ContentView extends Sprite { // Visualizer for .png images and 3D m
         this.content = new Sprite();
         this.content.scaleX = 2;
         this.content.scaleY = 2;
-        this.content.addChild(this.mouseTriggerArea)
+        this.content.addChild(this.mouseTriggerArea);
         this.content.addChild(this.bitmapContainer); // Bitmap layer
         this.content.addChild(this.outlineLayer);
         this.content.addEventListener(MouseEvent.ROLL_OVER, this.onMouseOverContent);
         this.content.addEventListener(MouseEvent.ROLL_OUT, this.onMouseOutContent);
+        this.content.addEventListener(MouseEvent.CLICK, this.onContentClick);
         addChild(this.content);
 
         this.contentMask = new Shape();
@@ -179,6 +184,16 @@ public class ContentView extends Sprite { // Visualizer for .png images and 3D m
 
         this.addImages(titleName, imageDatas, animated);
 
+        var texture:Bitmap = this.contentCache[this.assetTitle][0] as Bitmap;
+        this.textureSample = texture;
+
+        this.outlineLayer.graphics.clear(); // Redraw outline layer
+        this.outlineLayer.graphics.lineStyle(1, 0xFF0000, 0.9);
+        this.outlineLayer.graphics.drawRect(0, 0, this.textureSample.width, this.textureSample.height);
+        this.outlineLayer.graphics.lineStyle();
+        this.outlineLayer.x = 0;
+        this.outlineLayer.y = 0;
+
         this.mouseTriggerArea.graphics.clear();
         this.mouseTriggerArea.graphics.beginFill(0, 0); // Redraw mouse area
         this.mouseTriggerArea.graphics.drawRect(0, 0, this.bitmapContainer.width, this.bitmapContainer.height);
@@ -229,7 +244,9 @@ public class ContentView extends Sprite { // Visualizer for .png images and 3D m
             Global.Main.stage.addChild(this.tooltip);
         }
 
-        this.updateTooltipText();
+        var index:int = this.getCursorTextureIndex();
+
+        this.updateTooltipText(index);
     }
 
     private function onMouseOutContent(e:MouseEvent):void {
@@ -241,16 +258,18 @@ public class ContentView extends Sprite { // Visualizer for .png images and 3D m
             return;
         }
 
-        this.updateTooltipText();
+        var index:int = this.getCursorTextureIndex();
+
+        this.updateTooltipText(index);
+        this.updateOutlinePosition(index);
     }
 
-    private function updateTooltipText():void {
+    private function getCursorTextureIndex():int {
         var i:int; // Find index based on position
         var mousePos:Point = new Point(Global.Main.stage.mouseX, Global.Main.stage.mouseY);
         var bitmapPos:Point = this.content.localToGlobal(new Point(this.bitmapContainer.x, this.bitmapContainer.y));
-        var texture:Bitmap = this.contentCache[this.assetTitle][0] as Bitmap;
-        var texWidth:int = texture.width * 2;
-        var texHeight:int = texture.height * 2;
+        var texWidth:int = this.textureSample.width * this.content.scaleX;
+        var texHeight:int = this.textureSample.height * this.content.scaleY;
 
         var yDiff:Number = mousePos.y - bitmapPos.y; // These numbers should always be positive
         var xDiff:Number = mousePos.x - bitmapPos.x;
@@ -262,9 +281,42 @@ public class ContentView extends Sprite { // Visualizer for .png images and 3D m
             var column:int = int(xDiff / texWidth);
             i = row * ROW_SIZE + column;
         }
+        return i;
+    }
 
+    private function updateOutlinePosition(index:int):void {
+        if (this.animated){
+            this.outlineLayer.x = 0;
+            this.outlineLayer.y = index * this.textureSample.height;
+            return;
+        }
+
+        this.outlineLayer.x = int(index % ROW_SIZE) * this.textureSample.width;
+        this.outlineLayer.y = int(index / ROW_SIZE) * this.textureSample.height;
+    }
+
+    private function updateTooltipText(index:int):void {
         this.tooltip.setTitle(this.assetTitle);
-        this.tooltip.setSubText("0x" + i.toString(16));
+        this.tooltip.setSubText("0x" + index.toString(16));
+    }
+
+    private function onContentClick(e:MouseEvent):void {
+        if (!this.selectingTexture){
+            return;
+        }
+
+        this.selectingTexture = false;
+
+        dispatchEvent(this.getSelectedTextureEvent());
+    }
+
+    private function getSelectedTextureEvent():TextureSelectedEvent {
+        var index:int = this.getCursorTextureIndex();
+        return new TextureSelectedEvent(this.assetTitle, "0x" + index.toString(16), this.animated);
+    }
+
+    public function listenToTextureSelection():void {
+        this.selectingTexture = true;
     }
 }
 }

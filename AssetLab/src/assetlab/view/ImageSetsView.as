@@ -19,7 +19,7 @@ public class ImageSetsView extends Sprite { // Used for visualizing and working 
 
     private var workspace:WorkspaceView;
     private var imageSetList:VerticalListView;
-    private var contentView:ContentView;
+    public var contentView:ContentView;
     private var mouseTriggerArea:Shape;
 
     public function ImageSetsView(workspace:WorkspaceView) {

@@ -66,6 +66,12 @@ public class TabbedWindow extends Sprite {
         this.positionTabs();
     }
 
+    public function selectTab(tabTitle:String):void {
+        for each (var tab:TabElement in this.tabs){
+            tab.setSelected(tab.title.text == tabTitle);
+        }
+    }
+
     public function resize(width:int, height:int):void {
         this.background.width = width;
         this.background.height = height;
@@ -93,7 +99,7 @@ class TabElement extends Sprite {
     public static const WIDTH:int = 55;
     public static const HEIGHT:int = 30;
 
-    private var title:SimpleText;
+    public var title:SimpleText;
     private var background:SliceScalingBitmap;
     private var content:Sprite;
 

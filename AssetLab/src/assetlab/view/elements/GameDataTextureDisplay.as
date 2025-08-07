@@ -51,6 +51,32 @@ public class GameDataTextureDisplay extends Sprite {
         }
     }
 
+    public function setTexture(textureData:TextureData):void {
+        removeChildren();
+        this.animationFrames = null;
+        removeEventListener(Event.ENTER_FRAME, this.onEnterFrame);
+
+        this.textureData = textureData;
+
+        var texture:BitmapData = textureData.getTexture();
+        var staticTexture:BitmapData = null;
+        if (texture != null) {
+            var textureSize:int = Math.max(texture.width, texture.height);
+            this.finalSize = SIZE * (8.0 / textureSize);
+            staticTexture = TextureRedrawer.redraw(texture, this.finalSize, true, 0);
+        }
+        this.staticTexture = new Bitmap(staticTexture);
+        addChild(this.staticTexture);
+
+        this.animatedTexture = new Bitmap(staticTexture);
+        addChild(this.animatedTexture);
+
+        if (textureData.animatedChar_ != null) {
+            this.staticTexture.visible = false;
+            this.animationFrames = textureData.animatedChar_.dict_;
+        }
+    }
+
     public function startAnimation():void {
         if (this.animationFrames != null) {
             addEventListener(Event.ENTER_FRAME, this.onEnterFrame);

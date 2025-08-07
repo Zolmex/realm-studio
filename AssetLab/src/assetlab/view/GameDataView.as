@@ -49,7 +49,8 @@ public class GameDataView extends Sprite {
         this.listView.y = this.fileBrowser.y;
 
         if (this.currentEditView) {
-            this.currentEditView.x = this.workspace.contentWidth - GameDataEditView.WIDTH;
+            this.currentEditView.y = this.parent.y;
+            this.currentEditView.x = this.workspace.contentWidth - GameDataEditView.WIDTH + 5;
         }
     }
 
@@ -91,7 +92,7 @@ public class GameDataView extends Sprite {
         else {
             editView = new GameDataEditView(this.workspace, xml);
             this.editViews[xml] = editView;
-            addChild(editView);
+            this.workspace.addChild(editView);
         }
 
         if (this.currentEditView) {
