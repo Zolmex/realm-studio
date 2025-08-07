@@ -244,6 +244,8 @@ public class SimpleText extends TextField {
     }
 
     private function resize():void {
+        scaleX = 1;
+        scaleY = 1;
         while ((this.inputWidth_ > 0 && width > this.inputWidth_) || (this.inputHeight_ > 0 && height > this.inputHeight_)) {
             scaleX -= 0.05;
             scaleY -= 0.05;

@@ -76,7 +76,7 @@ public class TextureProperties extends Sprite {
 
         this.indexText = new SimpleText(10, Constants.TEXT_UI_COLOR, false, TEXT_WIDTH);
         this.indexText.setAutoSize(TextFieldAutoSize.LEFT);
-        this.indexText.setText("#" + int(textureXML.Index));
+        this.indexText.setText("0x" + int(textureXML.Index).toString(16));
         this.indexText.setBold(true);
         this.indexText.backgroundImage = TextureParser.instance.getSliceScalingBitmap("UI", "checkbox_title_background")
         this.indexText.updateMetrics();
@@ -148,6 +148,12 @@ public class TextureProperties extends Sprite {
         this.textureDisplay.addEventListener(MouseEvent.ROLL_OUT, this.onTextureRollOut);
         this.textureDisplay.alpha = 1;
         this.editIcon.visible = false;
+
+        this.fileText.setText(e.File);
+        this.fileText.updateMetrics();
+
+        this.indexText.setText(e.Index);
+        this.indexText.updateMetrics();
     }
 }
 }
