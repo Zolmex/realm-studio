@@ -17,11 +17,14 @@ public class VerticalListSlot extends Sprite {
     public static const WIDTH:int = 144;
     public static const HEIGHT:int = 25;
 
+    public var titleName:String;
     private var background:SliceScalingBitmap;
     private var nameText:SimpleText;
     public var selected:Boolean;
 
     function VerticalListSlot(name:String) {
+        this.titleName = name;
+
         this.background = TextureParser.instance.getSliceScalingBitmap("UI", "drawelementselector_selection");
         this.background.width = WIDTH;
         this.background.height = HEIGHT;

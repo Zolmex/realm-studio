@@ -16,11 +16,15 @@ public class Tooltip extends Sprite {
 
     private var target:DisplayObject;
     private var background:SliceScalingBitmap;
+    protected var content:Sprite;
 
     // Tooltips should always be instantiated on roll over
     public function Tooltip(target:DisplayObject) {
         this.background = TextureParser.instance.getSliceScalingBitmap("UI", "maplist_element_background");
         addChild(this.background);
+
+        this.content = new Sprite();
+        addChild(this.content);
 
         this.target = target;
         target.addEventListener(MouseEvent.ROLL_OUT, this.onTargetOut);
@@ -43,6 +47,10 @@ public class Tooltip extends Sprite {
     }
 
     private function onTargetOut(e:Event):void {
+        if (this.hitTestPoint(Global.Main.stage.mouseX, Global.Main.stage.mouseY)){ // Ignore roll out if the mouse is over the tooltip
+            return;
+        }
+
         this.target.removeEventListener(MouseEvent.ROLL_OUT, this.onTargetOut);
         this.target.removeEventListener(Event.ENTER_FRAME, this.onEnterFrame);
         this.visible = false;
@@ -59,13 +67,12 @@ public class Tooltip extends Sprite {
     }
 
     protected virtual function drawBackground():void {
-        this.background.width = width + 10;
-        this.background.height = height + 10;
+        this.background.width = this.content.width + 10;
+        this.background.height = this.content.height + 10;
         this.background.alpha = 0.8;
     }
 
     protected function updateChildren():void {
-        this.addChildren();
         this.positionChildren();
         this.drawBackground();
     }

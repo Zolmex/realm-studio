@@ -3,6 +3,7 @@ import assetlab.io.LabAssets;
 import assetlab.view.elements.ContentView;
 import assetlab.view.elements.ContentView3D;
 import assetlab.view.elements.FileBrowser;
+import assetlab.view.elements.VerticalListView;
 
 import common.Global;
 
@@ -38,7 +39,7 @@ public class Model3DView extends Sprite {
     }
 
     public function resize():void {
-        this.fileBrowser.resize(FileBrowser.WIDTH, this.workspace.contentHeight);
+        this.fileBrowser.resize(VerticalListView.WIDTH, this.workspace.contentHeight);
         this.contentView.resize();
         this.positionChildren();
     }

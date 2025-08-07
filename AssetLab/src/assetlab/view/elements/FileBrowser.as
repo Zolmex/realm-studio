@@ -17,17 +17,15 @@ import flash.utils.Dictionary;
 
 public class FileBrowser extends Sprite {
 
-    public static const WIDTH:int = 164;
-    public static const HEIGHT:int = 492;
     public static const FILE_SELECTED:String = "FileSelected"
 
     private var files:Dictionary; // Key: File; Value: File content (ByteArray)
     private var list:VerticalListView;
     public var selectedSlot:FileBrowserSlot;
 
-    public function FileBrowser(files:Dictionary, width:int = WIDTH, height:int = HEIGHT) {
+    public function FileBrowser(files:Dictionary) {
         this.files = files;
-        this.list = new VerticalListView(width, height);
+        this.list = new VerticalListView();
         this.list.addEventListener(VerticalListView.SLOT_SELECTED, this.onSlotSelected);
         addChild(this.list);
     }

@@ -4,6 +4,7 @@ import assetlab.view.GameDataView;
 import assetlab.view.elements.FileBrowser;
 import assetlab.view.elements.GameDataObjectCard;
 import assetlab.view.elements.GameDataObjectCard;
+import assetlab.view.elements.VerticalListView;
 
 import common.ui.elements.SimpleScrollbar;
 
@@ -133,7 +134,7 @@ public class GameDataListView extends Sprite {
     }
 
     public override function get width():Number {
-        return this.workspace.contentWidth - FileBrowser.WIDTH;
+        return this.workspace.contentWidth - VerticalListView.WIDTH;
     }
 
     private function getCardRowSize():int {

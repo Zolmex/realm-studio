@@ -23,9 +23,9 @@ public class TextTooltip extends Tooltip {
     }
 
     protected override function addChildren():void {
-        addChild(this.textField);
+        this.content.addChild(this.textField);
         if (this.subTextField){
-            addChild(this.subTextField);
+            this.content.addChild(this.subTextField);
         }
     }
 
@@ -39,13 +39,24 @@ public class TextTooltip extends Tooltip {
         }
     }
 
-    public function addSubText(text:String, size:int = 14, color:uint = 0xFFFFFF, bold:Boolean = false):void {
-        this.subTextField = new SimpleText(size, color);
-        var sheet:StyleSheet = new StyleSheet();
-        sheet.parseCSS(CSS_TEXT);
-        this.subTextField.styleSheet = sheet;
+    public function setSubText(text:String, size:int = 14, color:uint = 0xFFFFFF):void {
+        if (this.subTextField == null) {
+            this.subTextField = new SimpleText(size, color);
+            var sheet:StyleSheet = new StyleSheet();
+            sheet.parseCSS(CSS_TEXT);
+            this.subTextField.styleSheet = sheet;
+            this.content.addChild(this.subTextField);
+        }
+
         this.subTextField.htmlText = text;
         this.subTextField.useTextDimensions();
+
+        this.updateChildren();
+    }
+
+    public function setTitle(text:String):void {
+        this.textField.htmlText = text;
+        this.textField.useTextDimensions();
 
         this.updateChildren();
     }

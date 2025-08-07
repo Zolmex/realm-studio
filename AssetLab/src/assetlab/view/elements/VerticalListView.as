@@ -14,6 +14,8 @@ import flash.utils.Dictionary;
 
 public class VerticalListView extends Sprite {
 
+    public static const WIDTH:int = 164;
+    public static const HEIGHT:int = 492;
     public static const SLOT_SELECTED:String = "SlotSelected";
 
     private var background:SliceScalingBitmap;
@@ -26,7 +28,7 @@ public class VerticalListView extends Sprite {
     private const listYLimit:int = 3;
     private var viewHeight:int;
 
-    public function VerticalListView( width:int, height:int) {
+    public function VerticalListView(width:int = WIDTH, height:int = HEIGHT) {
         this.viewHeight = height - 2;
 
         this.background = TextureParser.instance.getSliceScalingBitmap("UI", "search_input_background");
