@@ -109,21 +109,27 @@ public class AssetLoader {
     private static function parseGroundFiles():void {
         var groundObj:* = undefined;
         for each(groundObj in EmbeddedData.groundFiles) {
-            GroundLibrary.parseFromXML(XML(groundObj));
+            for each (var xml:XML in XMLList(XML(groundObj).Ground)) {
+                GroundLibrary.parseFromXML(xml);
+            }
         }
     }
 
     private static function parseObjectFiles():void {
         var objectObj:* = undefined;
         for each(objectObj in EmbeddedData.objectFiles) {
-            ObjectLibrary.parseFromXML(XML(objectObj));
+            for each (var xml:XML in XMLList(XML(objectObj).Object)) {
+                ObjectLibrary.parseFromXML(xml);
+            }
         }
     }
 
     private static function parseRegionFiles():void {
         var regionXML:* = undefined;
         for each(regionXML in EmbeddedData.regionFiles) {
-            RegionLibrary.parseFromXML(XML(regionXML));
+            for each (var xml:XML in XMLList(XML(regionXML).Region)) {
+                RegionLibrary.parseFromXML(xml);
+            }
         }
     }
 }

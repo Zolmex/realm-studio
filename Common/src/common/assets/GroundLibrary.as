@@ -36,22 +36,13 @@ public class GroundLibrary {
         return ret;
     }
 
-    public static function parseFromXML(xml:XML):void {
-        if (!xml.hasOwnProperty("Ground")) {
-            trace("Return???")
-            return;
-        }
-
+    public static function parseFromXML(groundXML:XML):void {
         try {
-            var groundXML:XML = null;
-            var groundType:int = 0;
-            for each(groundXML in xml.Ground) {
-                groundType = int(groundXML.@type);
-                propsLibrary_[groundType] = new GroundProperties(groundXML);
-                xmlLibrary_[groundType] = groundXML;
-                typeToTextureData_[groundType] = new TextureData(groundXML);
-                idToType_[String(groundXML.@id)] = groundType;
-            }
+            var groundType:int = int(groundXML.@type);
+            propsLibrary_[groundType] = new GroundProperties(groundXML);
+            xmlLibrary_[groundType] = groundXML;
+            typeToTextureData_[groundType] = new TextureData(groundXML);
+            idToType_[String(groundXML.@id)] = groundType;
         } catch (e:Error) {
             trace("GROUND ASSET FAILED", groundXML.@id);
             trace(e.getStackTrace());

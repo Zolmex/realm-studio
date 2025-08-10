@@ -19,6 +19,7 @@ import flash.display.StageScaleMode;
 import flash.events.Event;
 
 import mapeditor.EditorLoader;
+import mapeditor.RealmEditorTestEvent;
 import mapeditor.editor.Parameters;
 import mapeditor.editor.ui.Keybinds;
 
@@ -69,7 +70,7 @@ public class Main extends Sprite {
 //        EditorLoader.loadRegions(RegionLibrary.xmlLibrary_);
         this.editorView = EditorLoader.load(this, true);
         this.editorView.addEventListener(Event.REMOVED_FROM_STAGE, onAppExit);
-        this.editorView.addEventListener(Event.CONNECT, onMapTest);
+        this.editorView.addEventListener(RealmEditorTestEvent.TEST_CONNECT, onMapTest);
     }
 
     private function loadAssetLab():void {

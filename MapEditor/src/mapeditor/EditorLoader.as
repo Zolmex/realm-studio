@@ -52,11 +52,6 @@ public class EditorLoader {
             throw new Error("RealmEditor: " + readyCount + " out of 5 asset libraries weren't loaded.");
         }
 
-        if (standalone) { // Needed assets
-            AssetLibrary.addImageSet("cursorsEmbed", new Cursors().bitmapData, 32, 32);
-            AssetLibrary.addImageSet("editorTools", new EditorTools().bitmapData, 16, 16);
-        }
-
         TextureParser.load(new UIAssets.UI(), new UIAssets.UI_CONFIG(), new UIAssets.UI_SLICE_CONFIG(), "UI");
         Parameters.load();
         Keybinds.loadKeys();

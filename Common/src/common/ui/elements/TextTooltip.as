@@ -23,9 +23,9 @@ public class TextTooltip extends Tooltip {
     }
 
     protected override function addChildren():void {
-        this.content.addChild(this.textField);
+        addChild(this.textField);
         if (this.subTextField){
-            this.content.addChild(this.subTextField);
+            addChild(this.subTextField);
         }
     }
 
@@ -45,7 +45,7 @@ public class TextTooltip extends Tooltip {
             var sheet:StyleSheet = new StyleSheet();
             sheet.parseCSS(CSS_TEXT);
             this.subTextField.styleSheet = sheet;
-            this.content.addChild(this.subTextField);
+            addChild(this.subTextField);
         }
 
         this.subTextField.htmlText = text;

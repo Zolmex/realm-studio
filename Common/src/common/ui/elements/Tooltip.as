@@ -21,10 +21,10 @@ public class Tooltip extends Sprite {
     // Tooltips should always be instantiated on roll over
     public function Tooltip(target:DisplayObject) {
         this.background = TextureParser.instance.getSliceScalingBitmap("UI", "maplist_element_background");
-        addChild(this.background);
+        super.addChild(this.background); // Make sure we're not calling the overridden function, looks weird but it's okay we're not gonna use it more than this
 
         this.content = new Sprite();
-        addChild(this.content);
+        super.addChild(this.content);
 
         this.target = target;
         target.addEventListener(MouseEvent.ROLL_OUT, this.onTargetOut);
@@ -69,6 +69,7 @@ public class Tooltip extends Sprite {
     }
 
     protected function updateChildren():void {
+        this.addChildren();
         this.positionChildren();
         this.drawBackground();
     }
@@ -126,6 +127,10 @@ public class Tooltip extends Sprite {
             return mouseY - limitHeight;
         }
         return mouseY;
+    }
+
+    public override function addChild(obj:DisplayObject):DisplayObject { // Meant to be used by subclasses of Tooltip
+        return this.content.addChild(obj);
     }
 }
 }

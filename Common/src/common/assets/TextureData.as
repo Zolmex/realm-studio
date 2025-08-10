@@ -35,7 +35,7 @@ public class TextureData {
             this.parse(objectXML);
         }
         for each(altTexture in objectXML.AltTexture) {
-            this.parse(altTexture);
+            this.parseAltTexture(altTexture);
         }
         if (objectXML.hasOwnProperty("Mask")) {
             this.parse(XML(objectXML.Mask));
@@ -85,13 +85,14 @@ public class TextureData {
                     this.randomTextureData_.push(new TextureData(childXML));
                 }
                 break;
-            case "AltTexture":
-                if (this.altTextures_ == null) {
-                    this.altTextures_ = new Dictionary();
-                }
-                this.altTextures_[int(xml.@id)] = new TextureData(xml);
-                break;
         }
+    }
+
+    private function parseAltTexture(xml:XML):void {
+        if (this.altTextures_ == null) {
+            this.altTextures_ = new Dictionary();
+        }
+        this.altTextures_[int(xml.@id)] = new TextureData(xml);
     }
 }
 }

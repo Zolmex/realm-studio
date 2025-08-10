@@ -172,11 +172,10 @@ public class MainView extends Sprite {
         this.saveButton.addEventListener(MouseEvent.CLICK, this.onSaveClick);
         addChild(this.saveButton);
 
-        if (standalone) {
-            this.backButton = new SimpleTextButton("Back");
-            this.backButton.addEventListener(MouseEvent.CLICK, this.onBackClick);
-            addChild(this.backButton);
-        }
+        this.backButton = new SimpleTextButton("Back");
+        this.backButton.addEventListener(MouseEvent.CLICK, this.onBackClick);
+        this.backButton.visible = !standalone;
+        addChild(this.backButton);
 
         this.saveWmapButton = new SimpleTextButton("Save Wmap");
         this.saveWmapButton.addEventListener(MouseEvent.CLICK, this.onSaveWmapClick);
@@ -271,10 +270,8 @@ public class MainView extends Sprite {
         this.saveButton.x = this.newButton.x + this.newButton.width + 10;
         this.saveButton.y = this.loadButton.y;
 
-        if (this.backButton != null) {
-            this.backButton.x = Global.StageWidth - this.backButton.width - 10;
-            this.backButton.y = this.loadButton.y;
-        }
+        this.backButton.x = Global.StageWidth - this.backButton.width - 10;
+        this.backButton.y = this.loadButton.y;
 
         this.saveWmapButton.x = this.saveButton.x + this.saveButton.width + 10;
         this.saveWmapButton.y = this.loadButton.y;
@@ -295,11 +292,7 @@ public class MainView extends Sprite {
         }
 
         this.drawElementsList.x = Global.StageWidth - MapDrawElementListView.WIDTH - 15;
-        if (this.backButton != null) {
-            this.drawElementsList.y = this.backButton.y + this.backButton.height + 15;
-        } else {
-            this.drawElementsList.y = 15;
-        }
+        this.drawElementsList.y = this.backButton.y + this.backButton.height + 15;
 
         this.tileInfoPanel.x = this.drawElementsList.x - this.tileInfoPanel.width - 15;
         this.tileInfoPanel.y = Global.StageHeight - this.tileInfoPanel.height - 15;
