@@ -29,20 +29,12 @@ public class RegionLibrary {
         return ret;
     }
 
-    public static function parseFromXML(xml:XML):void {
-        if (!xml.hasOwnProperty("Region")) {
-            return;
-        }
-
+    public static function parseFromXML(regionXML:XML):void {
         try {
-            var regionXML:XML = null;
-            var type:int = 0;
-            for each(regionXML in xml.Region) {
-                type = int(regionXML.@type);
-                xmlLibrary_[type] = regionXML;
-                idToType_[String(regionXML.@id)] = type;
-                typeToTextureData_[type] = new TextureData(regionXML, true);
-            }
+            var type:int = int(regionXML.@type);
+            xmlLibrary_[type] = regionXML;
+            idToType_[String(regionXML.@id)] = type;
+            typeToTextureData_[type] = new TextureData(regionXML, true);
         } catch (e:Error) {
             trace("REGION ASSET FAILED", regionXML.@id);
             trace(e.getStackTrace());
