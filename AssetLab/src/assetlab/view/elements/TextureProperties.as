@@ -1,6 +1,7 @@
 package assetlab.view.elements {
 import assetlab.io.LabAssets;
 import assetlab.view.TextureSelectedEvent;
+import assetlab.view.elements.GameDataEditView;
 
 import common.assets.AssetLibrary;
 
@@ -35,12 +36,12 @@ public class TextureProperties extends Sprite {
     private var editIcon:Bitmap;
 
     public function TextureProperties(xml:XML) {
+        this.xml = xml;
+
         if (this.textureDisplay){
             removeChild(this.textureDisplay);
             this.textureDisplay = null;
         }
-
-        this.xml = xml;
 
         var textureData:TextureData = LabAssets.getTextureData(xml);
         this.textureDisplay = new GameDataTextureDisplay(textureData);
@@ -127,11 +128,11 @@ public class TextureProperties extends Sprite {
     }
 
     public function onTextureSelected(e:TextureSelectedEvent):void {
-        delete this.xml.Texture;
+        delete this.xml.Texture; // Delete all of the texture elements from the xml (AltTexture doesn't count)
         delete this.xml.AnimatedTexture;
         delete this.xml.RandomTexture;
 
-        if (e.Animated){
+        if (e.Animated){ // Re-add the correct texture element with updated
             this.xml.AnimatedTexture = new XML();
             this.xml.AnimatedTexture.File = e.File;
             this.xml.AnimatedTexture.Index = e.Index;

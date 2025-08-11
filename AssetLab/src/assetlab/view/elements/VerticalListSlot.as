@@ -19,11 +19,13 @@ public class VerticalListSlot extends Sprite {
 
     public var titleName:String;
     private var background:SliceScalingBitmap;
-    private var nameText:SimpleText;
+    protected var nameText:SimpleText;
     public var selected:Boolean;
+    protected var normalColor:uint;
 
     function VerticalListSlot(name:String) {
         this.titleName = name;
+        this.normalColor = Constants.TEXT_UI_COLOR;
 
         this.background = TextureParser.instance.getSliceScalingBitmap("UI", "drawelementselector_selection");
         this.background.width = WIDTH;
@@ -57,7 +59,7 @@ public class VerticalListSlot extends Sprite {
 
     public function setSelected(val:Boolean):void {
         this.selected = val;
-        this.nameText.setColor(val ? Constants.TITLE_COLOR : Constants.TEXT_UI_COLOR);
+        this.nameText.setColor(val ? Constants.TITLE_COLOR : this.normalColor);
         transform.colorTransform = val ? MoreColorUtil.identity : MoreColorUtil.darkCT;
     }
 }

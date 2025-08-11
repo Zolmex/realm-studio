@@ -22,7 +22,7 @@ public class GameDataListView extends Sprite {
     private var xmlList:Sprite;
     private var listMask:Shape;
     private var scrollbar:SimpleScrollbar;
-    private var gameDataObjects:Vector.<GameDataObjectCard> = new Vector.<GameDataObjectCard>();
+    public var gameDataObjects:Vector.<GameDataObjectCard> = new Vector.<GameDataObjectCard>();
 
     public function GameDataListView(view:GameDataView, workspace:WorkspaceView) {
         this.view = view;

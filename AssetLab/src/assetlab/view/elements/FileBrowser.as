@@ -20,7 +20,7 @@ public class FileBrowser extends Sprite {
     public static const FILE_SELECTED:String = "FileSelected"
 
     private var files:Dictionary; // Key: File; Value: File content (ByteArray)
-    private var list:VerticalListView;
+    public var list:VerticalListView;
     public var selectedSlot:FileBrowserSlot;
 
     public function FileBrowser(files:Dictionary) {
@@ -47,43 +47,4 @@ public class FileBrowser extends Sprite {
         this.list.resize(width, height);
     }
 }
-}
-
-import assetlab.view.elements.VerticalListSlot;
-
-import common.ui.SliceScalingBitmap;
-import common.ui.TextureParser;
-import common.ui.text.SimpleText;
-import common.util.Constants;
-import common.util.MoreColorUtil;
-
-import flash.display.Sprite;
-import flash.events.Event;
-import flash.events.MouseEvent;
-import flash.filesystem.File;
-import flash.text.TextFieldAutoSize;
-import flash.utils.ByteArray;
-import flash.utils.getTimer;
-
-class FileBrowserSlot extends VerticalListSlot {
-
-    public var file:File;
-    public var fileContent:ByteArray;
-
-    function FileBrowserSlot(file:File, content:ByteArray) {
-        this.file = file;
-        this.fileContent = content;
-        var cleanFileName:String = getCleanFileName(file.name);
-        super(cleanFileName);
-
-    }
-
-    private static function getCleanFileName(fullName:String):String {
-        var cleanName:String = fullName;
-        cleanName = cleanName.replace("EmbeddedData_", "");
-        cleanName = cleanName.replace("EmbeddedAssets_", "");
-        cleanName = cleanName.replace("CXML", "");
-        cleanName = cleanName.replace("Embed_", "");
-        return cleanName;
-    }
 }

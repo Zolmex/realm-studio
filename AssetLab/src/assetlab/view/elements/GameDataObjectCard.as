@@ -1,6 +1,8 @@
 package assetlab.view.elements {
 import assetlab.io.LabAssets;
 
+import common.assets.TextureData;
+
 import common.ui.SliceScalingBitmap;
 import common.ui.TextureParser;
 import common.ui.text.SimpleText;
@@ -17,15 +19,16 @@ public class GameDataObjectCard extends Sprite {
     public static const WIDTH:int = 115;
     public static const HEIGHT:int = 100;
 
-    private var xml_:XML;
+    public var xml:XML;
 
     private var background:SliceScalingBitmap;
     private var title:SimpleText;
     private var typeText:SimpleText;
     private var textureDisplay:GameDataTextureDisplay;
+    private var changedIndicator:SimpleText;
 
     public function GameDataObjectCard(xml:XML) {
-        this.xml_ = xml;
+        this.xml = xml;
 
         this.background = TextureParser.instance.getSliceScalingBitmap("UI", "drawelement_background");
         this.background.width = WIDTH;
@@ -46,6 +49,13 @@ public class GameDataObjectCard extends Sprite {
 
         this.textureDisplay = new GameDataTextureDisplay(LabAssets.getTextureData(xml));
         addChild(this.textureDisplay);
+
+        this.changedIndicator = new SimpleText(24, 0xFFFFFF);
+        this.changedIndicator.setBold(true);
+        this.changedIndicator.text = "*";
+        this.changedIndicator.updateMetrics();
+        this.changedIndicator.visible = false;
+        addChild(this.changedIndicator);
 
         addEventListener(MouseEvent.ROLL_OVER, this.onRollOver);
         addEventListener(MouseEvent.ROLL_OUT, this.onRollOut);
@@ -77,8 +87,9 @@ public class GameDataObjectCard extends Sprite {
         this.textureDisplay.y = this.typeText.y + this.typeText.height + (HEIGHT - (this.typeText.y + this.typeText.height) - this.textureDisplay.height) / 2;
     }
 
-    public function get xml():XML{
-        return this.xml_;
+    public function setChanged(val:Boolean):void {
+        this.changedIndicator.visible = val;
+        this.textureDisplay.setTexture(new TextureData(this.xml));
     }
 }
 }

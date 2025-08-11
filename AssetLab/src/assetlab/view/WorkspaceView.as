@@ -13,8 +13,8 @@ public class WorkspaceView extends Sprite {
 
     private var mainView:MainView;
     public var imageSetsView:ImageSetsView;
-    private var model3DView:Model3DView;
-    private var gameDataView:GameDataView;
+    public var model3DView:Model3DView;
+    public var gameDataView:GameDataView;
     public var window:TabbedWindow;
 
     public function WorkspaceView(mainView:MainView) {

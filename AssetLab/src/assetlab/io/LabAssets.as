@@ -16,7 +16,8 @@ public class LabAssets {
     public static const gameDataFiles:Dictionary = new Dictionary(); // Value: String content (UTF8 ByteArray)
     public static const model3dFiles:Dictionary = new Dictionary(); // Value: String content (UTF8 ByteArray)
 
-    public static const gameDataLinks:Dictionary = new Dictionary(); // Key: File, Value: XMLList
+    public static const gameDataXMLs:Dictionary = new Dictionary(); // Key: File.name, Value: XMLList
+    public static const gameDataTexts:Dictionary = new Dictionary(); // Key: File.name, Value: Dictionary (Key: XML, Value: XML String)
 
     private static const textureDataCache:Dictionary = new Dictionary();
 
@@ -57,18 +58,26 @@ public class LabAssets {
 //        trace("Constructing GameData content...");
         for (var file:File in gameDataFiles){
 //            trace("Constructing", file.name)
-            var contentXML:XML = XML(gameDataFiles[file]);
+            var xmlString:String = gameDataFiles[file];
+            var contentXML:XML = XML(xmlString);
             if (contentXML.hasOwnProperty("Ground")){
-                gameDataLinks[file.name] = contentXML.Ground;
+                gameDataXMLs[file.name] = contentXML.Ground;
             }
             else if (contentXML.hasOwnProperty("Object")){
-                gameDataLinks[file.name] = contentXML.Object;
+                gameDataXMLs[file.name] = contentXML.Object;
             }
             else if (contentXML.hasOwnProperty("Region")){
-                gameDataLinks[file.name] = contentXML.Region;
+                gameDataXMLs[file.name] = contentXML.Region;
             }
             else {
                 trace("Unknown XML type for:", file.name);
+                continue;
+            }
+
+            gameDataTexts[file.name] = new Dictionary(); // Save every xml as string for the current file. This is needed for saving the files
+            var dict:Dictionary = gameDataTexts[file.name];
+            for each (var xml:XML in gameDataXMLs[file.name]){
+                dict[xml] = xml.toString();
             }
         }
 
@@ -76,11 +85,11 @@ public class LabAssets {
     }
 
     public static function getGameData(fileName:String):XMLList {
-        if (!(fileName in gameDataLinks)){
+        if (!(fileName in gameDataXMLs)){
             return null;
         }
 
-        return gameDataLinks[fileName] as XMLList;
+        return gameDataXMLs[fileName] as XMLList;
     }
 
     public static function getTextureData(xml:XML):TextureData { // TextureData cache
@@ -100,11 +109,11 @@ public class LabAssets {
         for (key in textureDataCache){
             delete textureDataCache[key];
         }
-        for (key in gameDataLinks){
-            delete gameDataLinks[key];
+        for (key in gameDataXMLs){
+            delete gameDataXMLs[key];
         }
         textureDataCache.length = 0;
-        gameDataLinks.length = 0;
+        gameDataXMLs.length = 0;
     }
 }
 }

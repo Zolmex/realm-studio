@@ -21,7 +21,7 @@ public class VerticalListView extends Sprite {
     private var background:SliceScalingBitmap;
     private var fileContainer:Sprite;
     private var fileContainerMask:Shape;
-    private var slots:Vector.<VerticalListSlot> = new <VerticalListSlot>[];
+    public var slots:Vector.<VerticalListSlot> = new <VerticalListSlot>[];
     private var scrollbar:SimpleScrollbar;
     public var selectedSlot:VerticalListSlot;
 

@@ -2,7 +2,9 @@ package assetlab.view {
 import assetlab.io.LabAssets;
 import assetlab.view.elements.ContentView;
 import assetlab.view.elements.FileBrowser;
+import assetlab.view.elements.FileBrowserSlot;
 import assetlab.view.elements.GameDataEditView;
+import assetlab.view.elements.GameDataObjectCard;
 import assetlab.view.elements.VerticalListView;
 
 import common.Global;
@@ -13,17 +15,20 @@ import flash.display.Shape;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
+import flash.filesystem.File;
 import flash.utils.Dictionary;
 
 public class GameDataView extends Sprite {
 
     private var workspace:WorkspaceView;
-    private var fileBrowser:FileBrowser;
+    public var fileBrowser:FileBrowser;
     private var listView:GameDataListView;
     private var mouseTriggerArea:Shape;
 
     private var editViews:Dictionary = new Dictionary();
     private var currentEditView:GameDataEditView;
+
+    public var filesChanged:Dictionary = new Dictionary(); // Key: File, Value: Vector.<XML>
 
     public function GameDataView(workspace:WorkspaceView) {
         this.workspace = workspace;
@@ -90,7 +95,7 @@ public class GameDataView extends Sprite {
             }
         }
         else {
-            editView = new GameDataEditView(this.workspace, xml);
+            editView = new GameDataEditView(this.workspace, this, xml);
             this.editViews[xml] = editView;
             this.workspace.addChild(editView);
         }
@@ -102,6 +107,26 @@ public class GameDataView extends Sprite {
         this.currentEditView = editView;
         this.currentEditView.visible = true;
         this.positionChildren();
+    }
+
+    public function onGameDataChanged(xml:XML):void {
+        for each (var card:GameDataObjectCard in this.listView.gameDataObjects){
+            if (card.xml == xml){
+                card.setChanged(true);
+            }
+        }
+    }
+
+    public function onAllFilesSaved():void {
+        for each (var slot:FileBrowserSlot in this.fileBrowser.list.slots){
+            slot.setChanged(false);
+        }
+
+        for each (var card:GameDataObjectCard in this.listView.gameDataObjects){
+            card.setChanged(false);
+        }
+
+        this.filesChanged = new Dictionary();
     }
 }
 }
