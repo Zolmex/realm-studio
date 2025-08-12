@@ -2,17 +2,14 @@ package common.ui.embed
 {
    public class UIAssets
    {
-      
-      public static const UI_CONFIG:Class = UIAssets_UI_CONFIG;
-      
-      public static const UI_SLICE_CONFIG:Class = UIAssets_UI_SLICE_CONFIG;
-      
-      public static var UI:Class = UIAssets_UI;
-       
-      
-      public function UIAssets()
-      {
-         super();
-      }
+
+      [Embed(source="UIAssets_UI_CONFIG.json", mimeType="application/octet-stream")]
+      public static const UI_CONFIG:Class;
+
+      [Embed(source="UIAssets_UI_SLICE_CONFIG.json", mimeType="application/octet-stream")]
+      public static const UI_SLICE_CONFIG:Class;
+
+      [Embed(source="UIAssets_UI.png")]
+      public static var UI:Class;
    }
 }

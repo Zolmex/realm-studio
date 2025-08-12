@@ -15,6 +15,7 @@ public class WorkspaceView extends Sprite {
     public var imageSetsView:ImageSetsView;
     public var model3DView:Model3DView;
     public var gameDataView:GameDataView;
+    public var uiAssetsView:UIAssetsView;
     public var window:TabbedWindow;
 
     public function WorkspaceView(mainView:MainView) {
@@ -23,11 +24,13 @@ public class WorkspaceView extends Sprite {
         this.imageSetsView = new ImageSetsView(this);
         this.model3DView = new Model3DView(this);
         this.gameDataView = new GameDataView(this);
+        this.uiAssetsView = new UIAssetsView(this);
 
         this.window = new TabbedWindow(WIDTH, HEIGHT);
         this.window.addTab("ImageSets", this.imageSetsView);
         this.window.addTab("3D Models", this.model3DView);
         this.window.addTab("GameData", this.gameDataView);
+        this.window.addTab("UI Assets", this.uiAssetsView);
         addChild(this.window);
 
         filters = Constants.SHADOW_FILTER_1;
@@ -37,6 +40,7 @@ public class WorkspaceView extends Sprite {
         this.imageSetsView.onAssetsLoaded();
         this.model3DView.onAssetsLoaded();
         this.gameDataView.onAssetsLoaded();
+        this.uiAssetsView.onAssetsLoaded();
     }
 
     public function onStageResize():void {
@@ -44,6 +48,7 @@ public class WorkspaceView extends Sprite {
         this.imageSetsView.resize();
         this.model3DView.resize();
         this.gameDataView.resize();
+        this.uiAssetsView.resize();
     }
 
     override public function get width():Number { // I need these property overrides cus the tab contents may be bigger than what is actually visible

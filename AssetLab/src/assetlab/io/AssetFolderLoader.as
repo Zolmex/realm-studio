@@ -81,9 +81,7 @@ public class AssetFolderLoader {
         var content:Object;
         switch (file.extension){
             case "png":
-                content = new ByteArray();
-                fs.readBytes(content as ByteArray);
-                LabAssets.addImageFile(file, content as ByteArray);
+                    // Deprecated
                 break;
             case "dat":
                 content = fs.readUTFBytes(fs.bytesAvailable);

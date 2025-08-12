@@ -19,7 +19,7 @@ import flash.geom.Point;
 import flash.geom.Vector3D;
 import flash.utils.ByteArray;
 
-public class ContentView3D extends Sprite {
+public class ContentView3D extends Sprite { // Visualizer for 3D models
 
     private var workspace:WorkspaceView;
     private var viewMask:Shape;

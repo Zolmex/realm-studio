@@ -12,7 +12,6 @@ public class LabAssets {
     // We keep track of the file names and their content to compare with embedded assets to
     // properly know which asset file we're dealing with. So that we can save the changes to disk later
 
-    public static const imageFiles:Dictionary = new Dictionary(); // Key: File, Value: Content (png ByteArray)
     public static const gameDataFiles:Dictionary = new Dictionary(); // Value: String content (UTF8 ByteArray)
     public static const model3dFiles:Dictionary = new Dictionary(); // Value: String content (UTF8 ByteArray)
 
@@ -20,15 +19,6 @@ public class LabAssets {
     public static const gameDataTexts:Dictionary = new Dictionary(); // Key: File.name, Value: Dictionary (Key: XML, Value: XML String)
 
     private static const textureDataCache:Dictionary = new Dictionary();
-
-    public static function addImageFile(pngFile:File, content:ByteArray):void {
-        if (pngFile in imageFiles){
-            trace("DUPLICATE PNG ASSET FILE", pngFile.name);
-            return;
-        }
-
-        imageFiles[pngFile] = content;
-    }
 
     public static function addXMLFile(xmlFile:File, content:String):void {
         if (xmlFile in gameDataFiles){

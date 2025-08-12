@@ -12,7 +12,7 @@ public class TextureParser {
 
     public static var instance:TextureParser;
 
-    private var textures:Dictionary;
+    public var textures:Dictionary;
 
     function TextureParser() {
         this.textures = new Dictionary();
@@ -21,8 +21,8 @@ public class TextureParser {
     public static function load(atlas:Bitmap, config:String, sliceRects:String, atlasName:String):void {
         if (instance == null) {
             instance = new TextureParser();
-            instance.registerTexture(atlas, config, sliceRects, atlasName);
         }
+        instance.registerTexture(atlas, config, sliceRects, atlasName);
     }
 
     public function registerTexture(atlas:Bitmap, config:String, sliceRects:String, atlasName:String):void {

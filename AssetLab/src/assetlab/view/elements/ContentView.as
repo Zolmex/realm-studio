@@ -48,7 +48,7 @@ import flash.geom.Vector3D;
 import flash.utils.ByteArray;
 import flash.utils.Dictionary;
 
-public class ContentView extends Sprite { // Visualizer for .png images and 3D models
+public class ContentView extends Sprite { // Visualizer for .png images
 
     public static const TEXTURE_SELECTED:String = "TextureSelected";
     private static const ROW_SIZE:int = 16;

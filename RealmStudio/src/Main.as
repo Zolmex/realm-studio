@@ -4,11 +4,17 @@ import assetlab.AssetLabLoader;
 
 import assets.AssetLoader;
 
+import common.Parameters;
+
 import common.assets.AnimatedChars;
 import common.assets.AssetLibrary;
 import common.assets.GroundLibrary;
 import common.assets.ObjectLibrary;
 import common.assets.RegionLibrary;
+import common.ui.TextureParser;
+import common.ui.UIAssetAtlas;
+import common.ui.embed.EditorTools;
+import common.ui.embed.UIAssets;
 
 import flash.desktop.NativeApplication;
 import flash.display.BlendMode;
@@ -51,7 +57,11 @@ public class Main extends Sprite {
         stage.scaleMode = StageScaleMode.NO_SCALE;
         stage.align = StageAlign.TOP_LEFT;
 
+        UIAssetAtlas.load();
         AssetLoader.load();
+        Parameters.load();
+
+        AssetLibrary.addImageSet("editorTools", new EditorTools().bitmapData, 16, 16);
 
 //        this.loadRealmEditor();
         this.loadAssetLab();

@@ -49,11 +49,6 @@ public class AssetLabLoader {
             throw new Error("RealmEditor: " + readyCount + " out of 5 asset libraries weren't loaded.");
         }
 
-        AssetLibrary.addImageSet("editorTools", new EditorTools().bitmapData, 16, 16);
-
-        TextureParser.load(new UIAssets.UI(), new UIAssets.UI_CONFIG(), new UIAssets.UI_SLICE_CONFIG(), "UI");
-        Parameters.load();
-
         var view:MainView = new MainView(main, standalone);
         main.addChild(view);
         return view;

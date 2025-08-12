@@ -37,8 +37,6 @@ public class EditorLoader {
 
     public static function loadAssets(images:Dictionary, imageSets:Dictionary, imageLookup:Dictionary):void {
         AssetLibrary.load(images, imageSets, imageLookup);
-        AssetLibrary.addImageSet("cursorsEmbed", new Cursors().bitmapData, 32, 32); // Editor assets
-        AssetLibrary.addImageSet("editorTools", new EditorTools().bitmapData, 16, 16);
         readyCount++;
     }
 
@@ -52,8 +50,6 @@ public class EditorLoader {
             throw new Error("RealmEditor: " + readyCount + " out of 5 asset libraries weren't loaded.");
         }
 
-        TextureParser.load(new UIAssets.UI(), new UIAssets.UI_CONFIG(), new UIAssets.UI_SLICE_CONFIG(), "UI");
-        Parameters.load();
         Keybinds.loadKeys();
 
         var view:MainView = new MainView(main, standalone);
