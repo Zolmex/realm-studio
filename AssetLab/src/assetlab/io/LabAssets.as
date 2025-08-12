@@ -59,6 +59,8 @@ public class LabAssets {
         for (var file:File in gameDataFiles){
 //            trace("Constructing", file.name)
             var xmlString:String = gameDataFiles[file];
+            XML.ignoreComments = false; // Make sure we don't get rid of our comments!!!
+
             var contentXML:XML = XML(xmlString);
             if (contentXML.hasOwnProperty("Ground")){
                 gameDataXMLs[file.name] = contentXML.Ground;
