@@ -1,4 +1,5 @@
 package assetlab.view.elements {
+import assetlab.view.UIAssetsView;
 import assetlab.view.WorkspaceView;
 
 import common.Global;
@@ -9,7 +10,9 @@ import common.assets.AnimatedChars;
 
 import common.assets.ImageSet;
 import common.ui.TextureParser;
+import common.ui.elements.SimpleCheckBox;
 import common.ui.elements.SimpleTextInput;
+import common.ui.elements.SimplestCheckBox;
 import common.util.IntPoint;
 
 import flash.display.Bitmap;
@@ -23,6 +26,7 @@ import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.geom.Point;
+import flash.geom.Rectangle;
 import flash.ui.Mouse;
 
 public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/slice configuration tool
@@ -33,30 +37,46 @@ public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/s
     private static const CheckboardBackground:Class;
     private var checkboardTexture:BitmapData;
 
+    private var view:UIAssetsView;
     private var workspace:WorkspaceView;
     private var content:Sprite;
     private var contentBackground:Shape;
     private var bitmapLayer:Sprite;
     private var outlineLayer:Sprite;
     private var contentMask:Shape;
-    private var inputHandler:InputHandler;
-    private var lastMousePos:Point;
+    private var contentInput:InputHandler;
     private var zoomLevel:int = 100;
     private var zoomInput:SimpleTextInput;
     private var contentOffset:Point = new Point();
+    private var mouseTriggerArea:Shape;
+
+    private var selecting:Boolean;
+    private var selectionStartPos:Point;
+    private var selectionOutline:Shape;
+    private var selectionRect:Rectangle = new Rectangle();
+    private var allowSelection:Boolean = true;
 
     private var atlasName:String;
     private var cutConfigs:Object; // JSON objects
     private var gridConfigs:Object;
 
-    public function ContentViewUI(workspace:WorkspaceView) {
+    public function ContentViewUI(view:UIAssetsView, workspace:WorkspaceView) {
+        this.view = view;
         this.workspace = workspace;
 
         this.checkboardTexture = (new CheckboardBackground() as Bitmap).bitmapData;
         this.contentBackground = new Shape();
 
+        this.mouseTriggerArea = new Shape();
+        this.mouseTriggerArea.graphics.beginFill(0, 0);
+        this.mouseTriggerArea.graphics.drawRect(0, 0, workspace.contentWidth - VerticalListView.WIDTH, workspace.contentHeight);
+        this.mouseTriggerArea.graphics.endFill();
+        addChild(this.mouseTriggerArea);
+
         this.bitmapLayer = new Sprite();
         this.outlineLayer = new Sprite();
+        this.selectionOutline = new Shape();
+        this.outlineLayer.addChild(this.selectionOutline);
 
         this.content = new Sprite();
         this.content.addChild(this.contentBackground);
@@ -77,10 +97,18 @@ public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/s
         this.zoomInput.inputText.addEventListener(Event.CHANGE, this.onZoomInputChange);
         addChild(this.zoomInput);
 
-        this.inputHandler = new InputHandler(this.content);
-        this.inputHandler.addEventListener(InputHandler.MOUSE_DRAG, this.onMouseDrag);
-        this.inputHandler.addEventListener(InputHandler.MOUSE_DRAG_END, this.onMouseDragEnd);
+        this.contentInput = new InputHandler(this.content);
+        this.contentInput.addEventListener(InputHandler.MOUSE_DRAG, this.onMouseDrag);
+        this.contentInput.addEventListener(InputHandler.MOUSE_DRAG_END, this.onMouseDragEnd);
+        this.contentInput.addEventListener(InputHandler.MIDDLE_MOUSE_DRAG, this.onContentDrag);
+
         addEventListener(MouseEvent.MOUSE_WHEEL, this.onScroll);
+
+        this.positionChildren();
+    }
+
+    private function positionChildren():void {
+        this.fixContentPosition();
     }
 
     private function fixContentPosition():void {
@@ -169,27 +197,78 @@ public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/s
         this.fixContentPosition();
     }
 
-    private function onMouseDrag(e:Event):void {
-        if (this.lastMousePos == null) {
-            this.lastMousePos = new Point(Global.Main.stage.mouseX, Global.Main.stage.mouseY);
+    private function onContentDrag(e:InputHandlerEvent):void {
+        var delta:Point = e.value as Point;
+        var zoom:Number = Math.max(1, Math.min(MAX_ZOOM, MAX_ZOOM / this.zoomLevel));
+        this.contentOffset.x += delta.x * zoom;
+        this.contentOffset.y += delta.y * zoom;
+        this.fixContentPosition();
+    }
+
+    private function onMouseDrag(e:InputHandlerEvent):void {
+        if (!this.allowSelection){
+            return;
         }
 
-        this.dragContent();
+        var cursorTexturePos:Point = this.getCursorPixel();
+        if (!this.selecting) {
+            this.selecting = true;
+            this.selectionStartPos = new Point(cursorTexturePos.x, cursorTexturePos.y);
+            return;
+        }
+
+        var x:int = this.selectionStartPos.x;
+        var y:int = this.selectionStartPos.y;
+        var w:int = cursorTexturePos.x - this.selectionStartPos.x;
+        var h:int = cursorTexturePos.y - this.selectionStartPos.y;
+        if (w < 0){
+            w *= -1; // Make the width positive
+            x -= w; // Move back the x origin of the outline rectangle by the width
+        }
+        if (h < 0){
+            h *= -1;
+            y -= h;
+        }
+
+        this.selectionRect.x = x;
+        this.selectionRect.y = y;
+        this.selectionRect.width = w;
+        this.selectionRect.height = h;
+
+        this.selectionOutline.graphics.clear();
+        this.selectionOutline.graphics.lineStyle(1, 0xFF0000, 0.9);
+        this.selectionOutline.graphics.drawRect(0, 0, w, h);
+        this.selectionOutline.graphics.lineStyle();
+        this.selectionOutline.x = x;
+        this.selectionOutline.y = y;
     }
 
-    private function onMouseDragEnd(e:Event):void {
-        this.lastMousePos = null;
+    private function onMouseDragEnd(e:InputHandlerEvent):void {
+        if (!this.selecting) {
+            return;
+        }
+
+        this.allowSelection = false;
+        this.selecting = false;
+        this.selectionStartPos = null;
+        this.showCreateCutWindow();
     }
 
-    private function dragContent():void {
-        var deltaX:Number = Global.Main.stage.mouseX - this.lastMousePos.x;
-        var deltaY:Number = Global.Main.stage.mouseY - this.lastMousePos.y;
-        var zoom:Number = Math.max(1, Math.min(MAX_ZOOM, MAX_ZOOM / this.zoomLevel));
-        this.contentOffset.x += deltaX * zoom;
-        this.contentOffset.y += deltaY * zoom;
-        this.lastMousePos.x = Global.Main.stage.mouseX;
-        this.lastMousePos.y = Global.Main.stage.mouseY;
-        this.fixContentPosition();
+    private function showCreateCutWindow():void {
+        this.view.showCreateCutWindow(true, this.selectionRect);
+    }
+
+    private function getCursorPixel():Point {
+        var mousePos:Point = new Point(Global.Main.stage.mouseX, Global.Main.stage.mouseY);
+        var bitmapPos:Point = this.localToGlobal(new Point(this.content.x, this.content.y));
+        var pixelWidth:Number = this.content.scaleX;
+        var pixelHeight:Number = this.content.scaleY;
+
+        var yDiff:Number = mousePos.y - bitmapPos.y; // These numbers should always be positive
+        var xDiff:Number = mousePos.x - bitmapPos.x;
+        var x:int = xDiff / pixelWidth;
+        var y:int = yDiff / pixelHeight;
+        return new Point(x, y);
     }
 
     public function displayAtlas(atlasName:String):void {
@@ -211,8 +290,7 @@ public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/s
         this.bitmapLayer.addChild(atlas);
 
         this.outlineLayer.removeChildren();
-        this.outlineLayer.x = 0;
-        this.outlineLayer.y = 0;
+        this.outlineLayer.addChild(this.selectionOutline);
 
         this.contentBackground.graphics.clear();
         this.contentBackground.graphics.beginBitmapFill(this.checkboardTexture);
@@ -225,6 +303,16 @@ public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/s
         this.contentMask.graphics.beginFill(0);
         this.contentMask.graphics.drawRect(0, 0, this.workspace.contentWidth - VerticalListView.WIDTH - 1, this.workspace.contentHeight);
         this.contentMask.graphics.endFill();
+        this.mouseTriggerArea.graphics.clear();
+        this.mouseTriggerArea.graphics.beginFill(0, 0);
+        this.mouseTriggerArea.graphics.drawRect(0, 0, workspace.contentWidth - VerticalListView.WIDTH, workspace.contentHeight);
+        this.mouseTriggerArea.graphics.endFill();
+        this.positionChildren();
+    }
+
+    public function onCutCreated(cutRect:Rectangle):void {
+        this.allowSelection = true;
+        // TODO: add new cut to cuts list and draw it
     }
 }
 }
