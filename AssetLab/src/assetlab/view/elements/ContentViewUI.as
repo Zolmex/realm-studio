@@ -28,6 +28,7 @@ import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.ui.Mouse;
+import flash.utils.Dictionary;
 
 public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/slice configuration tool
 
@@ -43,6 +44,7 @@ public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/s
     private var contentBackground:Shape;
     private var bitmapLayer:Sprite;
     private var outlineLayer:Sprite;
+    private var cutsLayer:Sprite;
     private var contentMask:Shape;
     private var contentInput:InputHandler;
     private var zoomLevel:int = 100;
@@ -59,6 +61,7 @@ public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/s
     private var atlasName:String;
     private var cutConfigs:Object; // JSON objects
     private var gridConfigs:Object;
+    private var atlasCuts:Dictionary = new Dictionary(); // Key: Cut name (String), Value: UISliceView
 
     public function ContentViewUI(view:UIAssetsView, workspace:WorkspaceView) {
         this.view = view;
@@ -76,6 +79,8 @@ public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/s
         this.bitmapLayer = new Sprite();
         this.outlineLayer = new Sprite();
         this.selectionOutline = new Shape();
+        this.cutsLayer = new Sprite();
+        this.outlineLayer.addChild(this.cutsLayer);
         this.outlineLayer.addChild(this.selectionOutline);
 
         this.content = new Sprite();
@@ -271,6 +276,30 @@ public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/s
         return new Point(x, y);
     }
 
+    private function loadCuts(cutConfigs:Object, gridConfigs:Object):void {
+        var frames:Object = cutConfigs.frames;
+        if (frames == null){
+            trace("Are you trying to crash the app?? invalid file bro");
+            return;
+        }
+
+        this.cutsLayer.removeChildren();
+        for (var cutName:String in frames){
+            if (!gridConfigs.slices.hasOwnProperty(cutName)){
+                trace("Missing slice config for", cutName);
+                continue;
+            }
+
+            var cutConfig:Object = frames[cutName];
+            var sliceConfig:Object = gridConfigs.slices[cutName];
+            var sliceView:UISliceView = new UISliceView(cutConfig, sliceConfig);
+            sliceView.x = sliceView.cutRect.x;
+            sliceView.y = sliceView.cutRect.y;
+            this.cutsLayer.addChild(sliceView);
+            this.atlasCuts[cutName] = sliceView;
+        }
+    }
+
     public function displayAtlas(atlasName:String):void {
         var atlasObj:Object;
         if (atlasName in TextureParser.instance.textures) {
@@ -286,11 +315,10 @@ public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/s
         this.cutConfigs = atlasObj["configuration"];
         this.gridConfigs = atlasObj["sliceRectangles"];
 
+        this.loadCuts(this.cutConfigs, this.gridConfigs);
+
         this.bitmapLayer.removeChildren();
         this.bitmapLayer.addChild(atlas);
-
-        this.outlineLayer.removeChildren();
-        this.outlineLayer.addChild(this.selectionOutline);
 
         this.contentBackground.graphics.clear();
         this.contentBackground.graphics.beginBitmapFill(this.checkboardTexture);
@@ -312,6 +340,9 @@ public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/s
 
     public function onCutCreated(cutRect:Rectangle):void {
         this.allowSelection = true;
+        if (cutRect == null){
+            return;
+        }
         // TODO: add new cut to cuts list and draw it
     }
 }
