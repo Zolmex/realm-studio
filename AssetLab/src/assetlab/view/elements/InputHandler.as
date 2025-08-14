@@ -17,7 +17,7 @@ public class InputHandler extends EventDispatcher {
     public static const RIGHT_MOUSE_DRAG:String = "InputRightMouseDrag";
     public static const RIGHT_MOUSE_DRAG_END:String = "InputRightMouseDragEnd";
 
-    private static var INPUT_TO_LISTENER:Object;
+    private var INPUT_TO_LISTENER:Object;
 
     private var owner:DisplayObject;
     private var dragging:Boolean;
@@ -27,11 +27,8 @@ public class InputHandler extends EventDispatcher {
     private var functionCache:Dictionary = new Dictionary();
 
     public function InputHandler(owner:DisplayObject) {
-        if (INPUT_TO_LISTENER == null){
-            this.setup();
-        }
-
         this.owner = owner;
+        this.setup();
     }
 
     private function setup():void {

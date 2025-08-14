@@ -35,7 +35,7 @@ public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/s
     private static const MAX_ZOOM:Number = 500;
 
     [Embed("../embed/CheckboardBackground.png")]
-    private static const CheckboardBackground:Class;
+    public static const CheckboardBackground:Class;
     private var checkboardTexture:BitmapData;
 
     private var view:UIAssetsView;
@@ -58,9 +58,10 @@ public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/s
     private var selectionRect:Rectangle = new Rectangle();
     private var allowSelection:Boolean = true;
 
+    public var atlas:Bitmap;
     private var atlasName:String;
     private var cutConfigs:Object; // JSON objects
-    private var gridConfigs:Object;
+    private var sliceConfigs:Object;
     private var atlasCuts:Dictionary = new Dictionary(); // Key: Cut name (String), Value: UISliceView
 
     public function ContentViewUI(view:UIAssetsView, workspace:WorkspaceView) {
@@ -253,14 +254,14 @@ public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/s
             return;
         }
 
-        this.allowSelection = false;
         this.selecting = false;
         this.selectionStartPos = null;
-        this.showCreateCutWindow();
+        this.showSliceEditor(true, null, this.selectionRect, null, null); // At this point we've define the texture CUT, now we need to define the SLICE, we do that through the SliceEditorWindow
     }
 
-    private function showCreateCutWindow():void {
-        this.view.showCreateCutWindow(true, this.selectionRect);
+    public function showSliceEditor(val:Boolean, cutName:String, cutRect:Rectangle, sliceType:String, sliceRect:Rectangle):void{
+        this.allowSelection = false;
+        this.view.showSliceEditor(val, cutName, cutRect, sliceType, sliceRect);
     }
 
     private function getCursorPixel():Point {
@@ -276,8 +277,8 @@ public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/s
         return new Point(x, y);
     }
 
-    private function loadCuts(cutConfigs:Object, gridConfigs:Object):void {
-        var frames:Object = cutConfigs.frames;
+    private function loadCuts():void {
+        var frames:Object = this.cutConfigs.frames;
         if (frames == null){
             trace("Are you trying to crash the app?? invalid file bro");
             return;
@@ -285,16 +286,17 @@ public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/s
 
         this.cutsLayer.removeChildren();
         for (var cutName:String in frames){
-            if (!gridConfigs.slices.hasOwnProperty(cutName)){
+            if (!this.sliceConfigs.slices.hasOwnProperty(cutName)){
                 trace("Missing slice config for", cutName);
                 continue;
             }
 
             var cutConfig:Object = frames[cutName];
-            var sliceConfig:Object = gridConfigs.slices[cutName];
-            var sliceView:UISliceView = new UISliceView(cutConfig, sliceConfig);
+            var sliceConfig:Object = this.sliceConfigs.slices[cutName];
+            var sliceView:UISliceView = new UISliceView(this, cutName, cutConfig, sliceConfig);
             sliceView.x = sliceView.cutRect.x;
             sliceView.y = sliceView.cutRect.y;
+
             this.cutsLayer.addChild(sliceView);
             this.atlasCuts[cutName] = sliceView;
         }
@@ -310,19 +312,19 @@ public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/s
             return;
         }
 
-        var atlas:Bitmap = atlasObj["texture"];
+        this.atlas = atlasObj["texture"];
         this.atlasName = atlasName;
         this.cutConfigs = atlasObj["configuration"];
-        this.gridConfigs = atlasObj["sliceRectangles"];
+        this.sliceConfigs = atlasObj["sliceRectangles"];
 
-        this.loadCuts(this.cutConfigs, this.gridConfigs);
+        this.loadCuts();
 
         this.bitmapLayer.removeChildren();
-        this.bitmapLayer.addChild(atlas);
+        this.bitmapLayer.addChild(this.atlas);
 
         this.contentBackground.graphics.clear();
         this.contentBackground.graphics.beginBitmapFill(this.checkboardTexture);
-        this.contentBackground.graphics.drawRect(0, 0, atlas.width, atlas.height);
+        this.contentBackground.graphics.drawRect(0, 0, this.atlas.width, this.atlas.height);
         this.contentBackground.graphics.endFill();
     }
 
@@ -338,12 +340,34 @@ public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/s
         this.positionChildren();
     }
 
-    public function onCutCreated(cutRect:Rectangle):void {
+    public function saveCut(cutName:String, cutRect:Rectangle, sliceType:String, sliceRect:Rectangle):void {
         this.allowSelection = true;
-        if (cutRect == null){
+        if (cutName == null){ // Null cut name is an invalid save operation, should use deleteCut()
             return;
         }
-        // TODO: add new cut to cuts list and draw it
+
+        // Update cut and slice objects
+        this.cutConfigs.frames[cutName] = { // New or update
+            "frame": {
+                "x": cutRect.x,
+                "y": cutRect.y,
+                "w": cutRect.width,
+                "h": cutRect.height
+            }
+        };
+        this.sliceConfigs.slices[cutName] = {
+            "type": sliceType,
+            "rectangle": {
+                "x": sliceRect.x,
+                "y": sliceRect.y,
+                "w": sliceRect.width,
+                "h": sliceRect.height
+            }
+        };
+
+        loadCuts(); // Reload cuts
+
+        // TODO: Prompt user to save to cut config file, and then to slice config file.
     }
 }
 }

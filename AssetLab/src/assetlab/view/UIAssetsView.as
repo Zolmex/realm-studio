@@ -4,6 +4,8 @@ import assetlab.view.elements.ContentView;
 import assetlab.view.elements.ContentViewUI;
 import assetlab.view.elements.CreateCutWindow;
 import assetlab.view.elements.FileBrowser;
+import assetlab.view.elements.SliceEditorWindow;
+import assetlab.view.elements.UISliceView;
 import assetlab.view.elements.VerticalListSlot;
 import assetlab.view.elements.VerticalListView;
 
@@ -21,10 +23,10 @@ public class UIAssetsView extends Sprite {
 
     private var workspace:WorkspaceView;
     private var atlasList:VerticalListView;
-    private var contentView:ContentViewUI;
+    public var contentView:ContentViewUI;
 
     private var windowBackground:Shape;
-    private var createCutWindow:CreateCutWindow;
+    private var sliceEditorWindow:SliceEditorWindow;
 
     public function UIAssetsView(workspace:WorkspaceView) {
         this.workspace = workspace;
@@ -43,9 +45,9 @@ public class UIAssetsView extends Sprite {
         this.windowBackground.visible = false;
         addChild(this.windowBackground);
 
-        this.createCutWindow = new CreateCutWindow(this);
-        this.createCutWindow.visible = false;
-        addChild(this.createCutWindow);
+        this.sliceEditorWindow = new SliceEditorWindow(this);
+        this.sliceEditorWindow.visible = false;
+        addChild(this.sliceEditorWindow);
 
         this.positionChildren();
     }
@@ -54,8 +56,8 @@ public class UIAssetsView extends Sprite {
         this.contentView.x = this.atlasList.x + this.atlasList.width;
         this.contentView.y = this.atlasList.y;
 
-        this.createCutWindow.x = (this.workspace.contentWidth - this.createCutWindow.width) / 2;
-        this.createCutWindow.y = (this.workspace.contentHeight - this.createCutWindow.height) / 2;
+        this.sliceEditorWindow.x = (this.workspace.contentWidth - this.sliceEditorWindow.width) / 2;
+        this.sliceEditorWindow.y = (this.workspace.contentHeight - this.sliceEditorWindow.height) / 2;
     }
 
     private function onUIAtlasSelected(e:Event):void {
@@ -76,21 +78,24 @@ public class UIAssetsView extends Sprite {
         this.windowBackground.graphics.endFill();
         this.atlasList.resize(VerticalListView.WIDTH, this.workspace.contentHeight);
         this.contentView.resize();
+        this.sliceEditorWindow.resize();
         this.positionChildren();
     }
 
-    public function showCreateCutWindow(val:Boolean, selectionRect:Rectangle):void {
-        this.windowBackground.visible = val;
-        this.createCutWindow.visible = val;
-        if (val) {
-            this.createCutWindow.setCut(selectionRect);
-        }
-        this.contentView.onCutCreated(selectionRect);
+    public function saveCut(cutName:String, cutRect:Rectangle, sliceType:String, sliceRect:Rectangle):void {
+        this.showSliceEditor(false, cutName, cutRect, sliceType, sliceRect);
+        this.contentView.saveCut(cutName, cutRect, sliceType, sliceRect);
     }
 
-    public function saveCut(cutRect:Rectangle):void {
-        this.showCreateCutWindow(false, cutRect);
-        // TODO: save the cut
+    public function showSliceEditor(val:Boolean, cutName:String, cutRect:Rectangle, sliceType:String, sliceRect:Rectangle):void {
+        this.windowBackground.visible = val;
+        this.sliceEditorWindow.visible = val;
+        if (val) {
+            this.sliceEditorWindow.setSliceData(cutName, cutRect, sliceType, sliceRect);
+        }
+        else{
+            this.contentView.saveCut(null, null, null, null);
+        }
     }
 }
 }
