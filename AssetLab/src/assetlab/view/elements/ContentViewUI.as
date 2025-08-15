@@ -354,6 +354,7 @@ public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/s
 
     public function saveCut(cutName:String, cutRect:Rectangle, sliceType:String, sliceRect:Rectangle):void {
         this.allowSelection = true;
+        this.selectionOutline.graphics.clear();
         if (cutName == null){ // Null cut name is an invalid save operation, should use deleteCut()
             return;
         }

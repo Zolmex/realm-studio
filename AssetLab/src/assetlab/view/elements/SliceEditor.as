@@ -14,6 +14,7 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
+import flash.geom.Rectangle;
 
 public class SliceEditor extends Sprite {
 
@@ -250,7 +251,7 @@ public class SliceEditor extends Sprite {
             this.canvasTexture.bitmapData = cropped;
         }
 
-        this.sliceRect = sliceRect.clone();
+        this.sliceRect = sliceRect == null ? new Rectangle() : sliceRect.clone();
 
         this.drawSliceLines();
         this.positionChildren();
