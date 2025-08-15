@@ -1,4 +1,5 @@
 package assetlab.view.elements {
+import assetlab.view.MainView;
 import assetlab.view.UIAssetsView;
 import assetlab.view.WorkspaceView;
 
@@ -14,6 +15,7 @@ import common.ui.elements.SimpleCheckBox;
 import common.ui.elements.SimpleTextInput;
 import common.ui.elements.SimplestCheckBox;
 import common.util.IntPoint;
+import common.util.TimedAction;
 
 import flash.display.Bitmap;
 import flash.display.BitmapData;
@@ -25,9 +27,14 @@ import flash.display.Shape;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
+import flash.filesystem.File;
+import flash.filesystem.FileMode;
+import flash.filesystem.FileStream;
 import flash.geom.Point;
 import flash.geom.Rectangle;
+import flash.net.FileReference;
 import flash.ui.Mouse;
+import flash.utils.ByteArray;
 import flash.utils.Dictionary;
 
 public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/slice configuration tool
@@ -57,6 +64,7 @@ public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/s
     private var selectionOutline:Shape;
     private var selectionRect:Rectangle = new Rectangle();
     private var allowSelection:Boolean = true;
+    private var saving:Boolean;
 
     public var atlas:Bitmap;
     private var atlasName:String;
@@ -212,7 +220,7 @@ public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/s
     }
 
     private function onMouseDrag(e:InputHandlerEvent):void {
-        if (!this.allowSelection){
+        if (!this.allowSelection || this.saving) {
             return;
         }
 
@@ -260,6 +268,10 @@ public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/s
     }
 
     public function showSliceEditor(val:Boolean, cutName:String, cutRect:Rectangle, sliceType:String, sliceRect:Rectangle):void{
+        if (this.saving){
+            return;
+        }
+
         this.allowSelection = false;
         this.view.showSliceEditor(val, cutName, cutRect, sliceType, sliceRect);
     }
@@ -367,7 +379,23 @@ public class ContentViewUI extends Sprite { // Visualizer for UI Atlas and cut/s
 
         loadCuts(); // Reload cuts
 
-        // TODO: Prompt user to save to cut config file, and then to slice config file.
+        this.saving = true;
+
+        var saveCutsFile:FileReference = new FileReference(); // Prompts the user to save to a specific folder
+        saveCutsFile.addEventListener(Event.SELECT, this.onCutConfigsSaved);
+        saveCutsFile.save(JSON.stringify(this.cutConfigs, null, 2), "UIAssets_UI_CONFIG.json");
+    }
+
+    private function onCutConfigsSaved(e:Event):void {
+        var saveSlicesFile:FileReference = new FileReference(); // Prompts the user to save to a specific folder
+        saveSlicesFile.addEventListener(Event.SELECT, this.onSliceConfigsSaved);
+        saveSlicesFile.save(JSON.stringify(this.sliceConfigs, null, 2), "UIAssets_UI_SLICE_CONFIG.json");
+    }
+
+    private function onSliceConfigsSaved(e:Event):void {
+        this.saving = false;
+        MainView.Instance.notifications.showNotification("Finished saving UI cuts and slices");
     }
 }
+
 }

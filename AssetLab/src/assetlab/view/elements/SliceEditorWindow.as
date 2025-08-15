@@ -54,7 +54,7 @@ public class SliceEditorWindow extends Sprite {
 
         this.cutNameInput = new SimpleTextInput("Cut name", true);
         this.cutNameInput.inputText.restrict = "a-z A-Z 0-9";
-        this.cutNameInput.setWidth(220);
+        this.cutNameInput.setWidth(270);
         addChild(this.cutNameInput);
 
         this.sliceTypeInput = new SimpleTextInput("Slice type", true);
@@ -111,6 +111,7 @@ public class SliceEditorWindow extends Sprite {
     }
 
     private function onSaveClick(e:MouseEvent):void {
+        this.sliceRect = this.editor.sliceRect; // Editor's slice rect may have changed by the user
         this.view.saveCut(this.cutNameInput.inputText.text, this.cutRect, this.sliceTypeInput.inputText.text, this.sliceRect);
     }
 

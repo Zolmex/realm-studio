@@ -28,7 +28,7 @@ public class SliceEditor extends Sprite {
 
     private var atlas:Bitmap;
     private var cutRect:Rectangle;
-    private var sliceRect:Rectangle;
+    public var sliceRect:Rectangle;
     private var zoomLevel:int = 200;
     private var canvasOffset:Point = new Point();
     private var input:InputHandler;
