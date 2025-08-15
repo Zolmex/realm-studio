@@ -17,6 +17,8 @@ public class Tooltip extends Sprite {
     private var target:DisplayObject;
     private var background:SliceScalingBitmap;
     protected var content:Sprite;
+    protected var enabled:Boolean = true;
+    protected var targetOver:Boolean;
 
     // Tooltips should always be instantiated on roll over
     public function Tooltip(target:DisplayObject) {
@@ -43,12 +45,17 @@ public class Tooltip extends Sprite {
         this.target.addEventListener(MouseEvent.ROLL_OUT, this.onTargetOut);
         this.target.addEventListener(Event.ENTER_FRAME, this.onEnterFrame);
         this.fixPosition();
-        this.visible = true;
+        this.targetOver = true;
+
+        if (this.enabled) {
+            this.visible = true;
+        }
     }
 
     private function onTargetOut(e:Event):void {
         this.target.removeEventListener(MouseEvent.ROLL_OUT, this.onTargetOut);
         this.target.removeEventListener(Event.ENTER_FRAME, this.onEnterFrame);
+        this.targetOver = false;
         this.visible = false;
     }
 
@@ -127,6 +134,18 @@ public class Tooltip extends Sprite {
             return mouseY - limitHeight;
         }
         return mouseY;
+    }
+
+    public function enable():void {
+        this.enabled = true;
+        if (this.targetOver){
+            this.visible = true;
+        }
+    }
+
+    public function disable():void {
+        this.enabled = false;
+        this.visible = false;
     }
 
     public override function addChild(obj:DisplayObject):DisplayObject { // Meant to be used by subclasses of Tooltip

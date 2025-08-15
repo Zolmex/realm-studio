@@ -54,12 +54,12 @@ public class SliceEditorWindow extends Sprite {
 
         this.cutNameInput = new SimpleTextInput("Cut name", true);
         this.cutNameInput.inputText.restrict = "a-z A-Z 0-9";
-        this.cutNameInput.setWidth(120);
+        this.cutNameInput.setWidth(220);
         addChild(this.cutNameInput);
 
         this.sliceTypeInput = new SimpleTextInput("Slice type", true);
         this.sliceTypeInput.inputText.restrict = "a-z A-Z 0-9";
-        this.sliceTypeInput.setWidth(120);
+        this.sliceTypeInput.setWidth(160);
         addChild(this.sliceTypeInput);
 
         this.editor = new SliceEditor(this);

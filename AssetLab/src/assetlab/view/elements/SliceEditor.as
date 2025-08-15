@@ -1,5 +1,6 @@
 package assetlab.view.elements {
 import common.Global;
+import common.ui.elements.TextTooltip;
 import common.util.BitmapUtil;
 import common.util.TextureRedrawer;
 
@@ -9,6 +10,7 @@ import flash.display.JointStyle;
 import flash.display.PixelSnapping;
 import flash.display.Shape;
 import flash.display.Sprite;
+import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
@@ -22,7 +24,7 @@ public class SliceEditor extends Sprite {
     private var window:SliceEditorWindow;
     private var background:Shape;
     private var canvas:Sprite;
-    private var outlineLayer:Shape;
+    private var outlineLayer:Sprite;
 
     private var atlas:Bitmap;
     private var cutRect:Rectangle;
@@ -31,6 +33,11 @@ public class SliceEditor extends Sprite {
     private var canvasOffset:Point = new Point();
     private var input:InputHandler;
     private var mouseTriggerArea:Shape;
+    private var canvasTexture:Bitmap;
+    private var outlineTooltip:TextTooltip;
+
+    private var selecting:Boolean;
+    private var selectionStartPos:Point;
 
     public function SliceEditor(window:SliceEditorWindow) {
         this.window = window;
@@ -54,10 +61,16 @@ public class SliceEditor extends Sprite {
         this.canvas.scaleY = 2;
         addChild(this.canvas);
 
-        this.outlineLayer = new Shape();
+        this.canvasTexture = new Bitmap(null, PixelSnapping.ALWAYS);
+        this.canvas.addChild(this.canvasTexture);
+
+        this.outlineLayer = new Sprite();
+        this.outlineLayer.addEventListener(MouseEvent.ROLL_OVER, this.onRollOverOutline);
         addChild(this.outlineLayer);
 
         this.input = new InputHandler(this);
+        this.input.addEventListener(InputHandler.MOUSE_DRAG, this.onMouseDrag);
+        this.input.addEventListener(InputHandler.MOUSE_DRAG_END, this.onMouseDragEnd);
         this.input.addEventListener(InputHandler.MIDDLE_MOUSE_DRAG, this.onContentDrag);
 
         addEventListener(MouseEvent.MOUSE_WHEEL, this.onScroll);
@@ -105,6 +118,89 @@ public class SliceEditor extends Sprite {
         this.positionChildren();
     }
 
+    private function onMouseDrag(e:InputHandlerEvent):void {
+        var cursorTexturePos:Point = this.getCursorPixel();
+        if (!this.selecting) {
+            this.selecting = true;
+            this.selectionStartPos = new Point(cursorTexturePos.x, cursorTexturePos.y);
+            this.outlineTooltip.disable();
+            return;
+        }
+
+        var x:int = this.selectionStartPos.x;
+        var y:int = this.selectionStartPos.y;
+        var w:int = cursorTexturePos.x - this.selectionStartPos.x;
+        var h:int = cursorTexturePos.y - this.selectionStartPos.y;
+        if (w < 0){
+            w *= -1; // Make the width positive
+            x -= w; // Move back the x origin of the outline rectangle by the width
+        }
+        if (h < 0){
+            h *= -1;
+            y -= h;
+        }
+
+        this.sliceRect.x = x;
+        this.sliceRect.y = y;
+        this.sliceRect.width = w;
+        this.sliceRect.height = h;
+
+        if (this.outlineTooltip != null) {
+            this.outlineTooltip.setSubText(this.getSliceText());
+        }
+
+        this.drawSliceLines();
+    }
+
+    private function onMouseDragEnd(e:InputHandlerEvent):void {
+        if (!this.selecting){
+            return;
+        }
+
+        this.selecting = false;
+        this.selectionStartPos = null;
+        this.outlineTooltip.enable();
+    }
+
+    private function getCursorPixel():Point {
+        var mousePos:Point = new Point(Global.Main.stage.mouseX, Global.Main.stage.mouseY);
+        var bitmapPos:Point = this.localToGlobal(new Point(this.canvas.x, this.canvas.y));
+        var pixelWidth:Number = this.canvas.scaleX;
+        var pixelHeight:Number = this.canvas.scaleY;
+
+        var yDiff:Number = mousePos.y - bitmapPos.y;
+        var xDiff:Number = mousePos.x - bitmapPos.x;
+        if (yDiff < 0) { // Lower limit
+            yDiff = 0;
+        }
+        if (xDiff < 0) {
+            xDiff = 0;
+        }
+
+        var x:int = xDiff / pixelWidth;
+        var y:int = yDiff / pixelHeight;
+
+        x = Math.min(x, this.canvasTexture.width);
+        y = Math.min(y, this.canvasTexture.height);
+
+        return new Point(x, y);
+    }
+
+    private function onRollOverOutline(e:MouseEvent):void {
+        if (this.outlineTooltip == null){
+            this.outlineTooltip = new TextTooltip(this.outlineLayer, "Slice");
+            this.outlineTooltip.setSubText(this.getSliceText());
+            Global.Main.stage.addChild(this.outlineTooltip);
+        }
+    }
+
+    private function getSliceText():String {
+        return "X:" + this.sliceRect.x + "\n" +
+                "Y:" + this.sliceRect.y + "\n" +
+                "Width:" + this.sliceRect.width + "\n" +
+                "Height:" + this.sliceRect.height;
+    }
+
     private function drawSliceLines():void {
         if (this.sliceRect == null){
             return;
@@ -123,19 +219,15 @@ public class SliceEditor extends Sprite {
         sliceWidth *= this.canvas.scaleX;
         sliceHeight *= this.canvas.scaleY;
 
-        if (sliceX != 0) {
-            this.outlineLayer.graphics.moveTo(sliceX, 0); // Horizontal lines
-            this.outlineLayer.graphics.lineTo(sliceX, this.canvas.height);
-            this.outlineLayer.graphics.moveTo(sliceX + sliceWidth, 0);
-            this.outlineLayer.graphics.lineTo(sliceX + sliceWidth, this.canvas.height);
-        }
+        this.outlineLayer.graphics.moveTo(sliceX, 0); // Horizontal lines
+        this.outlineLayer.graphics.lineTo(sliceX, this.canvas.height);
+        this.outlineLayer.graphics.moveTo(sliceX + sliceWidth, 0);
+        this.outlineLayer.graphics.lineTo(sliceX + sliceWidth, this.canvas.height);
 
-        if (sliceY != 0) {
-            this.outlineLayer.graphics.moveTo(0, sliceY); // Vertical lines
-            this.outlineLayer.graphics.lineTo(this.canvas.width, sliceY);
-            this.outlineLayer.graphics.moveTo(0, sliceY + sliceHeight);
-            this.outlineLayer.graphics.lineTo(this.canvas.width, sliceY + sliceHeight);
-        }
+        this.outlineLayer.graphics.moveTo(0, sliceY); // Vertical lines
+        this.outlineLayer.graphics.lineTo(this.canvas.width, sliceY);
+        this.outlineLayer.graphics.moveTo(0, sliceY + sliceHeight);
+        this.outlineLayer.graphics.lineTo(this.canvas.width, sliceY + sliceHeight);
 
         this.outlineLayer.graphics.lineStyle();
     }
@@ -151,12 +243,11 @@ public class SliceEditor extends Sprite {
 
     public function displayTexture(atlas:Bitmap, cutRect:Rectangle, sliceRect:Rectangle):void { // Slice type is irrelevant here, the slice lines are drawn exactly the same
         if (this.atlas != atlas || this.cutRect != cutRect) { // Texture update
-            this.canvas.removeChildren();
-            this.outlineLayer.graphics.clear();
-
             var cropped:BitmapData = BitmapUtil.cropToBitmapData(atlas.bitmapData, cutRect.x, cutRect.y, cutRect.width, cutRect.height);
-            var tex:Bitmap = new Bitmap(cropped, PixelSnapping.ALWAYS);
-            this.canvas.addChild(tex);
+            if (this.canvasTexture.bitmapData != null) {
+                this.canvasTexture.bitmapData.dispose();
+            }
+            this.canvasTexture.bitmapData = cropped;
         }
 
         this.sliceRect = sliceRect.clone();
